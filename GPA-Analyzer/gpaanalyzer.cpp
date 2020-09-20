@@ -1,6 +1,6 @@
 // gpaanalyzer.cpp
 // Ishan Meher, CISP 400
-// 9/20/2020
+// 9/27/2020
 
 #include<iostream>
 #include<string>
@@ -588,7 +588,7 @@ int main()
 void GradeInfo::gradeInfoUnitTest()
 {
 	//Unit Test for GradeInfo Class
-	GradeInfo gpaanalyzer();
+	GradeInfo gpaanalyzer;
 	int gradeValue;
 
 	// Tests cases where convertToLetterGrade function might fail
