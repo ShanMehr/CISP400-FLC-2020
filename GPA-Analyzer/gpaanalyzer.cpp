@@ -18,7 +18,7 @@ class GradeInfo
 		int gradeListSize=0; // The size of the gradesList
 
 		
-		int *gradeList;
+		int *gradeList; // grade array that stores all the entered grades
 		
 
 	public:
@@ -28,8 +28,8 @@ class GradeInfo
 		{
 			// Constructor sets starting value of grades class
 
-			gradeList= new int[0]; // allocates space for one grade
-				
+			gradeList= new int[0]; 
+			gradeListSize=0;
 		}
 
 		~GradeInfo()
@@ -57,7 +57,7 @@ class GradeInfo
 			delete[] gradeList; // Deletes the memory stored
 			gradeList=tempGradesList;	// Set the gradeList pointer to the copy's memory location
 			tempGradesList=nullptr;	//Removes the pointer to the memory location ot avoid a dangling pointer
-			gradeListSize++;	// Updates the size of the gradeList array	
+			//gradeListSize++;	// Updates the size of the gradeList array	CHECK THIS
 
 		}
 
@@ -71,20 +71,17 @@ class GradeInfo
 
 			system("clear"); // Clears the console
 
-			if(gradeListSize>=0
-)			{
+			if(gradeListSize>=0)
+			{
 				// If the array is not empty display all the grades
-				cout<<"Displaying Numeric Grades"<<'\n';
 				
-
+				
+				cout<<"#	Scores    Grade\n";
 				for(int position=0; position<gradeListSize; position++)
 				{
 					// Prints all the grades in the gradeList
-					cout<<"Grade "<<position+1<<": "<<gradeList[position]<<'\n';
-
-					// Also prints the letter grade after converting the letter grade into a string
-					cout<<"Letter Grade "<<position+1<<": "<<convertToLetterGrade(this->gradeList[position])<<'\n';
-					cout<<"\n";
+					cout<<position+1<<"	"<<gradeList[position]<<"        "<<convertToLetterGrade(this->gradeList[position])<<'\n';
+					
 				}
 			}
 			
@@ -200,12 +197,13 @@ class GradeInfo
 						// Runs If the input is a valid type and the grade entered is a possible numeric grade
 						// Records the grade in gradeList
 
-						gradeList[gradeListSize-1]= enteredGrade;
+						gradeList[gradeListSize]= enteredGrade;
 
 						cout<<"Grade entered successfully"<<'\n';
-						cout<<"Grade: "<<gradeList[gradeListSize-1]<<" Recorded"<<'\n';
+						cout<<"Grade: "<<gradeList[gradeListSize]<<" Recorded"<<'\n';
 
 						valid=true; // Grade has been entered breaks out of the grade request loop
+						gradeListSize++;
 					}
 				}
 
@@ -260,11 +258,48 @@ class Date
 		void setDate(int month, int day, int year )
 		{
 			// Utility dunctio used to set a date by changing instance variables 
+			
 			this->month=month; 
 			this->day=day;
 			this->year=year;
 
+
 		}
+		void testingSetDate(int month, int day, int year)
+		{
+			setDate(month,day,year);
+			if(month==this->month&&day==this->day&&year==this->year)
+			{
+				cout<<"Date member variables have been initialized\n";
+			}
+			else
+			{
+				cout<<"Date member variables have not been initialized\n";
+			}
+		}
+
+		Date* testDateContructor(int month,int day, int year)
+		{
+
+				Date date(month, day, year);
+				Date* testDate=&date;
+
+				if(month==testDate->month&&day==testDate->day&&year==testDate->year)
+				{
+					cout<<"Date member variables have been initialized\n";
+					cout<<"Contructor successfully works\n";
+				}
+				
+				else
+				{
+					cout<<"Date member variables have not been initialized\n";
+					cout<<"Contructor failed\n";
+				}
+
+				return testDate;
+
+		}
+
 
 	public:
 		
@@ -310,6 +345,7 @@ class Date
 			{
 				// Its not possible to have negative days or more than 31 days in a month
 				cout<<"Day input failed!\n";
+				cout<<"Months usually have days ranging from 1 and 31 days (inclusive)\n";
 				return false;
 			}
 
@@ -318,13 +354,15 @@ class Date
 
 				if((month==9||month==11)||(month%2==0&&(month!=10||month!=12||month!=8||month!=2)))
 				{
-					// Tests to see if months that have 30 days do not have more than 30 days4
+					// Tests to see if months that have 30 days do not have more than 30 days
 					// Most even months have 30 days have 30 days except December August and February
 					// The odd months September and November have 30 days
 					if(day>=31||day<1)
 					{
 						// Checks if the day entered of the checked months don't have more than 30 days or less than 1
 						cout<<"Day input failed!\n";
+						cout<<"Most of the even months have 30 days, Not including the months of February and August\n";
+						cout<<"The odd months of September and November have 30 days\n";
 						return false;
 					}
 				}
@@ -334,6 +372,7 @@ class Date
 					{
 						// There are 29 days in the month of february during leap year
 						cout<<"Day input failed!\n";
+						cout<<"The month of February has only dates between 1-29 (inclusive) during leap year\n";
 						return false;
 
 					}
@@ -342,6 +381,7 @@ class Date
 					{
 						// ELse if its a Common year then it will have 28 days
 						cout<<"Day input failed!\n";
+						cout<<"The month of February has only dates between 1-28 (inclusive) during a common year\n";
 						return false;
 					}
 				}
@@ -412,6 +452,7 @@ class Date
 			else
 			{
 					cout<<"Year input failed!\n";
+					cout<<"The year entered is not a reasonable year entry try a year between 1900-2100(inclusive)\n";
 					return false;
 			}
 		}
@@ -425,13 +466,33 @@ class Date
 
 				string monthString= monthList[month-1];
 				cout<<"Date: ";
-				cout<<monthString<<" "<<day<<", "<<year;
+				cout<<monthString<<" "<<day<<", "<<year<<'\n';
 
 			}
 			else
 			{
 				cout<<"Date is not valid"<<'\n';
 			}	
+		}
+
+		void printNumericDate()
+		{
+			// Prints the date
+			if(isValidDate(month,day,year))
+			{
+				// The date will only be printed if the date is a valid date
+
+				
+				cout<<"Date: ";
+				cout<<month<<"/"<<day<<"/"<<year<<'\n';
+
+			}
+			else
+			{
+				cout<<"Date is not valid"<<'\n';
+
+			}	
+
 		}
 
 		// Specification A3 - Component Test Method in Date
@@ -442,61 +503,91 @@ class Date
 			
 			// Printing Today's Date
 			Date testDate;
-			cout<<"Displaying Today's date\n";
-			printDate();
+			cout<<"Displaying Today's date in Letter form\n";
+			testDate.printDate();
+			cout<<"Entering Today's date in numeric form\n";
+			testDate.printNumericDate();
 			cout<<"\n";
+			
+			// Testing Constructor with multiple parameters and checking date entered
+			cout<<"Testing wether the multiple parameter constructor works\n";
+			Date* date  = testDateContructor(12,15,2020);
+			cout<<"Displaying Today's date in Letter form\n";
+			cout<<"Printing Numeric Date:\n";	
+			cout<<"Expected: 12/15/2015\n";
+			testDate.printNumericDate();
+			cout<<"Printing Letter Date\n";
+			cout<<"Expected "<<"December 15, 2015\n";	
+			testDate.printDate();				
 			cout<<"\n";
+			cout<<"\n";;
+
 
 			// Fails all the tests for a valid date
 			cout<<"Testing a Day that fails for any date test \n";
-			testDate.setDate(12000,15000,2020);
+			testDate.testingSetDate(12000,15000,2020);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();	
+			testDate.printDate();
+			testDate.printNumericDate();
 			cout<<"\n";
 		
 
 			// A date can't have a month that is more than 12
-			testDate.setDate(13,29,2000);
+			testDate.testingSetDate(13,29,2000);
 			cout<<"Testing a month that is not valid!\n";
 			cout<<"Testing a month that is greater than 12\n";			
 			cout<<"Expected: Date is not valid\n";
 			testDate.printDate();
+			testDate.printNumericDate();
 			cout<<"\n";
 
 
 			// A month can't be less than 1
 			cout<<"Testing a month that will fail! \n";
 			cout<<"Testing a month smaller than 1\n";	
-			testDate.setDate(0,12,2020);
+			testDate.testingSetDate(0,12,2020);
 			cout<<"Expected: Date is not valid\n";
 			testDate.printDate();
+			testDate.printNumericDate();
 			cout<<"\n";
 
 
 			// Testing a date to have a month that works
 			cout<<"Testing a month that works\n";
-			testDate.setDate(12,15,2015);			
-			testDate.printDate();	
+			testDate.testingSetDate(12,15,2015);
+			cout<<"Printing Numeric Date:\n";	
+			cout<<"Expected: 12/15/2015\n";
+			testDate.printNumericDate();
+			cout<<"Printing Letter Date\n";
+			cout<<"Expected "<<"December 15, 2015\n";	
+			testDate.printDate();				
 			cout<<"\n";
-			cout<<"\n";	
+			cout<<"\n";
 
 
 			cout<<"Testing a year smaller than expected that fails\n";
-			testDate.setDate(12,15,1800);
-
+			testDate.testingSetDate(12,15,1800);
+			cout<<"Printing Numeric Date:\n";
+			testDate.printNumericDate();
+			cout<<"Printing Letter Date\n";
 			testDate.printDate();	
 			cout<<"\n";
 			cout<<"\n";
 
 			cout<<"Testing a year that works\n";
-			testDate.setDate(12,15,2020);
+			testDate.testingSetDate(12,15,2020);
+			cout<<"Printing Numeric Date:\n";
+			cout<<"Expected: 12/15/2002\n";
+			testDate.printNumericDate();
+			cout<<"Printing Letter Date:\n";
+			cout<<"Expected: December 15, 2020\n";
 			testDate.printDate();	
 			cout<<"\n";
 			cout<<"\n";
 
 			// A month can't have more than 31 days
 			cout<<"Testing a day that is greater than 31\n";
-			testDate.setDate(2,32,2000);
+			testDate.testingSetDate(2,32,2000);
 			cout<<"Expected: Date is not valid\n";
 			testDate.printDate();	
 			cout<<"\n";
@@ -504,7 +595,7 @@ class Date
 
 			// A month can't less than 1 day
 			cout<<"Testing a day that is less than 1\n";
-			testDate.setDate(1,0,2000);
+			testDate.testingSetDate(1,0,2000);
 			cout<<"Expected: Date is not valid\n";
 			testDate.printDate();	
 			cout<<"\n";
@@ -512,7 +603,7 @@ class Date
 
 			// The month of April has 30 days 
 			cout<<"Testing a Day that fails for a 30 day month\n";
-			testDate.setDate(4,31,2020);
+			testDate.testingSetDate(4,31,2020);
 			cout<<"Expected: Date is not valid\n";
 			testDate.printDate();	
 			cout<<"\n";
@@ -521,14 +612,20 @@ class Date
 
 			// The month of april has 30 days
 			cout<<"Testing a Day that passes for a 30 day month \n";
-			testDate.setDate(4,30,2020);			
-			testDate.printDate();	
+			testDate.testingSetDate(4,30,2020);	
+			cout<<"Printing Letter Date:\n";
+			cout<<"Expected: 4/30/2020\n";	
+			testDate.printNumericDate();	
+			cout<<"Printing Letter Date:\n";
+			cout<<"Expected: April 30, 2020\n";
+			testDate.printDate();
+
 			cout<<"\n";
 			cout<<"\n";
 
 			// The Month of February has 29 days on leap year
 			cout<<"Testing a day in february that fails when it is leap year \n";
-			testDate.setDate(2,30,2022);
+			testDate.testingSetDate(2,30,2022);
 			cout<<"Expected: Date is not valid\n";
 			testDate.printDate();	
 			cout<<"\n";
@@ -536,22 +633,30 @@ class Date
 
 
 			cout<<"Testing a day in february that passes when it is leap year \n";
-			testDate.setDate(2,29,2000);
-			
+			testDate.testingSetDate(2,29,2000);
+			cout<<"Printing Numeric Date\n";
+			cout<<"Expected: 2/29/2000\n";
+			cout<<"Printing Letter Date\n";
+			cout<<"Expected: February 29, 2000\n";
 			testDate.printDate();	
 			cout<<"\n";
 			cout<<"\n";
 
 			// The month of February has 28 days in a Common year
 			cout<<"Testing a day in february that fails when it is not a leap year \n";
-			testDate.setDate(2,29,2001);
+			testDate.testingSetDate(2,29,2001);
 			cout<<"Expected: Date is not valid\n";
 			testDate.printDate();	
 			cout<<"\n";
 			cout<<"\n";
 
 			cout<<"Testing a day in february that passes when it is not leap year \n";
-			testDate.setDate(2,28,2001);
+			testDate.testingSetDate(2,28,2001);
+			cout<<"Printing Numeric Date\n";
+			cout<<"Expected: 2/28/2001\n";
+			testDate.printNumericDate();
+			cout<<"Printing Letter Date\n";
+			cout<<"Expected: February 28, 2001\n";
 			testDate.printDate();	
 			cout<<"\n";
 			cout<<"\n";
