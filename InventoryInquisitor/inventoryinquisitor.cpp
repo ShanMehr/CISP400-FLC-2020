@@ -483,7 +483,7 @@ class Date
 			}
 		}
 
-		void printDate()
+		string getDate()
 		{
 			// Prints the date
 			if(isValidDate(month,day,year))
@@ -491,17 +491,18 @@ class Date
 				// The date will only be printed if the date is a valid date
 
 				string monthString= monthList[month-1];
-				cout<<"Date: ";
-				cout<<monthString<<" "<<day<<", "<<year<<'\n';
+				
+				
+				return (monthList[month-1]+" "+to_string(day)+", "+to_string(year));
 
 			}
 			else
 			{
-				cout<<"Date is not valid"<<'\n';
+				return "Date is not valid!";
 			}	
 		}
 
-		void printNumericDate()
+		string getNumericDate()
 		{
 			// Prints the date
 			if(isValidDate(month,day,year))
@@ -509,13 +510,12 @@ class Date
 				// The date will only be printed if the date is a valid date
 
 				
-				cout<<"Date: ";
-				cout<<month<<"/"<<day<<"/"<<year<<'\n';
+				return (to_string(month)+"/"+to_string(day)+"/"+to_string(year));
 
 			}
 			else
 			{
-				cout<<"Date is not valid"<<'\n';
+				return "Date is not valid!";
 
 			}	
 
@@ -530,9 +530,9 @@ class Date
 			// Printing Today's Date
 			Date testDate;
 			cout<<"Displaying Today's date in Letter form\n";
-			testDate.printDate();
+			cout<<testDate.getDate();
 			cout<<"Entering Today's date in numeric form\n";
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"\n";
 			
 			// Testing Constructor with multiple parameters and checking date entered
@@ -541,10 +541,10 @@ class Date
 			cout<<"Displaying Today's date in Letter form\n";
 			cout<<"Printing Numeric Date:\n";	
 			cout<<"Expected: 12/15/2015\n";
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"Printing Letter Date\n";
 			cout<<"Expected "<<"December 15, 2015\n";	
-			testDate.printDate();				
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';
 			cout<<"\n";
 			cout<<"\n";;
 
@@ -553,8 +553,8 @@ class Date
 			cout<<"Testing a Day that fails for any date test \n";
 			testDate.testingSetDate(12000,15000,2020);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"\n";
 		
 
@@ -563,8 +563,8 @@ class Date
 			cout<<"Testing a month that is not valid!\n";
 			cout<<"Testing a month that is greater than 12\n";			
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"\n";
 
 
@@ -573,8 +573,8 @@ class Date
 			cout<<"Testing a month smaller than 1\n";	
 			testDate.testingSetDate(0,12,2020);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"\n";
 
 
@@ -583,10 +583,10 @@ class Date
 			testDate.testingSetDate(12,15,2015);
 			cout<<"Printing Numeric Date:\n";	
 			cout<<"Expected: 12/15/2015\n";
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"Printing Letter Date\n";
 			cout<<"Expected "<<"December 15, 2015\n";	
-			testDate.printDate();				
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';
 			cout<<"\n";
 			cout<<"\n";
 
@@ -594,9 +594,9 @@ class Date
 			cout<<"Testing a year smaller than expected that fails\n";
 			testDate.testingSetDate(12,15,1800);
 			cout<<"Printing Numeric Date:\n";
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"Printing Letter Date\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -604,10 +604,10 @@ class Date
 			testDate.testingSetDate(12,15,2020);
 			cout<<"Printing Numeric Date:\n";
 			cout<<"Expected: 12/15/2002\n";
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"Printing Letter Date:\n";
 			cout<<"Expected: December 15, 2020\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -615,7 +615,7 @@ class Date
 			cout<<"Testing a day that is greater than 31\n";
 			testDate.testingSetDate(2,32,2000);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -623,7 +623,7 @@ class Date
 			cout<<"Testing a day that is less than 1\n";
 			testDate.testingSetDate(1,0,2000);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -631,7 +631,7 @@ class Date
 			cout<<"Testing a Day that fails for a 30 day month\n";
 			testDate.testingSetDate(4,31,2020);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -641,10 +641,10 @@ class Date
 			testDate.testingSetDate(4,30,2020);	
 			cout<<"Printing Letter Date:\n";
 			cout<<"Expected: 4/30/2020\n";	
-			testDate.printNumericDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;	
 			cout<<"Printing Letter Date:\n";
 			cout<<"Expected: April 30, 2020\n";
-			testDate.printDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';
 
 			cout<<"\n";
 			cout<<"\n";
@@ -653,7 +653,7 @@ class Date
 			cout<<"Testing a day in february that fails when it is leap year \n";
 			testDate.testingSetDate(2,30,2022);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -664,7 +664,7 @@ class Date
 			cout<<"Expected: 2/29/2000\n";
 			cout<<"Printing Letter Date\n";
 			cout<<"Expected: February 29, 2000\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -672,7 +672,7 @@ class Date
 			cout<<"Testing a day in february that fails when it is not a leap year \n";
 			testDate.testingSetDate(2,29,2001);
 			cout<<"Expected: Date is not valid\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -680,10 +680,10 @@ class Date
 			testDate.testingSetDate(2,28,2001);
 			cout<<"Printing Numeric Date\n";
 			cout<<"Expected: 2/28/2001\n";
-			testDate.printNumericDate();
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';;
 			cout<<"Printing Letter Date\n";
 			cout<<"Expected: February 28, 2001\n";
-			testDate.printDate();	
+			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			cout<<"\n";
 
@@ -714,29 +714,40 @@ struct InventoryItem
 
 	}
 
-	InventoryItem operator <<(const InventoryItem &inventory)
+	ostream& operator << (ostream &output)
 	{
-		cout<<"Item Information\n"<<"=========="<<'\n';
-		cout<<"Item ID: "<<idNumber<<'\n';
-		cout<<"Number of items: "<<itemQuantity<<'\n';
-		cout<<"Wholesale Cost: ";
-		printf("$%.2f",retailCost);
-		cout<<'\n';
-		cout<<"Retail Cost: ";
-		printf("$%.2f", retailCost);
-		cout<<'\n';
-		dateAdded.printNumericDate();  
-		return inventory;
+    	output<<"ID: "<<idNumber<<'\n';
+    	output<<"Number of Items: "<<itemQuantity<<'\n';
+    	output<< "Date: "<<dateAdded.getNumericDate()<<'\n';
+    	output<<"Wholesale Cost: $"<<formatDecimalToTwoPlaces(wholesaleCost);
+    	output<<'\n';
+    	output<<"Retail Cost: $"<<formatDecimalToTwoPlaces(retailCost);
+    	output<<'\n';
+    	output<<"Date Added: "<<dateAdded.getNumericDate()<<'\n'<<'\n';
 
-	}
 
-	ostream& operator<< (ostream &out)
-	{
-    	
-    	out << "InventoryItem"<<dateAdded<<'\n';
  
-    	return out;
+    	return output;
 	}
+
+
+	istream& operator >>(ostream &input)
+	{
+		return in;
+	}	
+	private:
+
+		double formatDecimalToTwoPlaces(double number)
+		{
+			// Formats the Decimal to two places
+			// First divides by 100 to shift the values 2 places to the left of the decimal
+			// Then the number is converted to an int which removes the remaining unneeded decimals
+			// Next the number is converted to a type double so that it can have decimals
+			// Finally the number is shifted two decimal places to the right making allowing it to have two decimal places
+    		return (((double)((int)(number*100)))/100);
+
+		}
+
 
 
 };
@@ -875,8 +886,7 @@ void pressEnterKey()
 	 int enter=0;
         
         cout << "Press Enter to Continue\n";
-        while (enter==cin.get() ) 
-        {
+        while (enter==cin.get() )      {
                 if ( enter == (int)'\n' ) 
                 {
                     
