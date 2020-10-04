@@ -730,7 +730,14 @@ struct InventoryItem
 
 	}
 
-	InventoryItem operator >>()
+	ostream& operator<< (ostream &out)
+	{
+    	
+    	out << "InventoryItem"<<dateAdded<<'\n';
+ 
+    	return out;
+	}
+
 
 };
 
