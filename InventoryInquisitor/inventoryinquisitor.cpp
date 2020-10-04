@@ -5,7 +5,7 @@
 #include<iostream>
 #include<string>
 #include<limits>
-
+#include<cctype>
 #include <ctime>
 
 using namespace std;
@@ -699,18 +699,38 @@ struct InventoryItem
 {
 	int idNumber;
 	int itemQuantity;
-	int wholesaleCost;
-	int retailCost=2*wholesaleCost;
+	double wholesaleCost;
+	double retailCost=2*wholesaleCost;
 	Date dateAdded;
 
 	InventoryItem(int idNumber, int itemQuantity, int wholesaleCost, Date dateAdded)
 	{
+
 		this->idNumber=idNumber;
 		this->itemQuantity=itemQuantity;
 		this->wholesaleCost=wholesaleCost;
 		this->retailCost=2*wholesaleCost;
+		this->dateAdded=dateAdded;
 
 	}
+
+	InventoryItem operator <<(const InventoryItem &inventory)
+	{
+		cout<<"Item Information\n"<<"=========="<<'\n';
+		cout<<"Item ID: "<<idNumber<<'\n';
+		cout<<"Number of items: "<<itemQuantity<<'\n';
+		cout<<"Wholesale Cost: ";
+		printf("$%.2f",retailCost);
+		cout<<'\n';
+		cout<<"Retail Cost: ";
+		printf("$%.2f", retailCost);
+		cout<<'\n';
+		dateAdded.printNumericDate();  
+		return inventory;
+
+	}
+
+	InventoryItem operator >>()
 
 };
 
@@ -720,10 +740,7 @@ class InventoryManager
 	private:
 		ArrayList<InventoryItem*> inventory;
 	public:
-		InventoryManager()
-		{
-			cout<<"Constructor";
-		}
+		
 
 
 
@@ -734,6 +751,9 @@ class InventoryManager
 void ProgramGreeting();
 void UnitTest();
 void pressEnterKey();
+void runInventoryInquisitor();
+void alphaMenu();
+bool validateUserInput(char input,InventoryManager& inventory);
 
 
 int main()
@@ -750,6 +770,94 @@ void UnitTest()
 	pressEnterKey();
 	Date date;
 	date.dateUnitTest();
+
+}
+
+
+void runInventoryInquisitor()
+{
+	bool done;
+
+	InventoryManager inventory;
+	do
+	{
+		char input=0;
+
+		alphaMenu();
+		cin>>input;
+		system("clear");
+
+		if(cin.fail())
+		{	
+			// Clears the buffer if the input fails whnen a bad type is entered
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+
+		else
+		{
+			// Processes the user input and checks what task the user wants to perform
+			// Also records whether the user want to quit the program
+			input=tolower(input);
+			done=validateUserInput(input,inventory);
+		}
+
+
+	}
+	while(!done);
+}
+
+
+void alphaMenu()
+{
+	cout<<"Select an Input\n";
+	cout<<"1. Add Inventory(A)\n";
+	cout<<"2. Delete Inventory(D)\n";
+	cout<<"3. Edit Inventory(E)\n";
+	cout<<"4. Output Inventory(O)\n";
+	cout<<"5. Quit Program(Q)\n";
+}
+
+
+// Specification B3 - Menu Input Validation
+bool validateUserInput(char input, InventoryManager &program)
+{
+	bool done;
+
+	switch(input)
+	{
+		case 'a':	
+			
+			// Add item
+			cout<<"Item added\n";
+			break;
+
+		case 'd':
+
+			cout<<"Item Deleted\n";
+			
+			break;
+
+		case 'e':
+
+			cout<<"Item Edited\n";
+						
+			break;
+
+		case 'o':
+			
+			cout<<"Outputing Inventory\n";
+			break;
+		case 'q':
+			cout<<"Quitting Program\n";
+			done=true;
+		default:
+
+			cout<<"The input entered is not valid!"<<'\n';
+			break;
+	} 
+	return done;
+
 
 }
 
