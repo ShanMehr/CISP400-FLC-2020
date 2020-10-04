@@ -695,15 +695,40 @@ class Date
 
 
 
-struct Item
+struct InventoryItem
 {
 	int idNumber;
 	int itemQuantity;
 	int wholesaleCost;
-	int retailCost;
+	int retailCost=2*wholesaleCost;
 	Date dateAdded;
 
+	InventoryItem(int idNumber, int itemQuantity, int wholesaleCost, Date dateAdded)
+	{
+		this->idNumber=idNumber;
+		this->itemQuantity=itemQuantity;
+		this->wholesaleCost=wholesaleCost;
+		this->retailCost=2*wholesaleCost;
+
+	}
+
 };
+
+
+class InventoryManager
+{
+	private:
+		ArrayList<InventoryItem*> inventory;
+	public:
+		InventoryManager()
+		{
+			cout<<"Constructor";
+		}
+
+
+
+};
+
 
 // Function Prototypes
 void ProgramGreeting();
