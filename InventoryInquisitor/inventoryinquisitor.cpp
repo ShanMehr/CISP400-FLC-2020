@@ -59,7 +59,7 @@ class ArrayList
 			// The gradeList is set to point to the tempArrayList memory location
 			delete[] array; 
 			array=tempArrayList;	
-			tempArrayList=nullptr;	
+			tempArrayList=nullptr;
 		}
 
 
@@ -107,8 +107,6 @@ class ArrayList
 			length++;		
 			
 		}
-
-
 
 		bool isValidIndex(const int index)
 		{
@@ -736,6 +734,15 @@ struct InventoryItem
 
 	}
 
+	InventoryItem()
+	{
+		this->idNumber=validateIdNumberInput();
+		this->itemQuantity=validateItemQuantityInput();
+		this->wholesaleCost=validateWholeSaleCostInput();
+		this->retailCost=wholesaleCost*2;
+		this->dateAdded=validateDateInput();
+	}
+
 	// Specification A2 - Overload operator«
 	friend ostream& operator << (ostream &output, InventoryItem& inventory)
 	{
@@ -760,10 +767,6 @@ struct InventoryItem
 			input>>inventory.itemQuantity;
 			input>>inventory.wholesaleCost;
 			input>>(*inventory.dateAdded);
-		
-
-
-
 			return input;
 	}	
 	
@@ -945,7 +948,92 @@ class InventoryManager
 	private:
 		ArrayList<InventoryItem*> inventory;
 	public:
+
+		void addItem()
+		{
+				InventoryItem* item;
+				this->inventory.add(item);	
+
 		
+		}
+
+		void remove()
+		{
+			this->inventory.removeLast();
+		}
+
+		void outputInventoryData()
+		{
+			for(int index=0;index<inventory.size()-1;index++)
+			{
+				cout<<inventory.get(index);
+			}
+		}
+
+
+		void editInventoryItem()
+		{
+			bool done;
+			InventoryItem item;
+			int choice;
+			int index;
+			do
+			{
+				cout<<"Select an item edit\n";
+				cout<<"Choose an index between 0 and "<<(inventory.size()-1)<<" (inclusive)\n";				
+				cin>>index;
+				if(cin.fail())
+				{		
+					// Clears the buffer if the input fails when a bad type is entered
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				}
+
+				else
+				{
+					cout<<"Choose a value:\n";
+					cout<<"(1)Change ID(:\n";
+					cout<<"(2)Change Number of Items:\n";
+					cout<<"(3)Change Wholesale Cost:\n";
+					cout<<"(4)Change Retail Cost:\n";
+					cout<<"(5)Change Date:\n";
+
+					int choice=0;
+					cin>>choice;
+
+					if(cin.fail())
+					{		
+						// Clears the buffer if the input fails when a bad type is entered
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					}
+					else
+					{
+
+					}
+					
+
+				}
+
+
+			}while(!done);
+		}
+
+	private:
+
+		void handleUserSelection(int index,int choice)
+		{
+			InventoryItem item;
+			switch(choice)
+			{
+				case 1:
+				int id=item.validateIdNumberInput();
+				inventory.get(index)->idNumber=id;
+				
+
+			}
+		}
+
 
 
 
