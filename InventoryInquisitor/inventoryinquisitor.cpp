@@ -160,6 +160,8 @@ class ArrayList
 			
 		}
 
+
+		// Specification C3 - Resize Array - subtract from end
 		void removeLast()
 		{
 			// Removes the element at the last index of the array
@@ -281,16 +283,7 @@ class Date
 
 	private:
 
-		void setDate(int month, int day, int year )
-		{
-			// Utility dunctio used to set a date by changing instance variables 
-			
-			this->month=month; 
-			this->day=day;
-			this->year=year;
-
-
-		}
+		
 		void testingSetDate(int month, int day, int year)
 		{
 			setDate(month,day,year);
@@ -521,7 +514,18 @@ class Date
 
 		}
 
-		// Specification A3 - Component Test Method in Date
+		void setDate(int month, int day, int year )
+		{
+			// Utility dunctio used to set a date by changing instance variables 
+			
+			this->month=month; 
+			this->day=day;
+			this->year=year;
+
+
+		}
+
+		//Specification B2 - ComponentTest method in Datee
 		void dateUnitTest()
 		{
 			//Tests the cases in which dates will work and cases where dates will fail
@@ -688,6 +692,23 @@ class Date
 			cout<<"\n";
 
 		}
+
+
+	friend ostream& operator << (ostream &output,Date& date)
+	{
+    output<<date.getDate();
+
+ 
+    	return output;
+	}
+
+
+	
+	friend istream& operator >>(istream &input, Date& date)
+	{
+		input>>date.month>>date.day>>date.year;
+		return input;
+	}	
 		
 };
 
@@ -701,29 +722,30 @@ struct InventoryItem
 	int itemQuantity;
 	double wholesaleCost;
 	double retailCost=2*wholesaleCost;
-	Date dateAdded;
+	Date* dateAdded;
 
-	InventoryItem(int idNumber, int itemQuantity, int wholesaleCost, Date dateAdded)
+	InventoryItem(int idNumber, int itemQuantity, int wholesaleCost, Date* date)
 	{
 
 		this->idNumber=idNumber;
 		this->itemQuantity=itemQuantity;
 		this->wholesaleCost=wholesaleCost;
 		this->retailCost=2*wholesaleCost;
-		this->dateAdded=dateAdded;
+		dateAdded=date;
+
 
 	}
 
-	ostream& operator << (ostream &output)
+	// Specification A2 - Overload operator«
+	friend ostream& operator << (ostream &output, InventoryItem& inventory)
 	{
-    	output<<"ID: "<<idNumber<<'\n';
-    	output<<"Number of Items: "<<itemQuantity<<'\n';
-    	output<< "Date: "<<dateAdded.getNumericDate()<<'\n';
-    	output<<"Wholesale Cost: $"<<formatDecimalToTwoPlaces(wholesaleCost);
+    	output<<"ID: "<<inventory.idNumber<<'\n';
+    	output<<"Number of Items: "<<inventory.itemQuantity<<'\n';
+    	output<<"Wholesale Cost: $"<<inventory.formatDecimalToTwoPlaces(inventory.wholesaleCost);
     	output<<'\n';
-    	output<<"Retail Cost: $"<<formatDecimalToTwoPlaces(retailCost);
+    	output<<"Retail Cost: $"<<inventory.formatDecimalToTwoPlaces(inventory.retailCost);
     	output<<'\n';
-    	output<<"Date Added: "<<dateAdded.getNumericDate()<<'\n'<<'\n';
+    	output<<"Date Added: "<<inventory.dateAdded->getNumericDate()<<'\n'<<'\n';
 
 
  
@@ -731,10 +753,175 @@ struct InventoryItem
 	}
 
 
-	istream& operator >>(ostream &input)
+	// Specification A3 - Overload operator»
+	friend istream &operator >>(istream &input, InventoryItem& inventory )
 	{
-		return in;
+			input>>inventory.idNumber;
+			input>>inventory.itemQuantity;
+			input>>inventory.wholesaleCost;
+			input>>(*inventory.dateAdded);
+		
+
+
+
+			return input;
 	}	
+	
+
+	int validateIdNumberInput()
+	{
+		bool done;
+		int id=0;
+
+		do
+		{
+			cout<<"Enter the id(A number with 5 digits)\n";
+			cin>>id;
+			if(cin.fail())
+			{	
+				// Clears the buffer if the input fails when a bad type is entered
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			else
+			{
+				if(id>9999&&id<100000)
+				{
+					done=true;
+				}
+			}	
+		}
+		while(!done);
+
+		return id;
+	}
+
+	int validateItemQuantityInput()
+	{
+		bool done;
+		int itemQuantity=0;
+
+		do
+		{
+			cout<<"Enter the number of items\n";
+			cin>>itemQuantity;
+			if(cin.fail())
+			{	
+				// Clears the buffer if the input fails when a bad type is entered
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			else
+			{				
+					done=true;				
+			}	
+		}
+		while(!done);
+
+		return itemQuantity;
+	}
+ 
+	double validateWholeSaleCostInput()
+	{
+		bool done;
+		double wholesaleCost=0;
+
+		do
+		{
+			cout<<"Enter the wholesale cost\n";
+			cin>>wholesaleCost;
+			if(cin.fail())
+			{	
+				// Clears the buffer if the input fails when a bad type is entered
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			else
+			{				
+					wholesaleCost=formatDecimalToTwoPlaces(wholesaleCost);
+					retailCost=2*wholesaleCost;
+					done=true;				
+			}	
+		}
+		while(!done);
+
+		return wholesaleCost;
+
+	}
+
+	Date* validateDateInput()
+	{
+		bool done;
+		Date *date;
+
+		int month;
+		int day;
+		int year;
+
+		do
+		{
+			// Prompts User for Input until a correct date is entered	
+
+
+			cout<<"Enter Month(1-12)\n";
+			cin>>month;
+			if(cin.fail())
+			{	
+				// Clears the buffer if the input fails when a bad type is entered
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			else
+			{	
+					// If the correct datatype of int is entered then prompts user for day
+					cout<<"Enter day (1-31 is a likely input)\n";
+					cin>>day;
+					if(cin.fail())
+					{	
+						// Clears the buffer if the input fails when a bad type is entered
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					}
+					else
+					{
+						// If the correct datatype of int is entered the prompts the user for the year
+						cout<<"Enter Year (Between 1900-2100)\n";
+						cin>>year;
+
+						if(cin.fail())
+						{	
+							// Clears the buffer if the input fails when a bad type is entered
+							cin.clear();
+							cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						}
+						else
+						{
+							// If the correct datatype of int is entered then checks if all the inputs can be a date
+							// isValidDate checks if the month is between 1-12
+							// isValidDate also checks if the day is between 1-31 and checks if the day is possible for the month chosen
+							// Some months have 28,29,30 or 31 days
+							// The year is also checked the year needs to be within reason between (1900-2100)
+							date->setDate(month,day,year);
+							if(date->isValidDate(month,day,year))
+							{
+								done=true;
+							}
+						}
+					}
+
+			}	
+		}
+		while(!done);
+
+		// The loop ends when the user enters a correct date and the date object is returned
+
+		return date;
+
+	}
+
+
+
+
 	private:
 
 		double formatDecimalToTwoPlaces(double number)
@@ -779,6 +966,7 @@ int main()
  	UnitTest(); 
 }
 
+// Specification A4 - UnitTest() method in main()
 void UnitTest()
 {
 	cout<<"Starting ArrayList Class Unit Test\n";
@@ -807,7 +995,7 @@ void runInventoryInquisitor()
 
 		if(cin.fail())
 		{	
-			// Clears the buffer if the input fails whnen a bad type is entered
+			// Clears the buffer if the input fails when a bad type is entered
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
@@ -825,7 +1013,7 @@ void runInventoryInquisitor()
 	while(!done);
 }
 
-
+// Specification C1 - Alpha Menu
 void alphaMenu()
 {
 	cout<<"Select an Input\n";
@@ -900,3 +1088,4 @@ void pressEnterKey()
         }
 
 }
+
