@@ -130,6 +130,19 @@ class ArrayList
 			}
 		}
 
+		void printItem(int index)
+		{
+			cout<<array[index];
+		}
+
+		void printContents()
+		{
+			for(int index=0;index>size();index++)
+			{
+				printItem(index);
+			}
+		}
+
 		void remove(const int index)
 		{
 			// Removes an alement at any index of the array
@@ -167,16 +180,6 @@ class ArrayList
 		}
 
 		
-
-		
-		
-		~ArrayList()
-		{
-			delete[] array;
-			array=nullptr;
-			this->length=0;
-		}
-
 		void ArrayListUnitTest()
 		{
 
@@ -240,6 +243,16 @@ class ArrayList
 
 		}
 
+		
+		
+		~ArrayList()
+		{
+			delete[] array;
+			array=nullptr;
+			this->length=0;
+		}
+
+		
 
 };
 
@@ -719,7 +732,7 @@ struct InventoryItem
 	int idNumber;
 	int itemQuantity;
 	double wholesaleCost;
-	double retailCost=2*wholesaleCost;
+	double retailCost;
 	Date dateAdded;
 
 	InventoryItem(int idNumber, int itemQuantity, int wholesaleCost, Date date)
@@ -729,7 +742,7 @@ struct InventoryItem
 		this->itemQuantity=itemQuantity;
 		this->wholesaleCost=wholesaleCost;
 		this->retailCost=2*wholesaleCost;
-		dateAdded=date;
+		this->dateAdded=date;
 
 
 	}
@@ -755,14 +768,16 @@ struct InventoryItem
     	return output;
 	}
 
+	
+
 	void editItem()
 	{
 		this->idNumber=validateIdNumberInput();
 		this->itemQuantity=validateItemQuantityInput();
 		this->wholesaleCost=validateWholeSaleCostInput();
 		this->retailCost=wholesaleCost*2;
-		validateDateInput();
-		
+		this->dateAdded=validateDateInput();	
+
 	}
 
 
@@ -777,7 +792,7 @@ struct InventoryItem
 	}	
 	
 
-	static int validateIdNumberInput()
+	 int validateIdNumberInput()
 	{
 		bool done;
 		int id=0;
@@ -804,8 +819,7 @@ struct InventoryItem
 
 		return id;
 	}
-
-	int validateItemQuantityInput()
+	 int validateItemQuantityInput()
 	{
 		bool done;
 		int itemQuantity=0;
@@ -858,7 +872,7 @@ struct InventoryItem
 
 	}
 
-	void validateDateInput()
+	Date validateDateInput()
 	{
 		bool done;
 		Date date;
@@ -914,7 +928,7 @@ struct InventoryItem
 							if(date.isValidDate(month,day,year))
 							{
 								
-								dateAdded.setDate(month,day,year);
+								date.setDate(month,day,year);
 								done=true;
 
 
@@ -927,6 +941,7 @@ struct InventoryItem
 		}
 		while(!done);
 
+		return date;
 		
 		
 
@@ -971,22 +986,27 @@ class InventoryManager
 	private:
 
 		ArrayList<InventoryItem*> inventory;
+
 	public:
 
 		void addItem()
 		{
-				InventoryItem* item;
-				
-				item->idNumber=item->validateIdNumberInput();
+			InventoryItem item;
+			item.editItem();
+			cout<<"WHAT SHOULD BE PRINTED\n";
+			cout<<item;
 
-				item->validateItemQuantityInput();
+			addItem(&item);
+			cout<<*inventory.get(inventory.size()-1);
+			cout<<"WHAT IS STORED WHEN ADDED\n";
+			
 
-				item->wholesaleCost=item->validateWholeSaleCostInput();				
+			
+		}
 
-				item->validateDateInput();	
-
-				inventory.add(item);
-		
+		void addItem(InventoryItem *item)
+		{
+			inventory.add(item);			
 		}
 
 		void remove()
@@ -1001,10 +1021,7 @@ class InventoryManager
 		{
 			if(getSize()>0)
 			{
-				for(int index=0;index<inventory.size()-1;index++)
-				{
-					cout<<inventory.get(index);
-				}
+				inventory.printContents();
 			}
 		}
 
@@ -1062,10 +1079,9 @@ class InventoryManager
 			}
 		}
 
-		void printItem(int index)
-		{
-			cout<<inventory.get(index);
-		}
+		
+
+	
 
 		int getSize()
 		{
@@ -1077,6 +1093,40 @@ class InventoryManager
 		{
 			return inventory.isValidIndex(index);
 		}
+
+		void InventoryManagerUnitTest()
+		{
+			InventoryManager inventoryTest;
+
+			int id = 12345;
+			int itemQuantity=13;
+			int wholesaleCost=14;
+			Date date(12,13,2018);
+
+			InventoryItem item(id,itemQuantity,wholesaleCost,date);
+			inventoryTest.addItem(&item);	
+			
+			int id2=23456;
+			int item2Quantity=23;
+			int wholesaleCost2=55;
+			Date date2(2,25,2001);
+			InventoryItem item2(id2,item2Quantity,wholesaleCost2,date2);
+			inventoryTest.addItem(&item2);
+			cout<<"Testing adding a new Item\n";
+
+			inventoryTest.addItem();
+
+			inventoryTest.outputInventoryData();
+
+
+			
+
+
+
+
+		}
+
+
 
 	private:
 
@@ -1134,24 +1184,28 @@ bool validateUserInput(char input,InventoryManager& inventory);
 
 int main()
 {
- 	//UnitTest(); 
- 	runInventoryInquisitor();
+ 	UnitTest(); 
+ 	//runInventoryInquisitor();
 }
 
 // Specification A4 - UnitTest() method in main()
 void UnitTest()
 {
-	cout<<"Starting ArrayList Class Unit Test\n";
-	pressEnterKey();
-	ArrayList<int> array;
-	array.ArrayListUnitTest();	
-	pressEnterKey();
-	Date date;
-	date.dateUnitTest();
-	pressEnterKey();
-	InventoryItem item;
-	item.InventoryItemUnitTest();
-	pressEnterKey();
+	cout<<"Starting Unit Tests\n";
+	//cout<<"Starting ArrayList Class Unit Test\n";
+	//pressEnterKey();
+	//ArrayList<int> array;
+	//array.ArrayListUnitTest();	
+	//pressEnterKey();
+	//Date date;
+	//date.dateUnitTest();
+	//pressEnterKey();
+	//InventoryItem item;
+	//item.InventoryItemUnitTest();
+	//cout<<"Ending InventoryItem Unit Testing\n";
+	//pressEnterKey();
+	InventoryManager inventory;
+	inventory.InventoryManagerUnitTest();
 }
 
 
