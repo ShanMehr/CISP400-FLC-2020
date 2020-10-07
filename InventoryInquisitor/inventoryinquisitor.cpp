@@ -16,7 +16,7 @@ template <class A>
 class ArrayList
 {
 	// The template class ArrayList creates an array that is able to store any data type 
-	private:
+	public:
 
 		int length=0;
 		A* array;
@@ -132,12 +132,16 @@ class ArrayList
 
 		void printItem(int index)
 		{
-			cout<<array[index];
+			
+				cout<<array[index];
+			
+			
 		}
 
 		void printContents()
 		{
-			for(int index=0;index>size();index++)
+
+			for(int index=0;index>size();++index)
 			{
 				printItem(index);
 			}
@@ -552,7 +556,7 @@ class Date
 			
 			// Testing Constructor with multiple parameters and checking date entered
 			cout<<"Testing wether the multiple parameter constructor works\n";
-			Date* date  = testDateContructor(12,15,2020);
+			
 			cout<<"Displaying Today's date in Letter form\n";
 			cout<<"Printing Numeric Date:\n";	
 			cout<<"Expected: 12/15/2015\n";
@@ -819,7 +823,8 @@ struct InventoryItem
 
 		return id;
 	}
-	 int validateItemQuantityInput()
+
+	int validateItemQuantityInput()
 	{
 		bool done;
 		int itemQuantity=0;
@@ -947,6 +952,26 @@ struct InventoryItem
 
 	}
 
+	void setIdNumber()
+	{
+		this->idNumber=validateIdNumberInput();
+	}
+	void setItemQuantity()
+	{
+		this->itemQuantity=validateItemQuantityInput();
+	}
+
+
+	void setWholesaleCost()
+	{
+		this->wholesaleCost=validateWholeSaleCostInput();
+	}
+
+	void setDateAdded()
+	{
+		this->dateAdded=validateDateInput();
+	}
+
  	void InventoryItemUnitTest()
  	{
       	InventoryItem item;
@@ -983,9 +1008,9 @@ struct InventoryItem
 
 class InventoryManager
 {
-	private:
+	public:
 
-		ArrayList<InventoryItem*> inventory;
+		ArrayList<InventoryItem> inventory;
 
 	public:
 
@@ -993,19 +1018,16 @@ class InventoryManager
 		{
 			InventoryItem item;
 			item.editItem();
-			cout<<"WHAT SHOULD BE PRINTED\n";
+			cout<<"PRINTING ITEM\n";
 			cout<<item;
-
-			addItem(&item);
-			cout<<*inventory.get(inventory.size()-1);
-			cout<<"WHAT IS STORED WHEN ADDED\n";
-			
+			addItem(item);		
 
 			
 		}
 
-		void addItem(InventoryItem *item)
+		void addItem(InventoryItem &item)
 		{
+
 			inventory.add(item);			
 		}
 
@@ -1015,14 +1037,37 @@ class InventoryManager
 			{
 				this->inventory.removeLast();
 			}
+			else
+			{
+				cout<<"The Inventory is Empty!\n";
+			}
 		}
 
 		void outputInventoryData()
 		{
-			if(getSize()>0)
-			{
-				inventory.printContents();
-			}
+				if(inventory.size()>0)
+				{
+					for(int i=0;i<inventory.size();i++)
+					{
+						printItem(i);
+					}
+				}
+				else
+				{
+					cout<<"The Inventory is Empty!\n";
+				}
+			
+		}
+
+
+		void editItem()
+		{
+
+		}
+
+		void printItem(int index)
+		{
+			inventory.printItem(index);
 		}
 
 
@@ -1032,7 +1077,6 @@ class InventoryManager
 			if(getSize()>0)
 			{	
 				bool done;
-				InventoryItem item;
 				int choice;
 				int index;
 				do
@@ -1050,13 +1094,15 @@ class InventoryManager
 					else
 					{
 						cout<<"Choose a value:\n";
-						cout<<"(1)Change ID(:\n";
+						cout<<"(1)Change ID\n";
 						cout<<"(2)Change Number of Items:\n";
 						cout<<"(3)Change Wholesale Cost:\n";
 						cout<<"(4)Change Retail Cost:\n";
 						cout<<"(5)Change Date:\n";
+						cout<<"(6) Quit\n";
 
-						int choice=0;
+						
+
 						cin>>choice;
 
 						if(cin.fail())
@@ -1067,7 +1113,7 @@ class InventoryManager
 						}
 						else
 						{
-							handleUserSelection(index,choice);
+							done=handleUserSelection(index,choice);
 						}
 						
 
@@ -1079,13 +1125,11 @@ class InventoryManager
 			}
 		}
 
-		
-
-	
+			
 
 		int getSize()
 		{
-				return inventory.size();
+			return inventory.size();
 		}
 
 		
@@ -1096,65 +1140,70 @@ class InventoryManager
 
 		void InventoryManagerUnitTest()
 		{
-			InventoryManager inventoryTest;
+		
+			InventoryManager testInventory;
 
-			int id = 12345;
-			int itemQuantity=13;
-			int wholesaleCost=14;
-			Date date(12,13,2018);
+			testInventory.addItem();
 
+			
+
+			int id=12345;
+			int itemQuantity=23;
+			double wholesaleCost=12.23;
+			Date date(2,25,2001);
 			InventoryItem item(id,itemQuantity,wholesaleCost,date);
-			inventoryTest.addItem(&item);	
-			
-			int id2=23456;
-			int item2Quantity=23;
-			int wholesaleCost2=55;
-			Date date2(2,25,2001);
-			InventoryItem item2(id2,item2Quantity,wholesaleCost2,date2);
-			inventoryTest.addItem(&item2);
-			cout<<"Testing adding a new Item\n";
-
-			inventoryTest.addItem();
-
-			inventoryTest.outputInventoryData();
+			testInventory.addItem(item);
 
 
-			
+			testInventory.outputInventoryData();
 
-
-
+			cout<<"Removing an Item\n";
+			testInventory.remove();
+			testInventory.outputInventoryData();
 
 		}
 
 
 
+
 	private:
 
-		void handleUserSelection(int index,int choice)
+		
+
+		bool handleUserSelection(int index,int choice)
 		{
+			bool done=false;
+
 			InventoryItem item;
 			switch(choice)
 			{
 				case 1:
-					inventory.get(index)->idNumber=item.validateIdNumberInput();
+					inventory.get(index).setIdNumber();
+					cout<<"Updated ID: "<<inventory.get(index).idNumber<<'\n';
 				break;
 
 				case 2:				
-					inventory.get(index)->itemQuantity=item.validateItemQuantityInput();
+					inventory.get(index).setItemQuantity();
+					cout<<"Updated Number of Items: "<<inventory.get(index).itemQuantity<<'\n';
+
 				break;
 
 				case 3:
-					inventory.get(index)->wholesaleCost=item.validateWholeSaleCostInput();
+					inventory.get(index).setWholesaleCost();
+					cout<<"Updated Wholesale Cost: "<<inventory.get(index).wholesaleCost<<'\n';
+					cout<<"Updated Retail Cost: "<<inventory.get(index).retailCost<<'\n';
 				break;
 
 				case 4:
-					inventory.get(index)->retailCost=item.validateWholeSaleCostInput();
+					inventory.get(index).setDateAdded();
+					cout<<"Updated Retail Cost: "<<inventory.get(index).dateAdded.getNumericDate()<<'\n';
 				break;
 
 				case 5:
-					inventory.get(index)->validateDateInput();
+					cout<<"Quitting Item Editor\n";
+					done=true;
 				break;
-
+			
 				default:
 				{
 					cout<<"Try Again, The input chosen is invalid\n";
@@ -1165,8 +1214,8 @@ class InventoryManager
 
 
 			}
+			return done;
 		}
-
 
 
 
@@ -1179,13 +1228,13 @@ void UnitTest();
 void pressEnterKey();
 void runInventoryInquisitor();
 void alphaMenu();
-bool validateUserInput(char input,InventoryManager& inventory);
+bool validateUserInput(char input,InventoryManager &inventory);
 
 
 int main()
 {
  	UnitTest(); 
- 	//runInventoryInquisitor();
+ 	runInventoryInquisitor();
 }
 
 // Specification A4 - UnitTest() method in main()
@@ -1220,7 +1269,8 @@ void runInventoryInquisitor()
 
 		alphaMenu();
 		cin>>input;
-		system("clear");
+
+		
 
 		if(cin.fail())
 		{	
@@ -1233,6 +1283,7 @@ void runInventoryInquisitor()
 		{
 			// Processes the user input and checks what task the user wants to perform
 			// Also records whether the user want to quit the program
+
 			input=tolower(input);
 			done=validateUserInput(input,inventory);
 		}
@@ -1257,60 +1308,47 @@ void alphaMenu()
 // Specification B3 - Menu Input Validation
 bool validateUserInput(char input, InventoryManager &program)
 {
-	bool done;
+	bool done=false;
 
-	switch(input)
+	if(input=='o')
 	{
-		case 'a':	
-			
-			// Add item
-			cout<<"Item added\n";
-			program.addItem();
-			break;
+		program.outputInventoryData();
+		
+	}
 
-		case 'd':
+	else if(input=='a')
+	{
+		// Add item
+		program.addItem();	
+		
+	}
 
-			cout<<"Item Deleted\n";
+	else if(input=='d')
+	{
+		program.remove();	
+	}
 
-				if(program.getSize()>0)
-				{
-					program.remove();
-				}
-				else
-				{
-					cout<<"Inventory is empty!\n";
-				}
-			break;
+	else if(input=='e')
+	{
+		program.editItem();
+		cout<<"Item Edited\n";		
+	}	
 
-		case 'e':
-
-				if(program.getSize()>0)
-				{
-					program.editInventoryItem();
-					cout<<"Item Edited\n";
-				}
-				else
-				{
-					cout<<"Inventory is empty!\n";
-				}
-						
-			break;
-
-		case 'o':
-			
-			cout<<"Outputing Inventory\n";
-			program.outputInventoryData();
-			break;
-		case 'q':
-
+	else if(input=='q')
+	{
 			cout<<"Quitting Program\n";
 			done=true;
+			
+	}
 
-		default:
+	else
+	{
+		cout<<"The input entered is not valid!"<<'\n';
+	}
 
-			cout<<"The input entered is not valid!"<<'\n';
-			break;
-	} 
+
+		
+	 
 	return done;
 
 
