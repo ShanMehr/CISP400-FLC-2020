@@ -477,7 +477,7 @@ class Date
 
 		bool validYear(int year)
 		{
-			if(year>=1900&&year<=2100)
+			if(year>=0&&year<=3000)
 			{
 				// Checks if a reasonable year is entered				
 				return true;				
@@ -486,7 +486,7 @@ class Date
 			else
 			{
 					cout<<"Year input failed!\n";
-					cout<<"The year entered is not a reasonable year entry try a year between 1900-2100(inclusive)\n";
+					cout<<"The year entered is not a reasonable year entry try a year larger than 0 and less than 3000\n";
 					return false;
 			}
 		}
@@ -776,106 +776,152 @@ struct InventoryItem
 
 	void editItem()
 	{
-		this->idNumber=validateIdNumberInput();
-		this->itemQuantity=validateItemQuantityInput();
+		int id=validateIdNumberInput();
+		cout<<"ID Entered\n";
+		this->idNumber=id;
+		int itemQuantity=validateItemQuantityInput();
+		this->itemQuantity=itemQuantity;
+
 		this->wholesaleCost=validateWholeSaleCostInput();
 		this->retailCost=wholesaleCost*2;
-		this->dateAdded=validateDateInput();	
+		this->dateAdded.setDate(9,9,99);	
 
 	}
 
 
 	// Specification A3 - Overload operator»
 	friend istream &operator >>(istream &input, InventoryItem& inventory )
-	{
+	{		
+			cout<<"Enter Id Number:\n";
 			input>>inventory.idNumber;
+			cout<<"Enter Number of Items:\n";
 			input>>inventory.itemQuantity;
+			cout<<"Enter Wholesale Cost :\n";
 			input>>inventory.wholesaleCost;
+			cout<<"Enter Date the Item was added to the inventory:\n";
 			input>>(inventory.dateAdded);
 			return input;
 	}	
 	
 
-	 int validateIdNumberInput()
+	int validateIdNumberInput()
 	{
-		bool done;
-		int id=0;
+		bool done=false;
+		int id;
 
 		do
 		{
+			int chosenID;
 			cout<<"Enter the id(A number with 5 digits)\n";
-			cin>>id;
-			if(cin.fail())
+			cin>>chosenID;
+			if(!cin.fail())
 			{	
-				// Clears the buffer if the input fails when a bad type is entered
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				if(chosenID>9999&&chosenID<=99999)
+				{
+					done=true;
+					id=chosenID;
+					cout<<"ID Recorded\n";
+				}
+				else
+				{
+					cout<<"ID Input Failed\n";
+				}
+				
 			}
 			else
 			{
-				if(id>9999&&id<100000)
-				{
-					done=true;
-				}
+				// Clears the buffer if the input fails when a bad type is entered
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				
 			}	
 		}
-		while(!done);
+		while(done==false);
 
 		return id;
 	}
 
 	int validateItemQuantityInput()
 	{
-		bool done;
+		bool done=false;
 		int itemQuantity=0;
 
 		do
 		{
+			int quantitySelected;
 			cout<<"Enter the number of items\n";
-			cin>>itemQuantity;
-			if(cin.fail())
+			cin>>quantitySelected;
+			cout<<"You Entered: "<<	quantitySelected<<'\n';
+			if(!cin.fail())
+			{	
+				
+				if(quantitySelected>=0)
+				{			
+					done=true;	
+					itemQuantity=quantitySelected;
+				}	
+				else
+				{
+					
+					cout<<"Enter at least 1 item\n";
+				}		
+			}
+
+			else
 			{	
 				// Clears the buffer if the input fails when a bad type is entered
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			}
-			else
-			{				
-					done=true;				
+
+				
 			}	
+
 		}
-		while(!done);
+		while(done==false);
 
 		return itemQuantity;
 	}
  
 	double validateWholeSaleCostInput()
 	{
-		bool done;
+		bool done=false;
 		double wholesaleCost=0;
 
 		do
 		{
+			double wholesaleCostChosen;
 			cout<<"Enter the wholesale cost\n";
-			cin>>wholesaleCost;
-			if(cin.fail())
+			cin>>wholesaleCostChosen;
+			if(!cin.fail())
+			{	
+				if(wholesaleCostChosen>=0)
+				{		
+					wholesaleCost=wholesaleCostChosen;
+					wholesaleCost=formatDecimalToTwoPlaces(wholesaleCost);
+					retailCost=2*wholesaleCost;
+					cout<<"Wholesale Cost Recorded: "<<wholesaleCost<<'\n';
+					cout<<"Retail Cost Recorded: "<<retailCost<<'\n';
+					done=true;		
+				}		
+				else
+				{
+					cout<<"Entered Wholesale Cost is not valid";
+				}		
+			}
+			else
 			{	
 				// Clears the buffer if the input fails when a bad type is entered
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			}
-			else
-			{				
-					wholesaleCost=formatDecimalToTwoPlaces(wholesaleCost);
-					retailCost=2*wholesaleCost;
-					done=true;				
+				
 			}	
 		}
-		while(!done);
+		while(done==false);
 
 		return wholesaleCost;
 
 	}
+
 
 	Date validateDateInput()
 	{
@@ -886,79 +932,89 @@ struct InventoryItem
 		int day;
 		int year;
 
+
 		do
 		{
+
+			int monthEntered;
+			int dayEntered;
+			int yearEntered;
+
 			// Prompts User for Input until a correct date is entered	
-
-
 			cout<<"Enter Month(1-12)\n";
-			cin>>month;
-			if(cin.fail())
-			{	
-				// Clears the buffer if the input fails when a bad type is entered
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			}
-			else
-			{	
+			cin>>monthEntered;
+
+			if(!cin.fail())
+			{
+				cout<<"Month Entered: "<<monthEntered<<'\n';
+				if(!cin.fail())
+				{
 					// If the correct datatype of int is entered then prompts user for day
 					cout<<"Enter day (1-31 is a likely input)\n";
-					cin>>day;
-					if(cin.fail())
-					{	
+					cin>>dayEntered;
+
+
+					if(!cin.fail())
+					{
+						cout<<"Day Chosen: "<<dayEntered<<'\n';
+						// If the correct datatype of int is entered the prompts the user for the year
+						cout<<"Enter Year (Between 1900-2100)\n";
+						cin>>yearEntered;
+						if(date.isValidDate(monthEntered,dayEntered,yearEntered))
+						{
+
+							month=monthEntered;
+							day=dayEntered;
+							year=yearEntered;
+							date.setDate(month,day,year);
+
+
+						}
+					}	
+					else
+					{
 						// Clears the buffer if the input fails when a bad type is entered
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					}
-					else
-					{
-						// If the correct datatype of int is entered the prompts the user for the year
-						cout<<"Enter Year (Between 1900-2100)\n";
-						cin>>year;
 
-						if(cin.fail())
-						{	
-							// Clears the buffer if the input fails when a bad type is entered
-							cin.clear();
-							cin.ignore(numeric_limits<streamsize>::max(), '\n');
-						}
-						else
-						{
-							// If the correct datatype of int is entered then checks if all the inputs can be a date
-							// isValidDate checks if the month is between 1-12
-							// isValidDate also checks if the day is between 1-31 and checks if the day is possible for the month chosen
-							// Some months have 28,29,30 or 31 days
-							// The year is also checked the year needs to be within reason between (1900-2100)
+					}	
 
-							if(date.isValidDate(month,day,year))
-							{
-								
-								date.setDate(month,day,year);
-								done=true;
+				}	
+				else
+				{
+					// Clears the buffer if the input fails when a bad type is entered
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-
-							}
-
-						}
-					}
+				}		
 
 			}	
+			else
+			{
+				// Clears the buffer if the input fails when a bad type is entered
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+			}		
 		}
-		while(!done);
+		while(done==false);
 
 		return date;
-		
-		
 
 	}
+
+	
 
 	void setIdNumber()
 	{
-		this->idNumber=validateIdNumberInput();
+		int idChosen=validateIdNumberInput();
+		this->idNumber=idChosen;
 	}
 	void setItemQuantity()
 	{
-		this->itemQuantity=validateItemQuantityInput();
+		int quantitySelected=validateItemQuantityInput();
+		this->itemQuantity=quantitySelected;
+	
 	}
 
 
@@ -1060,23 +1116,20 @@ class InventoryManager
 		}
 
 
-		void editItem()
-		{
-
-		}
+		
 
 		void printItem(int index)
 		{
 			inventory.printItem(index);
 		}
 
-
 		// Specification A1 - Edit Inventory
 		void editInventoryItem()
 		{
+			cout<<"Editing Item\n";
 			if(getSize()>0)
 			{	
-				bool done;
+				bool done=false;
 				int choice;
 				int index;
 				do
@@ -1084,44 +1137,115 @@ class InventoryManager
 					cout<<"Select an item edit\n";
 					cout<<"Choose an index between 0 and "<<(inventory.size()-1)<<" (inclusive)\n";				
 					cin>>index;
-					if(cin.fail())
-					{		
-						// Clears the buffer if the input fails when a bad type is entered
-						cin.clear();
-						cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					}
 
-					else
-					{
-						cout<<"Choose a value:\n";
-						cout<<"(1)Change ID\n";
-						cout<<"(2)Change Number of Items:\n";
-						cout<<"(3)Change Wholesale Cost:\n";
-						cout<<"(4)Change Retail Cost:\n";
-						cout<<"(5)Change Date:\n";
-						cout<<"(6) Quit\n";
-
+					if(!cin.fail())
+					{	
 						
+						
+						if(!cin.fail())
+						{
+							if(index<inventory.size()&&index>=0)
+							{
+								InventoryItem item;
+								int ID = item.validateIdNumberInput();
+								int itemQuantity = item.validateItemQuantityInput();
+								double wholesaleCostChosen= item.validateWholeSaleCostInput();
+								Date date(9,9,9);
+								InventoryItem item2(ID,itemQuantity,wholesaleCostChosen,date);
+								inventory.set(index,item2);
+								cout<<item2;
+								done=true;
+							}
 
-						cin>>choice;
-
-						if(cin.fail())
-						{		
+							else
+							{
+								cout<<"The Index Entered is not valid\n";
+							}
+						}
+						else
+						{
 							// Clears the buffer if the input fails when a bad type is entered
 							cin.clear();
 							cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						}
-						else
-						{
-							done=handleUserSelection(index,choice);
-						}
+					}
+
+					else
+					{
+						
+						// Clears the buffer if the input fails when a bad type is entered
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						
 
 					}
 
 
 				}
-				while(!done);
+				
+				while(done==false);
+			}
+			else
+			{
+				cout<<"The Inventory is Empty\n";
+				cout<<"Redirecting to Item Insertion\n";
+				addItem();
+			}
+
+		}
+
+		
+		void editInventoryManagerItem()
+		{
+			cout<<"Editing Item\n";
+			if(getSize()>0)
+			{	
+				bool done=false;
+				int choice;
+				int index;
+				do
+				{
+					cout<<"Select an item edit\n";
+					cout<<"Choose an index between 0 and "<<(inventory.size()-1)<<" (inclusive)\n";				
+					cin>>index;
+					if(!cin.fail())
+					{	
+						cout<<"Choose a value:\n";
+						cout<<"(1)Change ID\n";
+						cout<<"(2)Change Number of Items:\n";
+						cout<<"(3)Change Wholesale Cost:\n";
+						cout<<"(4)Change Date:\n";
+						cout<<"(5) Quit\n";			
+
+						cin>>choice;
+	
+						if(!cin.fail())
+						{
+
+							bool endProgram=handleUserSelection(index,choice);
+							done=endProgram;
+						}
+						else
+						{
+							// Clears the buffer if the input fails when a bad type is entered
+							cin.clear();
+							cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						}
+					}
+
+					else
+					{
+						
+						// Clears the buffer if the input fails when a bad type is entered
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						
+
+					}
+
+
+				}
+				while(done==false);
 			}
 		}
 
@@ -1175,46 +1299,49 @@ class InventoryManager
 			bool done=false;
 
 			InventoryItem item;
-			switch(choice)
-			{
-				case 1:
+			
+				if(choice==1)
+				{
+					cout<<"Editing ID Number:\n";
 					inventory.get(index).setIdNumber();
 					cout<<"Updated ID: "<<inventory.get(index).idNumber<<'\n';
-				break;
+				}	
 
-				case 2:				
+				else if(choice==2)
+				{		
+					cout<<"Editing Number of Itemns:\n";		
 					inventory.get(index).setItemQuantity();
 					cout<<"Updated Number of Items: "<<inventory.get(index).itemQuantity<<'\n';
+				}
 
-				break;
+				else if(choice==3)
+				{
 
-				case 3:
+				
+					cout<<"Editing Wholesale Cost:\n";
 					inventory.get(index).setWholesaleCost();
 					cout<<"Updated Wholesale Cost: "<<inventory.get(index).wholesaleCost<<'\n';
 					cout<<"Updated Retail Cost: "<<inventory.get(index).retailCost<<'\n';
-				break;
-
-				case 4:
+				}
+				else if(choice==4)
+				{
+				
+					cout<<"Editing Date:\n";
 					inventory.get(index).setDateAdded();
 					cout<<"Updated Retail Cost: "<<inventory.get(index).dateAdded.getNumericDate()<<'\n';
-				break;
-
-				case 5:
+				}
+				else if(choice=5)
+				{
 					cout<<"Quitting Item Editor\n";
 					done=true;
-				break;
-			
-				default:
-				{
-					cout<<"Try Again, The input chosen is invalid\n";
 				}
-
-
-
-
-
-			}
-			return done;
+				else
+				{
+					cout<<"Input is not Valid\n";
+					done=true;
+				}
+			
+					return done;
 		}
 
 
@@ -1233,7 +1360,7 @@ bool validateUserInput(char input,InventoryManager &inventory);
 
 int main()
 {
- 	UnitTest(); 
+ 	//UnitTest(); 
  	runInventoryInquisitor();
 }
 
@@ -1260,7 +1387,7 @@ void UnitTest()
 
 void runInventoryInquisitor()
 {
-	bool done;
+	bool done=false;
 
 	InventoryManager inventory;
 	do
@@ -1290,7 +1417,7 @@ void runInventoryInquisitor()
 
 
 	}
-	while(!done);
+	while(done==false);
 }
 
 // Specification C1 - Alpha Menu
@@ -1330,8 +1457,10 @@ bool validateUserInput(char input, InventoryManager &program)
 
 	else if(input=='e')
 	{
-		program.editItem();
-		cout<<"Item Edited\n";		
+		program.editInventoryItem();
+
+
+
 	}	
 
 	else if(input=='q')
@@ -1345,9 +1474,6 @@ bool validateUserInput(char input, InventoryManager &program)
 	{
 		cout<<"The input entered is not valid!"<<'\n';
 	}
-
-
-		
 	 
 	return done;
 
