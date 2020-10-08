@@ -1122,80 +1122,7 @@ class InventoryManager
 			inventory.printItem(index);
 		}
 
-		// Specification A1 - Edit Inventory
-		void editInventoryItem()
-		{
-			// Changes the data of an InventoryItem at a index of the inventory ArrayList chosen by the user
-
-			cout<<"Editing Item\n";
-			if(getSize()>0)
-			{	
-				bool done=false;
-				int choice;
-				int index;
-				do
-				{
-					cout<<"Select an item edit\n";
-					cout<<"Choose an index between 0 and "<<(inventory.size()-1)<<" (inclusive)\n";				
-					cin>>index;
-
-					if(!cin.fail())
-					{	
-						
-						
-						if(!cin.fail())
-						{
-							if(index<inventory.size()&&index>=0)
-							{
-								InventoryItem item;
-								int ID = item.validateIdNumberInput();
-								int itemQuantity = item.validateItemQuantityInput();
-								double wholesaleCostChosen= item.validateWholeSaleCostInput();
-								Date date(9,9,9);
-								InventoryItem item2(ID,itemQuantity,wholesaleCostChosen,date);
-								inventory.set(index,item2);
-								cout<<item2;
-								done=true;
-							}
-
-							else
-							{
-								cout<<"The Index Entered is not valid\n";
-							}
-						}
-						else
-						{
-							// Clears the buffer if the input fails when a bad type is entered
-							cin.clear();
-							cin.ignore(numeric_limits<streamsize>::max(), '\n');
-						}
-					}
-
-					else
-					{
-						
-						// Clears the buffer if the input fails when a bad type is entered
-						cin.clear();
-						cin.ignore(numeric_limits<streamsize>::max(), '\n');
-						
-
-					}
-
-
-				}
-				
-				while(done==false);
-			}
-			else
-			{
-				cout<<"The Inventory is Empty\n";
-				cout<<"Redirecting to Item Insertion\n";
-				addItem();
-			}
-
-		}
-
-		
+		// Specification A1 - Edit Inventory	
 		void editInventoryManagerItem()
 		{
 
@@ -1259,6 +1186,12 @@ class InventoryManager
 				}
 				while(done==false);
 			}
+			else
+			{
+				cout<<"The Inventory is Empty\n";
+				cout<<"Redirecting to Item Insertion\n";
+				addItem();
+			}
 		}
 
 			
@@ -1310,7 +1243,7 @@ class InventoryManager
 
 			bool done=false;
 
-			InventoryItem *itemToInputData;
+			InventoryItem *itemToInputData=nullptr;
 
 			
 
@@ -1377,7 +1310,7 @@ class InventoryManager
 					inventory.set(index,item);
 				}
 
-				else if(choice=5)
+				else if(choice==5)
 				{
 					cout<<"Quitting Item Editor\n";
 					done=true;
