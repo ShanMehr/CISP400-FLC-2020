@@ -25,8 +25,11 @@ class ArrayList
 		
 		ArrayList(int size)
 		{	
+			// Defines an ArrayList Object that accepts a length
+			// Allocates space on the heap to store array
 			if(length>=0)
 			{
+				// Makes sure the length is at least 0
 				this->length=size;
 				
 			}			
@@ -35,8 +38,11 @@ class ArrayList
 
 		ArrayList()
 		{
+			// Creates an ArrayList object
+			// Allocates space on the heap to store array
 			this->length=0;
 			array=new A[length];
+
 		}
 
 
@@ -46,7 +52,8 @@ class ArrayList
 
 		void resizeArrayList()
 		{
-			
+			// Resiszes the array by one
+
 			A* tempArrayList= new A[length+1]; // The tempArrayList stores all the data of array and has one more element
 
 			for(int position=0; position < length; position++)
@@ -63,8 +70,7 @@ class ArrayList
 		}
 
 
-
-
+		
 		
 
 	public:
@@ -76,8 +82,7 @@ class ArrayList
 				if(isValidIndex(index))
 				{
 					array[index]=element;
-				}
-			
+				}		
 			
 		}
 
@@ -92,6 +97,7 @@ class ArrayList
 
 		int size()
 		{
+			// Returns the size of the array
 			return length;
 		}
 
@@ -110,6 +116,7 @@ class ArrayList
 
 		bool isValidIndex(const int index)
 		{
+			// Checks if the index entered is within the bounds of the array
 			return (index>=0&&index<length);
 		}
 
@@ -131,8 +138,8 @@ class ArrayList
 		}
 
 		void printItem(int index)
-		{
-			
+		{	
+				// Prints the item at the requested index
 				cout<<array[index];
 			
 			
@@ -140,7 +147,7 @@ class ArrayList
 
 		void printContents()
 		{
-
+			// Prints the the entire array
 			for(int index=0;index>size();++index)
 			{
 				printItem(index);
@@ -154,10 +161,15 @@ class ArrayList
 			{
 				// If the index is a valid index then remove the element located at the position
 
+
+				// Defines a temporary array allocated on the heap
+				// The int copyPosition variable increases with the loop unless the position that is to be removed is reached
+				// By not increasing int copyPosition it will make sure that one less item will be copied;
 				A* tempArrayList = new A[length-1];
 				int copyPosition=0;
 				for(int position=0;position<length;position++)
 				{
+
 					if(!(position==index))
 					{
 						tempArrayList[copyPosition]=array[position];
@@ -186,6 +198,7 @@ class ArrayList
 		
 		void ArrayListUnitTest()
 		{
+			// Tests various functions of the ArrayList Class
 
 			ArrayList<string> array;
 			cout<<"Printing Initial Size:\n"<<array.size()<<'\n';
@@ -238,29 +251,18 @@ class ArrayList
 			array.set(0,"Professor Fowler");
 			cout<<array.get(0)<<'\n';
 			cout<<'\n';
-
-
-			
-
-
-
-
 		}
-
-		
 		
 		~ArrayList()
 		{
 			delete[] array;
 			array=nullptr;
 			this->length=0;
-		}
-
-		
+		}	
 
 };
 
-
+// Specification B1 - Date class
 class Date
 {
 	private:
@@ -301,6 +303,7 @@ class Date
 		
 		void testingSetDate(int month, int day, int year)
 		{
+			// Tests wether the setDate method sets the Date object's member variables are correctly set
 			setDate(month,day,year);
 			if(month==this->month&&day==this->day&&year==this->year)
 			{
@@ -314,7 +317,7 @@ class Date
 
 		Date* testDateContructor(int month,int day, int year)
 		{
-
+				// Tests wether the Constructor sets the Date object's member variables are correctly set
 				Date date(month, day, year);
 				Date* testDate=&date;
 
@@ -428,9 +431,7 @@ class Date
 					
 				}
 
-			}
-
-			
+			}			
 
 			return valid;
 
@@ -439,8 +440,7 @@ class Date
 
 		bool isLeap(int year)
 		{
-			// Checks wether a year is a leap year or not
-			
+			// Checks wether a year is a leap year or not		
 
 			if(year%4!=0)
 			{
@@ -711,7 +711,8 @@ class Date
 
 	friend ostream& operator << (ostream &output,Date& date)
 	{
-    output<<date.getDate();
+		// Prints the data of the Date Class
+    	output<<date.getDate();
 
  
     	return output;
@@ -721,6 +722,7 @@ class Date
 	
 	friend istream& operator >>(istream &input, Date& date)
 	{
+		// Sets the member variables for the Date Class
 		input>>date.month>>date.day>>date.year;
 		return input;
 	}	
@@ -741,14 +743,11 @@ struct InventoryItem
 
 	InventoryItem(int idNumber, int itemQuantity, int wholesaleCost, Date date)
 	{
-
 		this->idNumber=idNumber;
 		this->itemQuantity=itemQuantity;
 		this->wholesaleCost=wholesaleCost;
 		this->retailCost=2*wholesaleCost;
 		this->dateAdded=date;
-
-
 	}
 
 	InventoryItem()
@@ -773,15 +772,13 @@ struct InventoryItem
 	}
 
 	
-
+	// Specification B4 - Inventory Entry Input Validation
 	void editItem()
 	{
 		int id=validateIdNumberInput();
-		cout<<"ID Entered\n";
 		this->idNumber=id;
 		int itemQuantity=validateItemQuantityInput();
 		this->itemQuantity=itemQuantity;
-
 		this->wholesaleCost=validateWholeSaleCostInput();
 		this->retailCost=wholesaleCost*2;
 		this->dateAdded.setDate(9,9,99);	
@@ -903,6 +900,7 @@ struct InventoryItem
 					cout<<"Retail Cost Recorded: "<<retailCost<<'\n';
 					done=true;		
 				}		
+
 				else
 				{
 					cout<<"Entered Wholesale Cost is not valid";
@@ -916,6 +914,7 @@ struct InventoryItem
 				
 			}	
 		}
+
 		while(done==false);
 
 		return wholesaleCost;
@@ -971,6 +970,7 @@ struct InventoryItem
 
 						}
 					}	
+
 					else
 					{
 						// Clears the buffer if the input fails when a bad type is entered
@@ -980,6 +980,7 @@ struct InventoryItem
 					}	
 
 				}	
+
 				else
 				{
 					// Clears the buffer if the input fails when a bad type is entered
@@ -988,7 +989,8 @@ struct InventoryItem
 
 				}		
 
-			}	
+			}
+
 			else
 			{
 				// Clears the buffer if the input fails when a bad type is entered
@@ -1074,8 +1076,6 @@ class InventoryManager
 		{
 			InventoryItem item;
 			item.editItem();
-			cout<<"PRINTING ITEM\n";
-			cout<<item;
 			addItem(item);		
 
 			
@@ -1083,7 +1083,6 @@ class InventoryManager
 
 		void addItem(InventoryItem &item)
 		{
-
 			inventory.add(item);			
 		}
 
@@ -1111,8 +1110,7 @@ class InventoryManager
 				else
 				{
 					cout<<"The Inventory is Empty!\n";
-				}
-			
+				}			
 		}
 
 
@@ -1221,10 +1219,18 @@ class InventoryManager
 	
 						if(!cin.fail())
 						{
+							if(index>=0&&index<inventory.size())
+							{
+								bool endProgram=handleUserSelection(index,choice);
+								done=endProgram;
 
-							bool endProgram=handleUserSelection(index,choice);
-							done=endProgram;
+							}
+							else
+							{
+								cout<<"Index Entered is not valid\n";
+							}
 						}
+
 						else
 						{
 							// Clears the buffer if the input fails when a bad type is entered
@@ -1234,15 +1240,12 @@ class InventoryManager
 					}
 
 					else
-					{
-						
+					{						
 						// Clears the buffer if the input fails when a bad type is entered
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
-						
 
 					}
-
 
 				}
 				while(done==false);
@@ -1267,9 +1270,7 @@ class InventoryManager
 		
 			InventoryManager testInventory;
 
-			testInventory.addItem();
-
-			
+			testInventory.addItem();			
 
 			int id=12345;
 			int itemQuantity=23;
@@ -1292,43 +1293,53 @@ class InventoryManager
 
 	private:
 
-		
-
 		bool handleUserSelection(int index,int choice)
 		{
 			bool done=false;
 
-			InventoryItem item;
+			InventoryItem *itemToInputData;
+
 			
+
 				if(choice==1)
 				{
 					cout<<"Editing ID Number:\n";
-					inventory.get(index).setIdNumber();
-					cout<<"Updated ID: "<<inventory.get(index).idNumber<<'\n';
+					int ID= itemToInputData->validateIdNumberInput();
+					InventoryItem item(ID,inventory.get(index).itemQuantity,inventory.get(index).wholesaleCost,inventory.get(index).dateAdded);
+					itemToInputData=&item;
+					cout<<"Updated ID: "<<item.idNumber<<'\n';
+					inventory.set(index,item);
 				}	
 
 				else if(choice==2)
-				{		
-					cout<<"Editing Number of Itemns:\n";		
-					inventory.get(index).setItemQuantity();
-					cout<<"Updated Number of Items: "<<inventory.get(index).itemQuantity<<'\n';
+				{
+					cout<<"Editing Number Of Items:\n";
+					int itemQuantity= itemToInputData->validateItemQuantityInput();
+					InventoryItem item(inventory.get(index).idNumber,itemQuantity,inventory.get(index).wholesaleCost,inventory.get(index).dateAdded);
+					itemToInputData=&item;
+					cout<<"Updated Number of Items: "<<item.itemQuantity<<'\n';
+					inventory.set(index,item);
+
 				}
 
 				else if(choice==3)
-				{
-
-				
+				{				
 					cout<<"Editing Wholesale Cost:\n";
-					inventory.get(index).setWholesaleCost();
-					cout<<"Updated Wholesale Cost: "<<inventory.get(index).wholesaleCost<<'\n';
-					cout<<"Updated Retail Cost: "<<inventory.get(index).retailCost<<'\n';
+					double wholesaleCost= itemToInputData->validateWholeSaleCostInput();
+					InventoryItem item(inventory.get(index).idNumber,inventory.get(index).itemQuantity,wholesaleCost,inventory.get(index).dateAdded);
+					cout<<"Updated Number of Items: "<<item.wholesaleCost<<'\n';
+					inventory.set(index,item);
+					
 				}
 				else if(choice==4)
 				{
-				
 					cout<<"Editing Date:\n";
-					inventory.get(index).setDateAdded();
-					cout<<"Updated Retail Cost: "<<inventory.get(index).dateAdded.getNumericDate()<<'\n';
+					Date dateAdded=itemToInputData->validateDateInput();
+					
+					InventoryItem item(inventory.get(index).idNumber,inventory.get(index).itemQuantity,inventory.get(index).wholesaleCost,dateAdded);
+					itemToInputData=&item;
+					cout<<"Updated Number of Items: "<<item.dateAdded<<'\n';
+					inventory.set(index,item);
 				}
 				else if(choice=5)
 				{
@@ -1339,9 +1350,9 @@ class InventoryManager
 				{
 					cout<<"Input is not Valid\n";
 					done=true;
-				}
-			
-					return done;
+				}			
+				
+				return done;
 		}
 
 
@@ -1397,7 +1408,6 @@ void runInventoryInquisitor()
 		alphaMenu();
 		cin>>input;
 
-		
 
 		if(cin.fail())
 		{	
@@ -1410,7 +1420,7 @@ void runInventoryInquisitor()
 		{
 			// Processes the user input and checks what task the user wants to perform
 			// Also records whether the user want to quit the program
-
+			system("clear");
 			input=tolower(input);
 			done=validateUserInput(input,inventory);
 		}
@@ -1457,9 +1467,7 @@ bool validateUserInput(char input, InventoryManager &program)
 
 	else if(input=='e')
 	{
-		program.editInventoryItem();
-
-
+		program.editInventoryManagerItem();
 
 	}	
 
@@ -1467,7 +1475,6 @@ bool validateUserInput(char input, InventoryManager &program)
 	{
 			cout<<"Quitting Program\n";
 			done=true;
-			
 	}
 
 	else
@@ -1476,10 +1483,7 @@ bool validateUserInput(char input, InventoryManager &program)
 	}
 	 
 	return done;
-
-
 }
-
 
 void pressEnterKey()
 {
