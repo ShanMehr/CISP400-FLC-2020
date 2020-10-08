@@ -712,9 +712,7 @@ class Date
 	friend ostream& operator << (ostream &output,Date& date)
 	{
 		// Prints the data of the Date Class
-    	output<<date.getDate();
-
- 
+    	output<<date.getDate(); 
     	return output;
 	}
 
@@ -735,7 +733,7 @@ class Date
 
 struct InventoryItem
 {
-	int idNumber;
+	int idNumber; 
 	int itemQuantity;
 	double wholesaleCost;
 	double retailCost;
@@ -743,6 +741,7 @@ struct InventoryItem
 
 	InventoryItem(int idNumber, int itemQuantity, int wholesaleCost, Date date)
 	{
+		// Initializes the member variables of InventoryItem
 		this->idNumber=idNumber;
 		this->itemQuantity=itemQuantity;
 		this->wholesaleCost=wholesaleCost;
@@ -758,6 +757,7 @@ struct InventoryItem
 	// Specification A2 - Overload operator«
 	friend ostream& operator << (ostream &output, InventoryItem& inventory)
 	{
+		// Prints the data of the InvetoryItem
     	output<<"ID: "<<inventory.idNumber<<'\n';
     	output<<"Number of Items: "<<inventory.itemQuantity<<'\n';
     	output<<"Wholesale Cost: $"<<inventory.formatDecimalToTwoPlaces(inventory.wholesaleCost);
@@ -775,6 +775,7 @@ struct InventoryItem
 	// Specification B4 - Inventory Entry Input Validation
 	void editItem()
 	{
+		// Edits and changes the instance variables of the InventoryItem class
 		int id=validateIdNumberInput();
 		this->idNumber=id;
 		int itemQuantity=validateItemQuantityInput();
@@ -789,6 +790,7 @@ struct InventoryItem
 	// Specification A3 - Overload operator»
 	friend istream &operator >>(istream &input, InventoryItem& inventory )
 	{		
+			// Changes member variables of the InventoryItem
 			cout<<"Enter Id Number:\n";
 			input>>inventory.idNumber;
 			cout<<"Enter Number of Items:\n";
@@ -803,6 +805,8 @@ struct InventoryItem
 
 	int validateIdNumberInput()
 	{
+		// Prompts the User for an idNumber and checks if the item chosen is correct
+		// If the data entered is invalid repropmts the user for an entry
 		bool done=false;
 		int id;
 
@@ -811,10 +815,12 @@ struct InventoryItem
 			int chosenID;
 			cout<<"Enter the id(A number with 5 digits)\n";
 			cin>>chosenID;
+
 			if(!cin.fail())
 			{	
 				if(chosenID>9999&&chosenID<=99999)
 				{
+					// Makes sure the id entered had five digits
 					done=true;
 					id=chosenID;
 					cout<<"ID Recorded\n";
@@ -840,7 +846,12 @@ struct InventoryItem
 
 	int validateItemQuantityInput()
 	{
+
+		// Prompts the User for an itemQuantity and checks if the item chosen is correct
+		// If the data entered is invalid repropmts the user for an entry
+
 		bool done=false;
+
 		int itemQuantity=0;
 
 		do
@@ -849,17 +860,19 @@ struct InventoryItem
 			cout<<"Enter the number of items\n";
 			cin>>quantitySelected;
 			cout<<"You Entered: "<<	quantitySelected<<'\n';
+
 			if(!cin.fail())
 			{	
-				
+				// Makes sure the data entered is not a bad type
+
 				if(quantitySelected>=0)
-				{			
+				{	
+					// Makes sure the quantitySelected is not negative a
 					done=true;	
 					itemQuantity=quantitySelected;
 				}	
 				else
-				{
-					
+				{					
 					cout<<"Enter at least 1 item\n";
 				}		
 			}
@@ -869,7 +882,6 @@ struct InventoryItem
 				// Clears the buffer if the input fails when a bad type is entered
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
 				
 			}	
 
@@ -881,8 +893,11 @@ struct InventoryItem
  
 	double validateWholeSaleCostInput()
 	{
+		// Prompts the User for an wholesaleCost and checks if the item chosen is correct
+		// If the data entered is invalid repropmts the user for an entry
+
 		bool done=false;
-		double wholesaleCost=0;
+			double wholesaleCost=0;
 
 		do
 		{
@@ -893,6 +908,7 @@ struct InventoryItem
 			{	
 				if(wholesaleCostChosen>=0)
 				{		
+					// Confirms that the data entered is not negative before storing item
 					wholesaleCost=wholesaleCostChosen;
 					wholesaleCost=formatDecimalToTwoPlaces(wholesaleCost);
 					retailCost=2*wholesaleCost;
@@ -924,6 +940,10 @@ struct InventoryItem
 
 	Date validateDateInput()
 	{
+
+		// Prompts the User for an Date and checks if the item chosen is correct
+		// If the data entered is invalid repropmts the user for an entry
+
 		bool done;
 		Date date;
 
@@ -935,37 +955,33 @@ struct InventoryItem
 		do
 		{
 
-			int monthEntered;
-			int dayEntered;
-			int yearEntered;
+			
 
 			// Prompts User for Input until a correct date is entered	
 			cout<<"Enter Month(1-12)\n";
-			cin>>monthEntered;
+			cin>>month;
 
 			if(!cin.fail())
 			{
-				cout<<"Month Entered: "<<monthEntered<<'\n';
+				cout<<"Month Entered: "<<month<<'\n';
 				if(!cin.fail())
 				{
 					// If the correct datatype of int is entered then prompts user for day
 					cout<<"Enter day (1-31 is a likely input)\n";
-					cin>>dayEntered;
+					cin>>day;
 
 
 					if(!cin.fail())
 					{
-						cout<<"Day Chosen: "<<dayEntered<<'\n';
+						cout<<"Day Chosen: "<<day<<'\n';
 						// If the correct datatype of int is entered the prompts the user for the year
 						cout<<"Enter Year (Between 1900-2100)\n";
-						cin>>yearEntered;
-						if(date.isValidDate(monthEntered,dayEntered,yearEntered))
+						cin>>year;
+						if(date.isValidDate(month,day,year))
 						{
-
-							month=monthEntered;
-							day=dayEntered;
-							year=yearEntered;
+							
 							date.setDate(month,day,year);
+							done=true;
 
 
 						}
@@ -1000,51 +1016,28 @@ struct InventoryItem
 			}		
 		}
 		while(done==false);
+		cout<<"Date Updated to:\n"<<date;
 
 		return date;
 
 	}
 
-	
-
-	void setIdNumber()
+	void InventoryItemUnitTest()
 	{
-		int idChosen=validateIdNumberInput();
-		this->idNumber=idChosen;
-	}
-	void setItemQuantity()
-	{
-		int quantitySelected=validateItemQuantityInput();
-		this->itemQuantity=quantitySelected;
-	
-	}
+
+		InventoryItem item;
 
 
-	void setWholesaleCost()
-	{
-		this->wholesaleCost=validateWholeSaleCostInput();
-	}
+		item.editItem();
+		cout<<item;
 
-	void setDateAdded()
-	{
-		this->dateAdded=validateDateInput();
-	}
+		
 
- 	void InventoryItemUnitTest()
- 	{
-      	InventoryItem item;
-
-       	item.editItem();
-       	cout<<item;
+		
 
 
 
-      	
-
-    
- }
-
-
+	}	
 
 	private:
 
@@ -1061,6 +1054,7 @@ struct InventoryItem
 
 
 
+
 };
 
 
@@ -1068,12 +1062,13 @@ class InventoryManager
 {
 	public:
 
-		ArrayList<InventoryItem> inventory;
+		ArrayList<InventoryItem> inventory; // An ArrayList which stores an array of InventoryItems
 
 	public:
 
 		void addItem()
 		{
+			// Adds an item to the ArrayList of InventoryItems 
 			InventoryItem item;
 			item.editItem();
 			addItem(item);		
@@ -1083,11 +1078,14 @@ class InventoryManager
 
 		void addItem(InventoryItem &item)
 		{
+			// Accepts the reference of an item and adds the item to the inventory
 			inventory.add(item);			
 		}
 
 		void remove()
 		{
+			// Removes the last item from the inventory
+
 			if(getSize()>0)
 			{
 				this->inventory.removeLast();
@@ -1100,6 +1098,8 @@ class InventoryManager
 
 		void outputInventoryData()
 		{
+
+			// Prints the contents of he inventory
 				if(inventory.size()>0)
 				{
 					for(int i=0;i<inventory.size();i++)
@@ -1118,12 +1118,15 @@ class InventoryManager
 
 		void printItem(int index)
 		{
+			// Prints a single content of the inventory.
 			inventory.printItem(index);
 		}
 
 		// Specification A1 - Edit Inventory
 		void editInventoryItem()
 		{
+			// Changes the data of an InventoryItem at a index of the inventory ArrayList chosen by the user
+
 			cout<<"Editing Item\n";
 			if(getSize()>0)
 			{	
@@ -1195,6 +1198,9 @@ class InventoryManager
 		
 		void editInventoryManagerItem()
 		{
+
+			// Edits the data members of a specific InventoryItem of the inventory Arraylist chosen by the user
+
 			cout<<"Editing Item\n";
 			if(getSize()>0)
 			{	
@@ -1219,10 +1225,13 @@ class InventoryManager
 	
 						if(!cin.fail())
 						{
+							// Makes sure a value of a different type is not chosen by the user
 							if(index>=0&&index<inventory.size())
 							{
+								// Only prompts the user to edit the item if the item is located at a valid index
 								bool endProgram=handleUserSelection(index,choice);
 								done=endProgram;
+
 
 							}
 							else
@@ -1256,18 +1265,20 @@ class InventoryManager
 
 		int getSize()
 		{
+			// Returns the size of inventory
 			return inventory.size();
 		}
 
 		
 		int isValidIndex(int index)
 		{
+			// Checks if the index chosen is valid 
 			return inventory.isValidIndex(index);
 		}
 
 		void InventoryManagerUnitTest()
 		{
-		
+			// Tests core functions of the InventoryManager
 			InventoryManager testInventory;
 
 			testInventory.addItem();			
@@ -1295,6 +1306,8 @@ class InventoryManager
 
 		bool handleUserSelection(int index,int choice)
 		{
+			// Processes the input chosen in editInventoryManagerItem() and updates a specific data type based on the int choice parameter
+
 			bool done=false;
 
 			InventoryItem *itemToInputData;
@@ -1303,44 +1316,67 @@ class InventoryManager
 
 				if(choice==1)
 				{
+					// Changes the idNumber of an InventoryItem located at the chosen index
 					cout<<"Editing ID Number:\n";
+
 					int ID= itemToInputData->validateIdNumberInput();
+
 					InventoryItem item(ID,inventory.get(index).itemQuantity,inventory.get(index).wholesaleCost,inventory.get(index).dateAdded);
+
 					itemToInputData=&item;
+
 					cout<<"Updated ID: "<<item.idNumber<<'\n';
+
 					inventory.set(index,item);
 				}	
 
 				else if(choice==2)
 				{
+					// Changes the itemQuantity of an InventoryItem located at the chosen index
 					cout<<"Editing Number Of Items:\n";
+
 					int itemQuantity= itemToInputData->validateItemQuantityInput();
+
 					InventoryItem item(inventory.get(index).idNumber,itemQuantity,inventory.get(index).wholesaleCost,inventory.get(index).dateAdded);
+
 					itemToInputData=&item;
+
 					cout<<"Updated Number of Items: "<<item.itemQuantity<<'\n';
+
 					inventory.set(index,item);
 
 				}
 
 				else if(choice==3)
-				{				
+				{	
+					// Changes the wholesaleCost of an InventoryItem located at the chosen index
 					cout<<"Editing Wholesale Cost:\n";
+
 					double wholesaleCost= itemToInputData->validateWholeSaleCostInput();
+
 					InventoryItem item(inventory.get(index).idNumber,inventory.get(index).itemQuantity,wholesaleCost,inventory.get(index).dateAdded);
+
 					cout<<"Updated Number of Items: "<<item.wholesaleCost<<'\n';
+
 					inventory.set(index,item);
 					
 				}
+
 				else if(choice==4)
 				{
+					// Changes the Date of an InventoryItem located at the chosen index
 					cout<<"Editing Date:\n";
 					Date dateAdded=itemToInputData->validateDateInput();
 					
 					InventoryItem item(inventory.get(index).idNumber,inventory.get(index).itemQuantity,inventory.get(index).wholesaleCost,dateAdded);
+
 					itemToInputData=&item;
+
 					cout<<"Updated Number of Items: "<<item.dateAdded<<'\n';
+
 					inventory.set(index,item);
 				}
+
 				else if(choice=5)
 				{
 					cout<<"Quitting Item Editor\n";
@@ -1371,28 +1407,46 @@ bool validateUserInput(char input,InventoryManager &inventory);
 
 int main()
 {
- 	//UnitTest(); 
+ 	UnitTest(); 
  	runInventoryInquisitor();
+}
+
+void ProgramGreeting()
+{
+	Date date;
+	cout<<"Today's Date: "<<date<<'\n';
+	cout<<"Welcome to the Inventory Inquisitory\n";
+	cout<<"The Inventory Inquisitor keeps track of items added to an inventory\n";
+	cout<<"Program Author: Ishan Meher\n";
+	cout<<"Program Due Date: Ocotober 20, 2020\n";
+
 }
 
 // Specification A4 - UnitTest() method in main()
 void UnitTest()
 {
 	cout<<"Starting Unit Tests\n";
-	//cout<<"Starting ArrayList Class Unit Test\n";
-	//pressEnterKey();
-	//ArrayList<int> array;
-	//array.ArrayListUnitTest();	
-	//pressEnterKey();
-	//Date date;
-	//date.dateUnitTest();
-	//pressEnterKey();
-	//InventoryItem item;
-	//item.InventoryItemUnitTest();
-	//cout<<"Ending InventoryItem Unit Testing\n";
-	//pressEnterKey();
+	cout<<"Starting ArrayList Class Unit Test\n";
+	pressEnterKey();
+	ArrayList<int> array;
+	array.ArrayListUnitTest();	
+	pressEnterKey();
+	Date date;
+	date.dateUnitTest();
+	pressEnterKey();
+	
+
+
+	pressEnterKey();
+	InventoryItem item;
+	item.InventoryItemUnitTest();
+	cout<<"Ending InventoryItem Unit Testing\n";
+	pressEnterKey();
 	InventoryManager inventory;
 	inventory.InventoryManagerUnitTest();
+	pressEnterKey();
+	system("clear");
+
 }
 
 
@@ -1449,30 +1503,35 @@ bool validateUserInput(char input, InventoryManager &program)
 
 	if(input=='o')
 	{
+		// Outputs the Inventory
 		program.outputInventoryData();
 		
 	}
 
 	else if(input=='a')
 	{
-		// Add item
+		// Add item to the Inventory
 		program.addItem();	
 		
 	}
 
 	else if(input=='d')
 	{
+		// Removes the Item last added to the inventory
 		program.remove();	
 	}
 
 	else if(input=='e')
 	{
+		// Edits the data values of the Inventory
 		program.editInventoryManagerItem();
 
 	}	
 
 	else if(input=='q')
 	{
+
+			// Quits the Program
 			cout<<"Quitting Program\n";
 			done=true;
 	}
