@@ -704,6 +704,15 @@ class Date
 			cout<<"Expected: February 28, 2001\n";
 			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
+			
+			cout<<"Testing the overloaded Date input operator\n";
+			Date dateOperatorTesting;
+			cin>>dateOperatorTesting;
+			cout<<"\n";
+
+			cout<<"Testing the overloaded Date output operator\n";
+			cout<<dateOperatorTesting;
+			cout<<"\n";
 			cout<<"\n";
 
 		}
@@ -721,7 +730,12 @@ class Date
 	friend istream& operator >>(istream &input, Date& date)
 	{
 		// Sets the member variables for the Date Class
-		input>>date.month>>date.day>>date.year;
+		cout<<"Enter the month\n";
+		input>>date.month;
+		cout<<"Enter the day of the month the date falls under.\n";
+		input>>date.day;
+		cout<<"Enter the year.\n";
+		input>>date.year;
 		return input;
 	}	
 		
@@ -797,8 +811,9 @@ struct InventoryItem
 			input>>inventory.itemQuantity;
 			cout<<"Enter Wholesale Cost :\n";
 			input>>inventory.wholesaleCost;
-			cout<<"Enter Date the Item was added to the inventory:\n";
-			input>>(inventory.dateAdded);
+			inventory.retailCost=inventory.wholesaleCost*2;
+			Date date(9,9,99);
+			inventory.dateAdded=date;
 			return input;
 	}	
 	
@@ -902,7 +917,7 @@ struct InventoryItem
 		do
 		{
 			double wholesaleCostChosen;
-			cout<<"Enter the wholesale cost\n";
+			cout<<"Enter the wholesale cost:\n";
 			cin>>wholesaleCostChosen;
 			if(!cin.fail())
 			{	
@@ -1024,19 +1039,19 @@ struct InventoryItem
 
 	void InventoryItemUnitTest()
 	{
-
+		// Unit Tests for InventoryItem
 		InventoryItem item;
 
-
+		cout<<"Testing the changing the values of the item\n";
 		item.editItem();
+		cout<<"Testing the Overloaded output operator\n";
 		cout<<item;
-
-		
-
-		
-
-
-
+		cout<<'\n';
+		cout<<"Testing the Overloaded input Operator\n";
+		InventoryItem item2;
+		cin>>item2;
+		cout<<item2;
+		cout<<'\n';
 	}	
 
 	private:
@@ -1128,7 +1143,8 @@ class InventoryManager
 
 			// Edits the data members of a specific InventoryItem of the inventory Arraylist chosen by the user
 
-			cout<<"Editing Item\n";
+			cout<<"Inventory Editor\n";
+			cout<<"================\n";
 			if(getSize()>0)
 			{	
 				bool done=false;
@@ -1137,16 +1153,21 @@ class InventoryManager
 				do
 				{
 					cout<<"Select an item edit\n";
-					cout<<"Choose an index between 0 and "<<(inventory.size()-1)<<" (inclusive)\n";				
+					cout<<"Choose an index between 0 and "<<(inventory.size()-1)<<" (inclusive)\n";	
+					cout<<"================\n";			
 					cin>>index;
+					
 					if(!cin.fail())
 					{	
+						system("clear");
 						cout<<"Choose a value:\n";
+						cout<<"================\n";
 						cout<<"(1)Change ID\n";
 						cout<<"(2)Change Number of Items:\n";
 						cout<<"(3)Change Wholesale Cost:\n";
 						cout<<"(4)Change Date:\n";
-						cout<<"(5) Quit\n";			
+						cout<<"(5) Quit\n";		
+						cout<<"================\n";	
 
 						cin>>choice;
 	
@@ -1163,6 +1184,7 @@ class InventoryManager
 							}
 							else
 							{
+								system("clear");
 								cout<<"Index Entered is not valid\n";
 							}
 						}
@@ -1319,7 +1341,9 @@ class InventoryManager
 				{
 					cout<<"Input is not Valid\n";
 					done=true;
-				}			
+				}
+				cout<<"Redirecting Back to Item Editor\n";
+				cout<<'\n';			
 				
 				return done;
 		}
@@ -1340,7 +1364,9 @@ bool validateUserInput(char input,InventoryManager &inventory);
 
 int main()
 {
+	ProgramGreeting();
  	UnitTest(); 
+
  	runInventoryInquisitor();
 }
 
@@ -1348,10 +1374,14 @@ void ProgramGreeting()
 {
 	Date date;
 	cout<<"Today's Date: "<<date<<'\n';
+	cout<<"========================================================================\n";
 	cout<<"Welcome to the Inventory Inquisitory\n";
 	cout<<"The Inventory Inquisitor keeps track of items added to an inventory\n";
 	cout<<"Program Author: Ishan Meher\n";
 	cout<<"Program Due Date: Ocotober 20, 2020\n";
+	cout<<"Proceeding to UnitTests\n";
+	cout<<"========================================================================\n";
+	pressEnterKey();
 
 }
 
@@ -1360,25 +1390,24 @@ void UnitTest()
 {
 	cout<<"Starting Unit Tests\n";
 	cout<<"Starting ArrayList Class Unit Test\n";
-	pressEnterKey();
 	ArrayList<int> array;
 	array.ArrayListUnitTest();	
-	pressEnterKey();
 	Date date;
 	date.dateUnitTest();
 	pressEnterKey();
 	
 
 
-	pressEnterKey();
+	
+	cout<<"Starting InventoryItem Unit Testing\n";
 	InventoryItem item;
 	item.InventoryItemUnitTest();
-	cout<<"Ending InventoryItem Unit Testing\n";
+	cout<<"Starting InventoryManager Unit Testing\n";
 	pressEnterKey();
 	InventoryManager inventory;
 	inventory.InventoryManagerUnitTest();
+	cout<<"Starting Program...\n";
 	pressEnterKey();
-	system("clear");
 
 }
 
@@ -1419,13 +1448,16 @@ void runInventoryInquisitor()
 
 // Specification C1 - Alpha Menu
 void alphaMenu()
-{
+{	
+
 	cout<<"Select an Input\n";
+	cout<<"================\n";
 	cout<<"1. Add Inventory(A)\n";
 	cout<<"2. Delete Inventory(D)\n";
 	cout<<"3. Edit Inventory(E)\n";
 	cout<<"4. Output Inventory(O)\n";
 	cout<<"5. Quit Program(Q)\n";
+	cout<<"================\n";
 }
 
 
@@ -1438,6 +1470,8 @@ bool validateUserInput(char input, InventoryManager &program)
 	{
 		// Outputs the Inventory
 		program.outputInventoryData();
+		cout<<"Inventory Information\n";
+		cout<<"========================\n";
 		
 	}
 
@@ -1482,7 +1516,7 @@ void pressEnterKey()
 	// Clears the console and asks the user to press the enter key to contine
 	 int enter=0;
         
-        cout << "Press Enter to Continue\n";
+        cout << "Press Enter key to Continue\n";
         while (enter==cin.get() )      {
                 if ( enter == (int)'\n' ) 
                 {
