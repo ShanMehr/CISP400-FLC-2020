@@ -540,7 +540,7 @@ class Date
 
 		}
 
-		//Specification B2 - ComponentTest method in Datee
+		//Specification B2 - ComponentTest method in Date
 		void dateUnitTest()
 		{
 			//Tests the cases in which dates will work and cases where dates will fail
