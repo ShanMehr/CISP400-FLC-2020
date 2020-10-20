@@ -745,12 +745,12 @@ class Date
 
 struct TODO
 {
-  
-    Date dateAdded;
-    string task;
-    unsigned int int_TODOId;
+    string task; 
+	int int_TODOId;
+	Date dateAdded;
+    
 
-    TODO(Date dateAdded,string task,unsigned int_TODOId)
+    TODO(string task,int int_TODOId,Date dateAdded)
     {
         this->task=task;
         this->int_TODOId=int_TODOId;
@@ -770,29 +770,128 @@ struct TODO
         return output;
 
 	}
+
+	friend istream& operator >> (istream &input, TODO& item)
+	{
+
+		input>>item.int_TODOId;
+		Date dateAdded;
+		input>>item.dateAdded;
+		input>>item.task;
+
+		return input;
+	}
+	
   
 
 };
 
 class ListManager
 {
-private:
+	private:
 
-    ArrayList<TODO> TODOlist; // Array of TODO's stored on the heap
+    	ArrayList<TODO> list; // Array of TODO's stored on the heap
 
-public:
-    void handleUserInput(string input)
-    {
-        char chosen = input[0];
-    
-        //if(+)
-            //addTODO()
-        //if(-)
-            //removeTODO()
-        //if(?)
-            //printTODO();
-        
-    }
+	public:
+
+    	bool handleUserInput(const string input)
+    	{
+			bool done=false;
+
+        	char chosen = input[0];
+			string task= input.substr(1,input.length());
+        	if(chosen=='+')
+        	{
+				addTODO(task);
+			}
+        	else if(chosen=='-')
+        	{
+				int idToRemove = stoi(task);
+				int itemIndex= idIsInList(idToRemove);
+				if(itemIndex!=-1)
+				{
+					list.remove(itemIndex);
+				}
+			}    
+        	else if(chosen='?')
+			{
+				printTODOList();
+			}
+            else if(chosen='E'||chosen=='e')
+			{
+				cout<<"Quitting Program\n";
+				done=true;    
+			}
+    			return done;
+    	}	
+
+	private:
+
+		int getID()
+		{
+			// Prompts the User for an idNumber and checks if the item chosen is correct
+			// If the data entered is invalid repropmts the user for an entry
+			bool done=false;
+			int id;
+
+			do
+			{
+				int chosenID;
+				cout<<"Enter the id(A number with 5 digits)\n";
+				cin>>chosenID;
+
+				if(!cin.fail())
+				{	
+					if(chosenID>999999&&chosenID<=99999999)
+					{
+						// Makes sure the id entered had seven digits
+						
+						id=chosenID;
+						cout<<"ID Recorded\n";
+						done=true;				
+						
+					}					
+				}	
+				else
+				{
+					// Clears the buffer if the input fails when a bad type is entered
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				
+				}	
+			}	
+			while(done==false);
+
+			return id;
+		}
+
+		int idIsInList(const int id)
+		{
+			for(int index=0;index>list.size();index++)
+			{
+				if(id==list.get(index).int_TODOId)
+				{
+					return index;
+				}
+			}
+			return -1;
+		}
+		
+		void addTODO(const string input)
+		{
+			int id= getID();
+			Date dateAdded;
+			TODO todo(input,id,dateAdded);
+			list.add(todo);		
+		}
+		
+		void printTODOList()
+		{
+			for(int index=0;index<list.size();index++)
+			{
+				cout<<list.get(index);
+			}
+		}
 
 
 };
@@ -818,13 +917,13 @@ void runTODOLIST()
 
     do
     {
-        string input;
         menu();
+        string input;
         cin>>input;
 
         if(!cin.fail())
         {
-            list.handleUserInput(input);
+            done =list.handleUserInput(input); // ADD SOME KIND OF BOOLEAN RETURN
         }
         else
         {
@@ -833,7 +932,6 @@ void runTODOLIST()
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
-        
     }
     while(!done);
     
@@ -842,10 +940,16 @@ void runTODOLIST()
 void menu()
 {   
     cout<<"TODO List Menu\n";
-    cout<<"====================================================================================\n";
+    cout<<"===================================================================================\n";
     cout<<"Enter a task into the console:\n";
-    cout<<"+Task to be added------ Example Input: +Do my Math Homework or +Walk the Dog\n";
-    cout<<"-TODO ID--------------Example Input -12345 or -23456 \n";
+    cout<<"<+> +Task to be added\n";
+	cout<<"	Example Input: +Do my Math Homework\n";
+    cout<<"<->Remove";
+	cout<<"	Example Input: -TODO ID Number\n";
+	cout<<"<?> ?Display all Tasks\n";
+	cout<<"	Example Input: ?Display All Tasks\n";
+	cout<<"<E> Exit the Program\n";
+	cout<<"===================================================================================\n";
 } 
 
 
