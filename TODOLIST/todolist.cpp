@@ -12,9 +12,9 @@ using namespace std;
 
 //Specification C4 - TODO array
 template <class A>
-class ArrayList
+class Vector
 {
-	// The template class ArrayList creates an array that is able to store any data type 
+	// The template class Vector creates an array that is able to store any data type 
 	public:
 
 		int length=0;
@@ -22,9 +22,9 @@ class ArrayList
 
 	public:
 		
-		ArrayList(int size)
+		Vector(int size)
 		{	
-			// Defines an ArrayList Object that accepts a length
+			// Defines an Vector Object that accepts a length
 			// Allocates space on the heap to store array
 			if(length>=0)
 			{
@@ -35,9 +35,9 @@ class ArrayList
 			array= new A[length];
 		}
 
-		ArrayList()
+		Vector()
 		{
-			// Creates an ArrayList object
+			// Creates an Vector object
 			// Allocates space on the heap to store array
 			this->length=0;
 			array=new A[length];
@@ -49,23 +49,23 @@ class ArrayList
 
 	private:
 
-		void resizeArrayList()
+		void resizeVector()
 		{
 			// Resiszes the array by one
 
-			A* tempArrayList= new A[length+1]; // The tempArrayList stores all the data of array and has one more element
+			A* tempVector= new A[length+1]; // The tempVector stores all the data of array and has one more element
 
 			for(int position=0; position < length; position++)
 			{
-				// Loops through each position of the array and stores copies the element at each position into the tempArrayList
-				tempArrayList[position]= array[position];
+				// Loops through each position of the array and stores copies the element at each position into the tempVector
+				tempVector[position]= array[position];
 			}
 
 			// Frees the memory used by the smaller array
-			// The gradeList is set to point to the tempArrayList memory location
+			// The gradeList is set to point to the tempVector memory location
 			delete[] array; 
-			array=tempArrayList;	
-			tempArrayList=nullptr;
+			array=tempVector;	
+			tempVector=nullptr;
 		}
 
 
@@ -106,7 +106,7 @@ class ArrayList
 			// Adds a new element to the end of the array
 
 			// Increases the size of the array by one
-			resizeArrayList();
+			resizeVector();
 						
 			array[length]=element;
 			length++;		
@@ -164,14 +164,14 @@ class ArrayList
 				// Defines a temporary array allocated on the heap
 				// The int copyPosition variable increases with the loop unless the position that is to be removed is reached
 				// By not increasing int copyPosition it will make sure that one less item will be copied;
-				A* tempArrayList = new A[length-1];
+				A* tempVector = new A[length-1];
 				int copyPosition=0;
 				for(int position=0;position<length;position++)
 				{
 
 					if(!(position==index))
 					{
-						tempArrayList[copyPosition]=array[position];
+						tempVector[copyPosition]=array[position];
 						copyPosition++;
 						
 
@@ -180,8 +180,8 @@ class ArrayList
 				}
 				delete[] array;
 				length--;
-				array=tempArrayList;
-				tempArrayList=nullptr;
+				array=tempVector;
+				tempVector=nullptr;
 			}
 			
 		}
@@ -195,11 +195,11 @@ class ArrayList
 		}
 
 		
-		void ArrayListUnitTest()
+		void VectorUnitTest()
 		{
-			// Tests various functions of the ArrayList Class
+			// Tests various functions of the Vector Class
 
-			ArrayList<string> array;
+			Vector<string> array;
 			cout<<"Printing Initial Size:\n"<<array.size()<<'\n';
 			cout<<"Adding an element:\n";
 			array.add("Ishan Meher");
@@ -252,7 +252,7 @@ class ArrayList
 			cout<<'\n';
 		}
 		
-		~ArrayList()
+		~Vector()
 		{
 			delete[] array;
 			array=nullptr;
@@ -559,7 +559,7 @@ class Date
         friend ostream& operator << (ostream &output,Date& date)
 	{
 		// Prints the data of the Date Class
-    	output<<date.getDate(); 
+    	output<<date.getDate()<<'\n'; 
     	return output;
 	}
 
@@ -748,10 +748,23 @@ class Date
 
 			cout<<"Testing the overloaded Date output operator\n";
 			cout<<dateOperatorTesting;
-			cout<<"\n";
-			cout<<"\n";
+			
+      cout<<"Checking the functionality of the overloaded = operator\n";
+      cout<<"Assinging one object's data to another\nThen printing object's content\n";
+      cout<<"Should print the previous object's data\n"<<'\n';
+      dateOperatorTesting=testDate;
+      cout<<dateOperatorTesting;
+    
 
-		}
+    
+    cout<<"Testing Constructor Overloading\n";
+    cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
+    cin>>testDate;
+    Date item3(testDate);
+    cout<<item3<<'\n';
+		cout<<"\n";
+
+	}
 
 
 	
@@ -762,8 +775,8 @@ class Date
 struct TODO
 {
     string task; 
-	int int_TODOId;
-	Date dateAdded;
+  	int int_TODOId;
+	  Date dateAdded;
     
 
     TODO(string task,int int_TODOId,Date dateAdded)
@@ -771,7 +784,7 @@ struct TODO
         this->task=task;
         this->int_TODOId=int_TODOId;
         this->dateAdded=dateAdded;
-	}	
+	  }	
 
 
 	// Specification A1 - Overload Copy Constructor
@@ -809,17 +822,18 @@ struct TODO
 	//Specification C2 - Overload »
 	friend istream& operator >> (istream &input, TODO& item)
 	{
-
+    // Overloads the << operator 
+    //Prints the instance members of TODO struct
 		Date dateAdded;
-		item.dateAdded=dateAdded;
+		item.dateAdded=dateAdded; 
 
-		cout<<"Enter the task:"<<'\n'; 	
-		getline(cin,item.task);	
+		cout<<"Enter an ID for the task: ";
+		input>>item.int_TODOId;			
+    cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 
+    cout<<"Enter the task:"<<'\n'; 	
+		getline(input,item.task);	
 
-		cout<<"Enter an ID for the task:\n";
-		input>>item.int_TODOId;
-
-			
+    
 
 		return input;
 	}
@@ -831,26 +845,41 @@ struct TODO
 
 		cout<<"Testing the TODO Constructor and print << operator\n";
 		Date date;
-		TODO todo("Do my CISP homework",1234567,date);
+		TODO todo("Do my CISP 400 homework",1234567,date);
 		cout<<"\nExpected: "<<'\n';
 		cout<<"Task: Do my CISP homework\n";
 		cout<<"Date Added: (The Current Date)\n";
 		cout<<"ID: 1234567\n";
 		cout<<"Result:\n";
-		cout<<todo<<'\n'<<'\n';
+    cout<<todo<<'\n';
+    cout<<"------------------------\n";
+    
+
 
 		cout<<"Testing the inputstream operator >>\n";
 		TODO item;
 		cin>>item;
 		cout<<"\nResult:\n";
-		cout<<item;
-		cout<<'\n';
-		
-		
+		cout<<item;    
+    cout<<"------------------------\n";
+   	cout<<'\n';
+    
 
-		
+    
+    cout<<"Checking the functionality of the overloaded = operator\n";
+    cout<<"Assinging one object's data to another\nThen printing object's content\n";
+    cout<<"Should print the previous object's data\n"<<'\n';
+    todo=item;
+    cout<<todo;
+    
 
-		
+    
+    cout<<"Testing Constructor Overloading\n";
+    cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
+    cin>>item;
+    TODO item3(item);
+    cout<<item3<<'\n';
+    cout<<"------------------------\n";    	
 
 	}
 
@@ -864,7 +893,7 @@ class ListManager
 	private:
 
 		//Specification C4 - TODO array
-    	ArrayList<TODO> list; // Array of TODO's stored on the heap
+    	Vector<TODO> list; // Array of TODO's stored on the heap
 
 	public:
 
@@ -1045,15 +1074,15 @@ void ProgramGreeting()
 void UnitTest()
 {
 	//pressEnterKey();
-    //ArrayList<int> array;
-    //array.ArrayListUnitTest();
-    //Date date;
+    //Vector<int> array;
+    //array.VectorUnitTest();
+    Date date;
+	pressEnterKey();
+  date.dateUnitTest();
 	//pressEnterKey();
-    //date.dateUnitTest();
-	pressEnterKey();
-	TODO todo;
-	todo.UnitTest();
-	pressEnterKey();
+	//TODO todo;
+	//todo.UnitTest();
+	//pressEnterKey();
 }
 
 void pressEnterKey()
