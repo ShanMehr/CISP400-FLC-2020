@@ -756,6 +756,7 @@ struct TODO
         this->int_TODOId=int_TODOId;
         this->dateAdded=dateAdded;
 	}	
+
     TODO()
     {
 
@@ -766,7 +767,8 @@ struct TODO
 	{
         // Overloads the print operator and prints the instance variables of TODO 
 		output<<"Task: "<<item.task<<'\n';
-        output<<"Date Added: "<<item.dateAdded.getDate();
+        output<<"Date Added: "<<item.dateAdded.getDate()<<'\n';
+		output<<"ID: "<<item.int_TODOId<<'\n';
         return output;
 
 	}
@@ -774,13 +776,50 @@ struct TODO
 	friend istream& operator >> (istream &input, TODO& item)
 	{
 
-		input>>item.int_TODOId;
 		Date dateAdded;
-		input>>item.dateAdded;
-		input>>item.task;
+		item.dateAdded=dateAdded;
+
+		cout<<"Enter the task:"<<'\n'; 	
+		getline(cin,item.task);	
+
+		cout<<"Enter an ID for the task:\n";
+		input>>item.int_TODOId;
+
+			
 
 		return input;
 	}
+
+	void UnitTest()
+	{			
+
+		cout<<"TODO class Unit Test\n";
+
+		cout<<"Testing the TODO Constructor and print << operator\n";
+		Date date;
+		TODO todo("Do my CISP homework",1234567,date);
+		cout<<"\nExpected: "<<'\n';
+		cout<<"Task: Do my CISP homework\n";
+		cout<<"Date Added: (The Current Date)\n";
+		cout<<"ID: 1234567\n";
+		cout<<"Result:\n";
+		cout<<todo<<'\n'<<'\n';
+
+		cout<<"Testing the inputstream operator >>\n";
+		TODO item;
+		cin>>item;
+		cout<<"\nResult:\n";
+		cout<<item;
+		cout<<'\n';
+		
+		
+
+		
+
+		
+
+	}
+
 	
   
 
@@ -806,18 +845,18 @@ class ListManager
 			}
         	else if(chosen=='-')
         	{
-				int idToRemove = stoi(task);
+				int idToRemove = (int)(stoi(task));				
 				int itemIndex= idIsInList(idToRemove);
 				if(itemIndex!=-1)
 				{
 					list.remove(itemIndex);
 				}
 			}    
-        	else if(chosen='?')
+        	else if(chosen=='?')
 			{
 				printTODOList();
 			}
-            else if(chosen='E'||chosen=='e')
+            else if(chosen=='E'||chosen=='e')
 			{
 				cout<<"Quitting Program\n";
 				done=true;    
@@ -889,11 +928,9 @@ class ListManager
 		{
 			for(int index=0;index<list.size();index++)
 			{
-				cout<<list.get(index);
+				list.printItem(index);
 			}
 		}
-
-
 };
 
 
@@ -902,6 +939,7 @@ void ProgramGreeting();
 void UnitTest();
 void runTODOLIST();
 void menu();
+void pressEnterKey();
 
 int main()
 {
@@ -917,13 +955,15 @@ void runTODOLIST()
 
     do
     {
-        menu();
+        
+
         string input;
+		menu();
         cin>>input;
 
         if(!cin.fail())
         {
-            done =list.handleUserInput(input); // ADD SOME KIND OF BOOLEAN RETURN
+            done=list.handleUserInput(input); 
         }
         else
         {
@@ -965,8 +1005,35 @@ void ProgramGreeting()
 
 void UnitTest()
 {
-    ArrayList<int> array;
-    array.ArrayListUnitTest();
-    Date date;
-    date.dateUnitTest();
+	//pressEnterKey();
+    //ArrayList<int> array;
+    //array.ArrayListUnitTest();
+    //Date date;
+	//pressEnterKey();
+    //date.dateUnitTest();
+	pressEnterKey();
+	TODO todo;
+	todo.UnitTest();
+	pressEnterKey();
+}
+
+void pressEnterKey()
+{
+	// Clears the console and asks the user to press the enter key to contine
+	 int enter=0;
+        
+        cout << "Press Enter key to Continue\n";
+        while (enter==cin.get() )      {
+                if ( enter == (int)'\n' ) 
+                {
+                    
+                    break;
+                }
+                else 
+                {
+                    cout << "Failure, Program Quitting\n";
+                    exit(EXIT_FAILURE);
+                }
+        }
+
 }
