@@ -285,7 +285,7 @@ class Date
 
 		}
 
-    // Specification A3 - System Date.
+		// Specification A3 - System Date.
 		Date()
 		{
 			// Initializes member variables to store current day
@@ -296,7 +296,15 @@ class Date
    			this->month=1 + tdy->tm_mon; //sets pointer to this Date objects month and initializes it to hold the current month
   			this->day=tdy->tm_mday;  //sets pointer to this Date objects day and initializes it to hold the current month	
    			this->year=1900+ tdy->tm_year;  //sets pointer to this Date objects year and initializes it to hold the current year
-		}				
+		}
+
+
+		Date(const Date& date)
+		{
+			this->month=date.month;
+			this->day=date.day;
+			this->year=date.year;
+		}	
 
 	private:
 
@@ -353,6 +361,14 @@ class Date
 			}
 
 		}
+
+		Date& operator =(const Date& date)
+		{
+			this->month=date.month;
+			this->day=date.day;
+			this->year=date.year;
+			return *this;
+		} 
 
 		bool validMonth(int month)
 		{
@@ -757,10 +773,27 @@ struct TODO
         this->dateAdded=dateAdded;
 	}	
 
-    TODO()
-    {
 
+	// Specification A1 - Overload Copy Constructor
+    TODO(const TODO& todo)
+    {
+		this->task=todo.task;
+		this->int_TODOId=todo.int_TODOId;
+		this->dateAdded=todo.dateAdded;
     }
+
+	TODO& operator= (const TODO& todo)
+	{
+		this->task=todo.task;
+		this->int_TODOId=todo.int_TODOId;
+		this->dateAdded=todo.dateAdded;
+		return *this;
+	}
+
+	TODO()
+	{
+		
+	}
 
     // Specification C1 - Overload «
     friend ostream& operator << (ostream &output,TODO& item)
@@ -773,6 +806,7 @@ struct TODO
 
 	}
 
+	//Specification C2 - Overload »
 	friend istream& operator >> (istream &input, TODO& item)
 	{
 
@@ -829,6 +863,7 @@ class ListManager
 {
 	private:
 
+		//Specification C4 - TODO array
     	ArrayList<TODO> list; // Array of TODO's stored on the heap
 
 	public:
@@ -839,10 +874,13 @@ class ListManager
 
         	char chosen = input[0];
 			string task= input.substr(1,input.length());
-        	if(chosen=='+')
+        	
+			// Specification B1 - + Symbol
+			if(chosen=='+')
         	{
 				addTODO(task);
 			}
+			// Specification B3 - - symbol
         	else if(chosen=='-')
         	{
 				int idToRemove = (int)(stoi(task));				
@@ -851,7 +889,8 @@ class ListManager
 				{
 					list.remove(itemIndex);
 				}
-			}    
+			} 
+			// Specification B2 - ? Symbol   
         	else if(chosen=='?')
 			{
 				printTODOList();
