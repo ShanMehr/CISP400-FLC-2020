@@ -794,7 +794,7 @@ struct TODO
 		this->int_TODOId=todo.int_TODOId;
 		this->dateAdded=todo.dateAdded;
     }
-
+  // Specification A2 - Overload Assignment Operator
 	TODO& operator= (const TODO& todo)
 	{
 		this->task=todo.task;
