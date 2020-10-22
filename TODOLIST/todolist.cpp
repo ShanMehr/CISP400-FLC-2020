@@ -896,7 +896,7 @@ class ListManager
 
 	public:
 
-    	bool handleUserInput(const string input);
+    	bool handleUserInput(const string input="   ");
     	
 		// Specification C3 - Test TODO’s
 		void UnitTest()
@@ -1013,6 +1013,7 @@ class ListManager
 
 			do
 			{
+				
 				int chosenID;
 				cout<<"Enter the id(A number with 7 digits)\n";
 				cin>>chosenID;
@@ -1119,16 +1120,19 @@ void runTODOLIST()
     do
     {
         
-
+		
         string input;
 		menu();
-        cin>>input;
-
+		
+		
+        getline(cin,input);
+	
+		
         if(!cin.fail())
         {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            done=list.handleUserInput(input); 
+			
+            done=list.handleUserInput(input);
+			
         }
         else
         {
@@ -1189,7 +1193,8 @@ void pressEnterKey()
 	 int enter=0;
         
         cout << "Press Enter key to Continue\n";
-        while (enter==cin.get() )      {
+        while (enter==cin.get() )      
+		{
                 if ( enter == (int)'\n' ) 
                 {
                     
