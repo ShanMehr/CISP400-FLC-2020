@@ -822,8 +822,8 @@ struct TODO
 	//Specification C2 - Overload »
 	friend istream& operator >> (istream &input, TODO& item)
 	{
-    // Overloads the << operator 
-    //Prints the instance members of TODO struct
+    	// Overloads the << operator 
+    	//Prints the instance members of TODO struct
 		Date dateAdded;
 		item.dateAdded=dateAdded; 
 
@@ -843,6 +843,7 @@ struct TODO
 
 		cout<<"TODO class Unit Test\n";
 
+		// Testing the TODO constructor
 		cout<<"Testing the TODO Constructor and print << operator\n";
 		Date date;
 		TODO todo("Do my CISP 400 homework",1234567,date);
@@ -855,7 +856,7 @@ struct TODO
     	cout<<"------------------------\n";
     
 
-
+		// Testing << and >> operators
 		cout<<"Testing the inputstream operator >>\n";
 		TODO item;
 		cin>>item;
@@ -865,7 +866,7 @@ struct TODO
    		cout<<'\n';
     
 
-    
+		// Testing the overloaded = operator
 		cout<<"Checking the functionality of the overloaded = operator\n";
 		cout<<"Assinging one object's data to another\nThen printing object's content\n";
 		cout<<"Should print the previous object's data\n"<<'\n';
@@ -873,7 +874,7 @@ struct TODO
 		cout<<todo;
     
 
-    
+		// Testing the overloaded copy constructor
 		cout<<"Testing Constructor Overloading\n";
 		cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
 		cin>>item;
@@ -897,31 +898,67 @@ class ListManager
 
     	bool handleUserInput(const string input);
     	
-
-
+		// Specification C3 - Test TODO’s
 		void UnitTest()
-		{
+		{	
+
 			ListManager todoList;
+
 			cout<<"List Manager Unit Test\n";
+
+			// Adding an item to the TODO list 
+			// A TODO is created this way to test the removal of an item from the TODO list
+			cout<<"Testing the addition of a Todo\n";	
+			Date dateAdded;
+			TODO todo("Remind Myself to go Running",1234567,dateAdded);
+			todoList.add(todo);
+			todoList.handleUserInput("?Print the list");
+			cout<<'\n';
+
+			// Checking if an item can be added to the list;
 			cout<<"Testing the addTodo() method\n";
+			cout<<"Note: can't enter ID: 1234567, already chosen\n";
 			todoList.addTODO("Do my Homework");
 			cout<<"Printing the newly added task\n";
 			todoList.printTODOList();
 			cout<<'\n';
 
+
+			// Checking if the + add command and the ? print items command works
 			cout<<"Adding an item using the handleUserInput() method\n";
 			cout<<"Also printing the list and the newly entered item\n";
 			todoList.handleUserInput("+Mow the Lawn"); 
 			cout<<"Printing the whole list\n";
 			cout<<"Testing the ? command that prints the list\n";
-			todoList.handleUserInput("?Print the list");	
+			todoList.handleUserInput("?Print the list");
+			cout<<'\n';	
 			
 
-			
-			
+			// Entering several items into the list
+			cout<<"adding a few more TODOs to the list\n";
+			todoList.handleUserInput("+Attend Online Class\n");
+			todoList.handleUserInput("+Walk the Dog");
+			todoList.handleUserInput("+Check the Electricity Bill");
+			cout<<'\n';
+
+			// Testing the removal of an item 
+			cout<<"Testing the removal of a TODO\n";
+			cout<<"Removing the first TODO entered\n";
+			todoList.handleUserInput("-1234567");
+			cout<<"Should print the list with the first entry removed\n";
+			cout<<"Note: task Remind myself to go Running should be gone\n";			
+			todoList.handleUserInput("?Print the list");
+	
 
 		}
 
+		void add(TODO& todo)
+		{
+			// adds a TODO reference to the list
+			// Method use to test removal of the todo;
+			list.add(todo);
+			
+		}
 		void addTODO(const string input)
 		{
 				int id= getID();
@@ -956,8 +993,7 @@ class ListManager
 							
 					if(id==(idAtIndex))
 					{
-						result=index;
-						
+						result=index;					
 						
 					}
 				}			
@@ -1019,11 +1055,7 @@ class ListManager
 			while(done==false);
 
 			return id;
-		}
-
-	
-		
-		
+		}	
 		
 		
 };
@@ -1073,9 +1105,9 @@ void pressEnterKey();
 
 int main()
 {
-    //ProgramGreeting();
-    UnitTest();
-	//runTODOLIST();
+    ProgramGreeting();
+    //UnitTest();
+	runTODOLIST();
     return 0;
 }
 
@@ -1094,6 +1126,8 @@ void runTODOLIST()
 
         if(!cin.fail())
         {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
             done=list.handleUserInput(input); 
         }
         else
