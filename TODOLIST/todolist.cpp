@@ -1061,40 +1061,42 @@ class ListManager
 		
 };
 
-		bool ListManager:: handleUserInput(const string input)
-    	{
+	bool ListManager:: handleUserInput(const string input)
+    {
 			bool done=false;
-
-        	char chosen = input[0];
-			string task= input.substr(1,input.length());
-        	
-			// Specification B1 - + Symbol
-			if(chosen=='+')
-        	{
-				addTODO(task);
-			}
-			// Specification B3 - - symbol
-        	else if(chosen=='-')
-        	{
-				int idToRemove = (int)(stoi(task));				
-				int itemIndex= idIsInList(idToRemove);
-				if(itemIndex!=-1)
+			if(input.length()>0)
+			{
+				char chosen = input[0];
+				string task= input.substr(1,input.length());
+				
+				// Specification B1 - + Symbol
+				if(chosen=='+')
 				{
-					list.remove(itemIndex);
+					addTODO(task);
 				}
-			} 
-			// Specification B2 - ? Symbol   
-        	else if(chosen=='?')
-			{
-				printTODOList();
-			}
-            else if(chosen=='E'||chosen=='e')
-			{
-				cout<<"Quitting Program\n";
-				done=true;    
+				// Specification B3 - - symbol
+				else if(chosen=='-')
+				{
+					int idToRemove = (int)(stoi(task));				
+					int itemIndex= idIsInList(idToRemove);
+					if(itemIndex!=-1)
+					{
+						list.remove(itemIndex);
+					}
+				} 
+				// Specification B2 - ? Symbol   
+				else if(chosen=='?')
+				{
+					printTODOList();
+				}
+				else if(chosen=='E'||chosen=='e')
+				{
+					cout<<"Quitting Program\n";
+					done=true;    
+				}
 			}
     			return done;
-    	}	
+    }	
 
 
 //Funtion Prototypes
