@@ -1,6 +1,6 @@
 // todolist.cpp
 // Ishan Meher, CISP 400
-// 11/3/2020
+// 11/1/2020
 
 #include<iostream>
 #include<string>
@@ -776,7 +776,7 @@ struct TODO
 {
     string task; 
   	int int_TODOId;
-	  Date dateAdded;
+	Date dateAdded;
     
 
     TODO(string task,int int_TODOId,Date dateAdded)
@@ -829,8 +829,8 @@ struct TODO
 
 		cout<<"Enter an ID for the task: ";
 		input>>item.int_TODOId;			
-    cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 
-    cout<<"Enter the task:"<<'\n'; 	
+    	cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 
+    	cout<<"Enter the task:"<<'\n'; 	
 		getline(input,item.task);	
 
     
@@ -851,8 +851,8 @@ struct TODO
 		cout<<"Date Added: (The Current Date)\n";
 		cout<<"ID: 1234567\n";
 		cout<<"Result:\n";
-    cout<<todo<<'\n';
-    cout<<"------------------------\n";
+    	cout<<todo<<'\n';
+    	cout<<"------------------------\n";
     
 
 
@@ -861,29 +861,27 @@ struct TODO
 		cin>>item;
 		cout<<"\nResult:\n";
 		cout<<item;    
-    cout<<"------------------------\n";
-   	cout<<'\n';
+   	 	cout<<"------------------------\n";
+   		cout<<'\n';
     
 
     
-    cout<<"Checking the functionality of the overloaded = operator\n";
-    cout<<"Assinging one object's data to another\nThen printing object's content\n";
-    cout<<"Should print the previous object's data\n"<<'\n';
-    todo=item;
-    cout<<todo;
+		cout<<"Checking the functionality of the overloaded = operator\n";
+		cout<<"Assinging one object's data to another\nThen printing object's content\n";
+		cout<<"Should print the previous object's data\n"<<'\n';
+		todo=item;
+		cout<<todo;
     
 
     
-    cout<<"Testing Constructor Overloading\n";
-    cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
-    cin>>item;
-    TODO item3(item);
-    cout<<item3<<'\n';
-    cout<<"------------------------\n";    	
+		cout<<"Testing Constructor Overloading\n";
+		cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
+		cin>>item;
+		TODO item3(item);
+		cout<<item3<<'\n';
+		cout<<"------------------------\n";    	
 
 	}
-
-	
   
 
 };
@@ -897,7 +895,140 @@ class ListManager
 
 	public:
 
-    	bool handleUserInput(const string input)
+    	bool handleUserInput(const string input);
+    	
+
+
+		void UnitTest()
+		{
+			ListManager todoList;
+			cout<<"List Manager Unit Test\n";
+			cout<<"Testing the addTodo() method\n";
+			todoList.addTODO("Do my Homework");
+			cout<<"Printing the newly added task\n";
+			todoList.printTODOList();
+			cout<<'\n';
+
+			cout<<"Adding an item using the handleUserInput() method\n";
+			cout<<"Also printing the list and the newly entered item\n";
+			todoList.handleUserInput("+Mow the Lawn"); 
+			cout<<"Printing the whole list\n";
+			cout<<"Testing the ? command that prints the list\n";
+			todoList.handleUserInput("?Print the list");	
+			
+
+			
+			
+
+		}
+
+		void addTODO(const string input)
+		{
+				int id= getID();
+				Date dateAdded;
+				TODO todo(input,id,dateAdded);				
+				list.add(todo);		
+		}
+
+			
+
+		void printTODOList()
+		{
+			
+			for(int index=0;index<list.size();index++)
+			{
+				cout<<"-----------------------------\n";
+				cout<<"Task #"<<index+1<<'\n';
+				list.printItem(index);	
+			}
+			cout<<"-----------------------------\n";
+		}
+
+		int idIsInList(const int id)
+		{
+
+			int result=-1;
+			
+				
+				for(int index=0;index<list.size();index++)
+				{
+					int idAtIndex=list.get(index).int_TODOId;
+							
+					if(id==(idAtIndex))
+					{
+						result=index;
+						
+						
+					}
+				}			
+			
+			return result;
+		}
+
+
+	private:
+
+		int getID()
+		{
+			// Prompts the User for an idNumber and checks if the item chosen is correct
+			// If the data entered is invalid repropmts the user for an entry
+			bool done=false;
+			int id;
+
+			do
+			{
+				int chosenID;
+				cout<<"Enter the id(A number with 7 digits)\n";
+				cin>>chosenID;
+
+				// Checks if the id entered is the correct datatype
+				if(!cin.fail())
+				{
+					// Check if the id entered had seven digits	
+					if(chosenID>999999&&chosenID<=9999999)
+					{				
+						// Checks if the id is unique	
+						int idValidationResult=idIsInList(chosenID);
+						if(-1==idValidationResult)
+						{
+							id=chosenID;
+							cout<<"ID Recorded\n";
+							done=true;	
+						}
+						else
+						{
+							cout<<"The id entered belongs to another task\n";
+							cout<<"Please choose another id\n";
+						}						
+						
+					}		
+					else
+					{
+						cout<<"The value entered does not have seven digits\n";
+					}
+								
+				}	
+				else
+				{
+					// Clears the buffer if the input fails when a bad type is entered
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				
+				}	
+			}	
+			while(done==false);
+
+			return id;
+		}
+
+	
+		
+		
+		
+		
+};
+
+		bool ListManager:: handleUserInput(const string input)
     	{
 			bool done=false;
 
@@ -932,75 +1063,6 @@ class ListManager
     			return done;
     	}	
 
-	private:
-
-		int getID()
-		{
-			// Prompts the User for an idNumber and checks if the item chosen is correct
-			// If the data entered is invalid repropmts the user for an entry
-			bool done=false;
-			int id;
-
-			do
-			{
-				int chosenID;
-				cout<<"Enter the id(A number with 5 digits)\n";
-				cin>>chosenID;
-
-				if(!cin.fail())
-				{	
-					if(chosenID>999999&&chosenID<=99999999)
-					{
-						// Makes sure the id entered had seven digits
-						
-						id=chosenID;
-						cout<<"ID Recorded\n";
-						done=true;				
-						
-					}					
-				}	
-				else
-				{
-					// Clears the buffer if the input fails when a bad type is entered
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				
-				}	
-			}	
-			while(done==false);
-
-			return id;
-		}
-
-		int idIsInList(const int id)
-		{
-			for(int index=0;index>list.size();index++)
-			{
-				if(id==list.get(index).int_TODOId)
-				{
-					return index;
-				}
-			}
-			return -1;
-		}
-		
-		void addTODO(const string input)
-		{
-			int id= getID();
-			Date dateAdded;
-			TODO todo(input,id,dateAdded);
-			list.add(todo);		
-		}
-		
-		void printTODOList()
-		{
-			for(int index=0;index<list.size();index++)
-			{
-				list.printItem(index);
-			}
-		}
-};
-
 
 //Funtion Prototypes
 void ProgramGreeting();
@@ -1011,8 +1073,9 @@ void pressEnterKey();
 
 int main()
 {
-    ProgramGreeting();
+    //ProgramGreeting();
     UnitTest();
+	//runTODOLIST();
     return 0;
 }
 
@@ -1048,7 +1111,6 @@ void runTODOLIST()
 void menu()
 {   
     cout<<"TODO List Menu\n";
-    cout<<"===================================================================================\n";
     cout<<"Enter a task into the console:\n";
     cout<<"<+> +Task to be added\n";
 	cout<<"	Example Input: +Do my Math Homework\n";
@@ -1057,7 +1119,7 @@ void menu()
 	cout<<"<?> ?Display all Tasks\n";
 	cout<<"	Example Input: ?Display All Tasks\n";
 	cout<<"<E> Exit the Program\n";
-	cout<<"===================================================================================\n";
+	
 } 
 
 
@@ -1076,13 +1138,15 @@ void UnitTest()
 	//pressEnterKey();
     //Vector<int> array;
     //array.VectorUnitTest();
-    Date date;
-	pressEnterKey();
-  date.dateUnitTest();
+    //Date date;
+	//pressEnterKey();
+  	//date.dateUnitTest();
 	//pressEnterKey();
 	//TODO todo;
 	//todo.UnitTest();
 	//pressEnterKey();
+	ListManager TODOLIST;
+	TODOLIST.UnitTest();
 }
 
 void pressEnterKey()
