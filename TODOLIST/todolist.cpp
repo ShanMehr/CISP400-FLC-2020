@@ -794,7 +794,7 @@ struct TODO
 		this->int_TODOId=todo.int_TODOId;
 		this->dateAdded=todo.dateAdded;
     }
-  // Specification A2 - Overload Assignment Operator
+  	// Specification A2 - Overload Assignment Operator
 	TODO& operator= (const TODO& todo)
 	{
 		this->task=todo.task;
@@ -805,7 +805,10 @@ struct TODO
 
 	TODO()
 	{
-		
+		this->task="Task";
+		Date dateAdded;
+		this->dateAdded=dateAdded;
+		this->int_TODOId=0000000;
 	}
 
     // Specification C1 - Overload «
@@ -832,6 +835,7 @@ struct TODO
     	cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 
     	cout<<"Enter the task:"<<'\n'; 	
 		getline(input,item.task);	
+		cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 	 
 
     
 
@@ -1013,7 +1017,7 @@ class ListManager
 
 			do
 			{
-				
+				cout<<"List Manager Editor\n";
 				int chosenID;
 				cout<<"Enter the id(A number with 7 digits)\n";
 				cin>>chosenID;
@@ -1022,7 +1026,7 @@ class ListManager
 				if(!cin.fail())
 				{
 					// Check if the id entered had seven digits	
-					if(chosenID>999999&&chosenID<=9999999)
+					if(chosenID==0||(chosenID>999999&&chosenID<=9999999))
 					{				
 						// Checks if the id is unique	
 						int idValidationResult=idIsInList(chosenID);
@@ -1064,6 +1068,9 @@ class ListManager
 	bool ListManager:: handleUserInput(const string input)
     {
 			bool done=false;
+
+			
+
 			if(input.length()>0)
 			{
 				char chosen = input[0];
@@ -1094,6 +1101,16 @@ class ListManager
 					cout<<"Quitting Program\n";
 					done=true;    
 				}
+				else
+				{
+					cout<<"Command is not valid\n";
+				}
+				
+			}
+			else
+			{
+				TODO todo;
+				add(todo);
 			}
     			return done;
     }	
@@ -1121,9 +1138,11 @@ void runTODOLIST()
 
     do
     {
-        
 		
-        string input;
+        cout<<"Press Enter to Continue";
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');		
+		string input;
+		system("clear");
 		menu();
 		
 		
@@ -1151,6 +1170,7 @@ void runTODOLIST()
 void menu()
 {   
     cout<<"TODO List Menu\n";
+	cout<<"|============================|\n";
     cout<<"Enter a task into the console:\n";
     cout<<"<+> +Task to be added\n";
 	cout<<"	Example Input: +Do my Math Homework\n";
@@ -1159,6 +1179,8 @@ void menu()
 	cout<<"<?> ?Display all Tasks\n";
 	cout<<"	Example Input: ?Display All Tasks\n";
 	cout<<"<E> Exit the Program\n";
+	cout<<"|============================|\n";
+	cout<<"TODO List console~$";
 	
 } 
 
@@ -1166,11 +1188,13 @@ void menu()
 void ProgramGreeting()
 {
     Date currentDate;
+	cout<<"Today's Date: "<<currentDate;
     cout<<"============================\n";
     cout<<"Welcome to the TODO LIST\n";
     cout<<"The TODO List keeps all of the tasks that you need to do!\n";
     cout<<"Program Author: Ishan Meher\n";
     cout<<"Program Due Date: November 3, 2020\n";
+	cout<<"============================\n";
 }
 
 void UnitTest()
