@@ -7,6 +7,7 @@
 #include<limits>
 #include<cctype>
 #include <ctime>
+#include <fstream> 
 
 using namespace std;
 
@@ -347,6 +348,22 @@ class Date
 
 
 	public:
+
+
+    int getMonth()
+    {
+      return month;
+    }
+
+    int getDay()
+    {
+      return day;
+    }
+
+    int getYear()
+    {
+      return year;
+    }
 		
 		bool isValidDate(int month,int day,int year)
 		{
@@ -776,7 +793,7 @@ struct TODO
 {
     string task; 
   	int int_TODOId;
-	Date dateAdded;
+	  Date dateAdded;
     
 
     TODO(string task,int int_TODOId,Date dateAdded)
@@ -901,6 +918,12 @@ class ListManager
 	public:
 
     	bool handleUserInput(const string input="   ");
+
+      ListManager()
+      {
+          // Checks if there is a file open
+          saveListContents();
+      }
     	
 		// Specification C3 - Test TODO’s
 		void UnitTest()
@@ -1005,8 +1028,82 @@ class ListManager
 			return result;
 		}
 
+    ~ListManager()
+    {
+      saveListContents();
+    }
 
 	private:
+
+    void saveListContents()
+    {
+        fstream outputFile;
+        
+        outputFile.open("todolist-ishanmeher.txt");
+        cout<<"Writing the data of the list to the file\n";     
+        
+        outputFile<<list.size()<<'\n';
+        for(int index=0; index<list.size();index++)
+        {
+         
+          TODO task=list.get(index);
+          outputFile<<task.task<<'\n';
+          outputFile<<task.dateAdded.getMonth()<<'\n';
+          outputFile<<task.dateAdded.getDay()<<'\n';
+          outputFile<<task.dateAdded.getYear()<<'\n';
+          outputFile<<task.int_TODOId<<'\n';
+          
+          
+        }
+        
+        outputFile.close();
+        
+    }
+
+    void loadListContents()
+    {
+
+      int listSize; // Stores the size of the content
+      fstream readFile;
+      
+      readFile.open("todolist-ishanmeher.txt");
+      cout<<"Reading the data of the list from the file\n";
+
+      readFile>>listSize;
+
+      string taskName;  // Stores the name of the task
+      int month;  // Stores the month
+      int day;  // Stores the day
+      int year; // Stores the Year
+      int id; // Stores the id
+
+      for(int index=0;index<listSize;index++)
+      {
+
+        readFile>>taskName;
+        readFile>>month;
+        readFile>>day;
+        readFile>>year;       
+        readFile>>id;
+        Date date(month,day,year);
+        TODO task(taskName,id,date);
+        add(task);
+
+      }
+      readFile.close();
+      
+
+
+    }
+
+
+    void addOldListContents()
+    {
+      ifstream inputFile; 
+
+    }
+
+
 
 		int getID()
 		{
@@ -1066,8 +1163,8 @@ class ListManager
 };
 
 	bool ListManager:: handleUserInput(const string input)
-    {
-			bool done=false;
+  {
+		  bool done=false;
 
 			
 
@@ -1109,10 +1206,11 @@ class ListManager
 			}
 			else
 			{
-				TODO todo;
-				add(todo);
+          TODO todo;
+          add(todo);
 			}
     			return done;
+
     }	
 
 
@@ -1122,12 +1220,13 @@ void UnitTest();
 void runTODOLIST();
 void menu();
 void pressEnterKey();
+void findTODOList();
 
 int main()
 {
     ProgramGreeting();
     //UnitTest();
-	runTODOLIST();
+	  runTODOLIST();
     return 0;
 }
 
@@ -1140,12 +1239,11 @@ void runTODOLIST()
     {
 		
         cout<<"Press Enter to Continue";
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');		
-		string input;
-		system("clear");
-		menu();
-		
-		
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');		
+        string input;
+        system("clear");
+        menu();
+			
         getline(cin,input);
 	
 		
@@ -1233,4 +1331,9 @@ void pressEnterKey()
                 }
         }
 
+}
+
+void findTODOList()
+{
+  cout<<"Finding previously entered data\n";
 }
