@@ -8,6 +8,7 @@
 #include<cctype>
 #include <ctime>
 #include <fstream> 
+#include <regex>
 
 using namespace std;
 
@@ -1061,62 +1062,137 @@ class ListManager
         
     }
 
+
+     int stringToInt(string task)
+    {
+      // Checks if the values inside the string can be a number
+      //  Only casts to int if the string can be casted to int
+      int valueToReturn;
+
+      regex reg("^[0-9]+$");
+      // A regular exression(regex) string pattern that the parameter has to match
+      // The string must have numbers zero to 9 in it and can be any length long;
+
+       if(regex_match(task, reg)) 
+       {
+         valueToReturn=stoi(task);         
+       }
+       return valueToReturn;
+    }   
+
+
     void loadListContents()
     {
+        fstream readFile;
 
-      int listSize; // Stores the size of the content
-      
-	  ifstream readFile;
-      
-      readFile.open("todolist-ishanmeher.txt");
-      cout<<"Reading the data of the list from the file\n";
-	
-	  if(readFile)
-	  {
 
-		readFile>>listSize;
-		
+        readFile.open("todolist-ishanmeher.txt");
+        if(readFile)
+        {
+          int listSize=0;
+          readFile>>listSize;
+        
 
-		string taskName="";  // Stores the name of the task
-		int fileMonth;  // Stores the month
-		int fileday;  // Stores the day
-		int fileYear; // Stores the Year
-		int fileId; // Stores the id
+        
+          
+        Vector<string>list;
+        string value;
+        int increment=0;
+            string task;
+            int month;
+            int day;
+            int year;
+            int id;
 
-		int month;
-		int day;
-		int year;
-		int id;
+            string filetask;
+            string fileMonth;
+            string fileDay;
+            string fileYear;
+            string fileId;
 
-		for(int index=0;index<listSize;index++)
-		{
-			getline(readFile,taskName);
-			cout<<taskName<<endl;	
-			readFile>>fileMonth;
-			cout<<fileMonth<<endl;
-			readFile>>fileday;
-			cout<<fileday<<'\n';
-			readFile>>fileYear;
-			cout<<fileYear<<endl;     
-			readFile>>fileId;
-			cout<<fileId<<endl;
-							
-			
+        int index;
+        while(!readFile.eof())
+        {
+          getline(readFile,value);
+          if(value!="")
+          {
+            list.add(value);
+           
+            if(increment==4)
+            {
+              id= stringToInt(list.get(index));
+              increment=0;
+              Date date(month,day,year);
+              TODO todo(task,id,date);
+              cout<<todo<<endl;
+              add(todo);
+              
+            }          
+            else if(increment==3)
+            {
+              year= stringToInt(list.get(index));
+              increment++;
+            }
+            else if(increment==2)
+            {
+              day= stringToInt(list.get(index));
+              increment++;
+            }
+            else if(increment==1)
+            {
+              month= stringToInt(list.get(index));
+              increment++;
+            }
+            else if(increment==0)
+            {
+              task=list.get(index);
+              increment++;
+            }
+            else
+            {
 
-			Date date(fileMonth,fileday,fileYear);
-			TODO task(taskName,fileId,date);
-			add(task);
+            }
+            index++;
+            
+            
+            
+          }
+          
 
-		}
-			readFile.close();
-		}
-		
 
+         
+
+        }
+
+        for(int i=0;i<(list.size()/5);i++)
+        {
+          
+
+
+        }
+          
+
+          
+          
+          
+
+         
+         
+
+
+         
+    
+          
+          
+          
+
+          readFile.close();
+
+        }
 
     }
 
-
-
+   
 
 		int getID()
 		{
@@ -1345,4 +1421,3 @@ void pressEnterKey()
         }
 
 }
-
