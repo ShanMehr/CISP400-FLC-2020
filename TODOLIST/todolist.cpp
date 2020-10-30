@@ -100,6 +100,7 @@ class Vector
 		{
 			// Returns the size of the array
 			return length;
+      
 		}
 
 	
@@ -797,33 +798,40 @@ struct TODO
   	int int_TODOId;
 	  Date dateAdded;
     
+    
 
     TODO(string task,int int_TODOId,Date dateAdded)
     {
+        // Creates a TODO object
         this->task=task;
         this->int_TODOId=int_TODOId;
         this->dateAdded=dateAdded;
+        
 	  }	
 
 
-	// Specification A1 - Overload Copy Constructor
+	  // Specification A1 - Overload Copy Constructor
     TODO(const TODO& todo)
     {
-		this->task=todo.task;
-		this->int_TODOId=todo.int_TODOId;
-		this->dateAdded=todo.dateAdded;
+      // Copy Constructor
+      this->task=todo.task;
+      this->int_TODOId=todo.int_TODOId;
+      this->dateAdded=todo.dateAdded;
     }
   	// Specification A2 - Overload Assignment Operator
 	TODO& operator= (const TODO& todo)
 	{
+    // Overloads the = operator
 		this->task=todo.task;
 		this->int_TODOId=todo.int_TODOId;
 		this->dateAdded=todo.dateAdded;
 		return *this;
 	}
 
+  // Specification A4 - Overload Constructor
 	TODO()
 	{
+    // Default Constructor that holds default data
 		this->task="Task";
 		Date dateAdded;
 		this->dateAdded=dateAdded;
@@ -844,26 +852,27 @@ struct TODO
 	//Specification C2 - Overload »
 	friend istream& operator >> (istream &input, TODO& item)
 	{
-    	// Overloads the << operator 
-    	//Prints the instance members of TODO struct
+    	// Overloads the >> operator 
+    	// Inputs the instance members of TODO struct
+
+    // Runs the default constructor which get the current date
 		Date dateAdded;
 		item.dateAdded=dateAdded; 
 
+    // Prompts the user for input
+    // Stores the input in the instance varuiables
 		cout<<"Enter an ID for the task: ";
 		input>>item.int_TODOId;			
-    	cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 
-    	cout<<"Enter the task:"<<'\n'; 	
+    cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 
+    cout<<"Enter the task:"<<'\n'; 	
 		getline(input,item.task);	
 		cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 	 
-
-    
-
 		return input;
 	}
 
 	void UnitTest()
 	{			
-
+    // Unit Test for my TODO object
 		cout<<"TODO class Unit Test\n";
 
 		// Testing the TODO constructor
@@ -910,27 +919,31 @@ struct TODO
 
 };
 
+
 class ListManager
 {
 	private:
 
-		//Specification C4 - TODO array
+	  	//Specification C4 - TODO array
     	Vector<TODO> list; // Array of TODO's stored on the heap
+      bool hasBlankEntries;
 
 	public:
 
-    	bool handleUserInput(const string input="   ");
+    	bool handleUserInput(const string input="  ");
 
+      // Specification B4 - Persistence
       ListManager()
       {
-          // Checks if there is a file open
+          // Checks if there is a file with ListManger data 
+          // If there is a file then that data is saved to the array
           loadListContents();
       }
     	
 		// Specification C3 - Test TODO’s
 		void UnitTest()
 		{	
-
+      // Unit Test for my list Manager Class
 			ListManager todoList;
 
 			cout<<"List Manager Unit Test\n";
@@ -977,23 +990,49 @@ class ListManager
 			cout<<"Should print the list with the first entry removed\n";
 			cout<<"Note: task Remind myself to go Running should be gone\n";			
 			todoList.handleUserInput("?Print the list");
-	
-
 		}
 
-		void add(TODO& todo)
+		
+
+    ~ListManager()
+    {
+      // Writes all the data of the array to the file
+      saveListContents();
+    }
+
+	private:
+
+    void add(TODO& todo)
 		{
 			// adds a TODO reference to the list
-			// Method use to test removal of the todo;
 			list.add(todo);
 			
 		}
+
 		void addTODO(const string input)
 		{
+        // Takes in a string input
+        // Performs a command based on the first character of the string parameter
+
+        // Prompts for an ID
 				int id= getID();
+        
+        // The default contructor sets the date object to have the current date
 				Date dateAdded;
-				TODO todo(input,id,dateAdded);				
-				list.add(todo);		
+
+        // Makes a new TODO item object and adds it to the array
+				TODO todo(input,id,dateAdded);
+        if(hasBlankEntries)
+        {
+          // Checks to see if there are blank entries
+          // Replaces the blank entries with a new TODO
+          replaceDefaultObject(todo);
+        }
+        else
+        {
+          list.add(todo);
+        }				
+						
 		}
 
 			
@@ -1001,6 +1040,7 @@ class ListManager
 		void printTODOList()
 		{
 			
+      // Prints the contents of the array
 			for(int index=0;index<list.size();index++)
 			{
 				cout<<"-----------------------------\n";
@@ -1012,10 +1052,10 @@ class ListManager
 
 		int idIsInList(const int id)
 		{
-
+      // Checks if the ID is in th elist
 			int result=-1;
 			
-				
+				// Loops through the list and checks if the ID entered matches a previously chosen id
 				for(int index=0;index<list.size();index++)
 				{
 					int idAtIndex=list.get(index).int_TODOId;
@@ -1025,26 +1065,26 @@ class ListManager
 						result=index;					
 						
 					}
+
 				}			
 			
 			return result;
 		}
 
-    ~ListManager()
-    {
-      saveListContents();
-    }
-
-	private:
-
     void saveListContents()
     {
+        // Saves the contents of the array to a text file
         ofstream outputFile;
         
+        // opens the file
         outputFile.open("todolist-ishanmeher.txt");
         cout<<"Writing the data of the list to the file\n";     
         
+        // Saves the length of the list to the file
+        // Used to determine how many objects are read when the program runs again
         outputFile<<list.size()<<'\n';
+
+        // Loops through the array and adds the contents of each object
         for(int index=0; index<list.size();index++)
         {
          
@@ -1065,14 +1105,16 @@ class ListManager
 
      int stringToInt(string task)
     {
-      // Checks if the values inside the string can be a number
+      // Used when reading from the text file
+      // Checks if the values inside the string is a number
       //  Only casts to int if the string can be casted to int
       int valueToReturn;
 
       regex reg("^[0-9]+$");
-      // A regular exression(regex) string pattern that the parameter has to match
-      // The string must have numbers zero to 9 in it and can be any length long;
+      // A regular exression(regex) string pattern that the string parameter has to match
+      // The string must have numbers zero to 9 in it and must have at least 1 number inside it;
 
+        // If the string matches the regular expression pattern only then is the string made into an int
        if(regex_match(task, reg)) 
        {
          valueToReturn=stoi(task);         
@@ -1083,32 +1125,41 @@ class ListManager
 
     void loadListContents()
     {
+        // Reads the contents of the text file
+        // Saves the contents of the text file into the array
+
         fstream readFile;
 
 
         readFile.open("todolist-ishanmeher.txt");
+
+        // Reads if the file was found
         if(readFile)
         {
           int listSize=0;
-          readFile>>listSize;
-        
 
-        
+          // Reads the first line which stores the length of the array
+          // The input is read in chunks, of every five lines having the instance variables to make a TODO object
+          // After the fifth line starts a new TODO object
+
+          readFile>>listSize;   
           
         Vector<string>list;
-        string value;
-        int increment=0;
-            string task;
-            int month;
-            int day;
-            int year;
-            int id;
 
-            string filetask;
-            string fileMonth;
-            string fileDay;
-            string fileYear;
-            string fileId;
+        // Stores a line of the file 
+        string value;     
+
+        // The increment is meant to keep track of what member variable of TODO is going to be saved
+        
+        int increment=0;
+
+            string task; // Read First in file
+            int month; // Read second in file
+            int day; // Read third in file
+            int year; // Read fourth in file
+            int id; // Read fifth in file
+
+            
 
         int index;
         while(!readFile.eof())
@@ -1120,7 +1171,12 @@ class ListManager
            
             if(increment==4)
             {
+              // If the last line of the TODO struct then save the id
+              // If it is at the 5th line then the instance varibales can be saved to the todo and added to the list
+
               id= stringToInt(list.get(index));
+
+              // Resetting to start saving to a new object
               increment=0;
               Date date(month,day,year);
               TODO todo(task,id,date);
@@ -1130,68 +1186,82 @@ class ListManager
             }          
             else if(increment==3)
             {
+              // The 4th line of the has the day
+              // stores the day to be added when the fourth line is reached
               year= stringToInt(list.get(index));
               increment++;
             }
             else if(increment==2)
             {
+              // The 3rd line of the has the day
+              // stores the day to be added when the fourth line is reached
               day= stringToInt(list.get(index));
               increment++;
             }
             else if(increment==1)
             {
+              // The 2nd line of the has the day
+              // stores the month to be added when the fourth line is reached
               month= stringToInt(list.get(index));
               increment++;
             }
             else if(increment==0)
             {
+              // The first line of the has the day
+              // stores the day to be added when the fourth line is reached
               task=list.get(index);
               increment++;
             }
-            else
-            {
-
-            }
             index++;
-            
-            
-            
+                   
           }
-          
-
-
-         
 
         }
-
-        for(int i=0;i<(list.size()/5);i++)
-        {
-          
-
-
-        }
-          
-
-          
-          
-          
-
-         
-         
-
-
-         
-    
-          
-          
-          
 
           readFile.close();
 
         }
+        else 
+        {
+          cout<<"No tasks have been saved\n";
+        }
 
     }
 
+
+    void replaceDefaultObject(TODO todo)
+    {
+      // Changes a blank entry
+      // Checks if there are still blank TODO objects
+      bool blankNotFound=false;
+      int blankCount;
+      for(int index=0;index<list.size();index++)
+      {
+        // Loops through the array ot find blank TODO entries
+        if(list.get(index).int_TODOId==0)
+        {
+          // If a TODO entry has been found then increment the variable that stores the count of blank entries
+          blankCount++;
+          if(blankNotFound==true)
+          {
+            // If a blank Entry has been previously found then don't update then don't change the other blank entries
+            // We don't want to repeat tasks
+            hasBlankEntries=true;
+            
+          }
+          else
+          {
+            // Changes the first found blank entry            
+            TODO todoToAdd(todo);
+            list.set(index,todoToAdd);
+            blankNotFound=true;
+            blankCount--;
+            hasBlankEntries=false;
+          }
+          
+        }
+      }
+    }
    
 
 		int getID()
@@ -1253,23 +1323,28 @@ class ListManager
 
 	bool ListManager:: handleUserInput(const string input)
   {
-		  bool done=false;
-
-			
+      // Takes the first char of the input and checks if it matches a task
+      // If a task is matched then a task is performed based on the input
+		  bool done=false;	
 
 			if(input.length()>0)
 			{
+        // Gets the first char
 				char chosen = input[0];
-				string task= input.substr(1,input.length());
+        // Cuts the char from the input
+    		string task= input.substr(1,input.length());
 				
 				// Specification B1 - + Symbol
 				if(chosen=='+')
 				{
-					addTODO(task);
+                    
+            addTODO(task);
+					
 				}
 				// Specification B3 - - symbol
 				else if(chosen=='-')
 				{
+          // If a - is matched then runs the remove command
 					int idToRemove = (int)(stoi(task));				
 					int itemIndex= idIsInList(idToRemove);
 					if(itemIndex!=-1)
@@ -1280,10 +1355,12 @@ class ListManager
 				// Specification B2 - ? Symbol   
 				else if(chosen=='?')
 				{
+          // If a ? is matched then contents are displayed
 					printTODOList();
 				}
 				else if(chosen=='E'||chosen=='e')
 				{
+          // If E is matched then quit
 					cout<<"Quitting Program\n";
 					done=true;    
 				}
@@ -1297,6 +1374,7 @@ class ListManager
 			{
           TODO todo;
           add(todo);
+          this->hasBlankEntries=true;
 			}
     			return done;
 
@@ -1314,7 +1392,7 @@ void findTODOList();
 int main()
 {
     ProgramGreeting();
-    //UnitTest();
+  UnitTest();
 	runTODOLIST();
     return 0;
 }
@@ -1386,16 +1464,16 @@ void ProgramGreeting()
 
 void UnitTest()
 {
-	//pressEnterKey();
-    //Vector<int> array;
-    //array.VectorUnitTest();
-    //Date date;
-	//pressEnterKey();
-  	//date.dateUnitTest();
-	//pressEnterKey();
-	//TODO todo;
-	//todo.UnitTest();
-	//pressEnterKey();
+	pressEnterKey();
+    Vector<int> array;
+    array.VectorUnitTest();
+    Date date;
+	pressEnterKey();
+  	date.dateUnitTest();
+	pressEnterKey();
+	TODO todo;
+	todo.UnitTest();
+	pressEnterKey();
 	ListManager TODOLIST;
 	TODOLIST.UnitTest();
 }
@@ -1421,3 +1499,4 @@ void pressEnterKey()
         }
 
 }
+
