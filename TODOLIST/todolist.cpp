@@ -6,9 +6,9 @@
 #include<string>
 #include<limits>
 #include<cctype>
-#include <ctime>
-#include <fstream> 
-#include <regex>
+#include<ctime>
+#include<fstream> 
+#include<regex>
 
 using namespace std;
 
@@ -521,9 +521,9 @@ class Date
 
 			else
 			{
-					cout<<"Year input failed!\n";
-					cout<<"The year entered is not a reasonable year entry try a year larger than 0 and less than 3000\n";
-					return false;
+				cout<<"Year input failed!\n";
+				cout<<"The year entered is not a reasonable year entry try a year larger than 0 and less than 3000\n";
+				return false;
 			}
 		}
 
@@ -769,20 +769,20 @@ class Date
 			cout<<"Testing the overloaded Date output operator\n";
 			cout<<dateOperatorTesting;
 			
-      cout<<"Checking the functionality of the overloaded = operator\n";
-      cout<<"Assinging one object's data to another\nThen printing object's content\n";
-      cout<<"Should print the previous object's data\n"<<'\n';
-      dateOperatorTesting=testDate;
-      cout<<dateOperatorTesting;
+			cout<<"Checking the functionality of the overloaded = operator\n";
+			cout<<"Assinging one object's data to another\nThen printing object's content\n";
+			cout<<"Should print the previous object's data\n"<<'\n';
+			dateOperatorTesting=testDate;
+			cout<<dateOperatorTesting;
     
 
     
-    cout<<"Testing Constructor Overloading\n";
-    cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
-    cin>>testDate;
-    Date item3(testDate);
-    cout<<item3<<'\n';
-		cout<<"\n";
+			cout<<"Testing Constructor Overloading\n";
+			cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
+			cin>>testDate;
+			Date item3(testDate);
+			cout<<item3<<'\n';
+			cout<<"\n";
 
 	}
 
@@ -796,7 +796,7 @@ struct TODO
 {
     string task; 
   	int int_TODOId;
-	  Date dateAdded;
+	Date dateAdded;
     
     
 
@@ -807,10 +807,10 @@ struct TODO
         this->int_TODOId=int_TODOId;
         this->dateAdded=dateAdded;
         
-	  }	
+	}	
 
 
-	  // Specification A1 - Overload Copy Constructor
+	// Specification A1 - Overload Copy Constructor
     TODO(const TODO& todo)
     {
       // Copy Constructor
@@ -821,14 +821,14 @@ struct TODO
   	// Specification A2 - Overload Assignment Operator
 	TODO& operator= (const TODO& todo)
 	{
-    // Overloads the = operator
+    	// Overloads the = operator
 		this->task=todo.task;
 		this->int_TODOId=todo.int_TODOId;
 		this->dateAdded=todo.dateAdded;
 		return *this;
 	}
 
-  // Specification A4 - Overload Constructor
+  	// Specification A4 - Overload Constructor
 	TODO()
 	{
     // Default Constructor that holds default data
@@ -855,24 +855,24 @@ struct TODO
     	// Overloads the >> operator 
     	// Inputs the instance members of TODO struct
 
-    // Runs the default constructor which get the current date
+    	// Runs the default constructor which get the current date
 		Date dateAdded;
 		item.dateAdded=dateAdded; 
 
-    // Prompts the user for input
-    // Stores the input in the instance varuiables
+		// Prompts the user for input
+		// Stores the input in the instance variables
 		cout<<"Enter an ID for the task: ";
 		input>>item.int_TODOId;			
-    cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 
+    
     cout<<"Enter the task:"<<'\n'; 	
 		getline(input,item.task);	
-		cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n'); 	 
+			 
 		return input;
 	}
 
 	void UnitTest()
 	{			
-    // Unit Test for my TODO object
+    	// Unit Test for my TODO object
 		cout<<"TODO class Unit Test\n";
 
 		// Testing the TODO constructor
@@ -926,7 +926,7 @@ class ListManager
 
 	  	//Specification C4 - TODO array
     	Vector<TODO> list; // Array of TODO's stored on the heap
-      bool hasBlankEntries;
+      	bool hasBlankEntries;
 
 	public:
 
@@ -943,7 +943,7 @@ class ListManager
 		// Specification C3 - Test TODO’s
 		void UnitTest()
 		{	
-      // Unit Test for my list Manager Class
+      		// Unit Test for my list Manager Class
 			ListManager todoList;
 
 			cout<<"List Manager Unit Test\n";
@@ -1011,16 +1011,16 @@ class ListManager
 
 		void addTODO(const string input)
 		{
-        // Takes in a string input
-        // Performs a command based on the first character of the string parameter
+				// Takes in a string input
+				// Performs a command based on the first character of the string parameter
 
-        // Prompts for an ID
+				// Prompts for an ID
 				int id= getID();
         
-        // The default contructor sets the date object to have the current date
+        		// The default contructor sets the date object to have the current date
 				Date dateAdded;
 
-        // Makes a new TODO item object and adds it to the array
+        		// Makes a new TODO item object and adds it to the array
 				TODO todo(input,id,dateAdded);
         if(hasBlankEntries)
         {
@@ -1039,8 +1039,7 @@ class ListManager
 
 		void printTODOList()
 		{
-			
-      // Prints the contents of the array
+      		// Prints the contents of the array
 			for(int index=0;index<list.size();index++)
 			{
 				cout<<"-----------------------------\n";
@@ -1052,7 +1051,7 @@ class ListManager
 
 		int idIsInList(const int id)
 		{
-      // Checks if the ID is in th elist
+      		// Checks if the ID is in th elist
 			int result=-1;
 			
 				// Loops through the list and checks if the ID entered matches a previously chosen id
@@ -1127,7 +1126,7 @@ class ListManager
     {
         // Reads the contents of the text file
         // Saves the contents of the text file into the array
-
+		
         fstream readFile;
 
 
@@ -1180,7 +1179,6 @@ class ListManager
               increment=0;
               Date date(month,day,year);
               TODO todo(task,id,date);
-              cout<<todo<<endl;
               add(todo);
               
             }          
@@ -1219,7 +1217,7 @@ class ListManager
         }
 
           readFile.close();
-
+		  cout<<"Past data loaded to TODO list\n";
         }
         else 
         {
@@ -1322,29 +1320,28 @@ class ListManager
 };
 
 	bool ListManager:: handleUserInput(const string input)
-  {
-      // Takes the first char of the input and checks if it matches a task
-      // If a task is matched then a task is performed based on the input
-		  bool done=false;	
+  	{
+		// Takes the first char of the input and checks if it matches a task
+		// If a task is matched then a task is performed based on the input
+		bool done=false;	
 
 			if(input.length()>0)
 			{
-        // Gets the first char
+       			// Gets the first char		
 				char chosen = input[0];
-        // Cuts the char from the input
-    		string task= input.substr(1,input.length());
+        		// Cuts the char from the input
+    			string task= input.substr(1,input.length());
 				
 				// Specification B1 - + Symbol
 				if(chosen=='+')
 				{
-                    
-            addTODO(task);
+            		addTODO(task);
 					
 				}
 				// Specification B3 - - symbol
 				else if(chosen=='-')
 				{
-          // If a - is matched then runs the remove command
+          			// If a - is matched then runs the remove command
 					int idToRemove = (int)(stoi(task));				
 					int itemIndex= idIsInList(idToRemove);
 					if(itemIndex!=-1)
@@ -1355,12 +1352,12 @@ class ListManager
 				// Specification B2 - ? Symbol   
 				else if(chosen=='?')
 				{
-          // If a ? is matched then contents are displayed
+          			// If a ? is matched then contents are displayed
 					printTODOList();
 				}
 				else if(chosen=='E'||chosen=='e')
 				{
-          // If E is matched then quit
+          			// If E is matched then quit
 					cout<<"Quitting Program\n";
 					done=true;    
 				}
@@ -1372,9 +1369,9 @@ class ListManager
 			}
 			else
 			{
-          TODO todo;
-          add(todo);
-          this->hasBlankEntries=true;
+				TODO todo;
+				add(todo);
+				this->hasBlankEntries=true;
 			}
     			return done;
 
@@ -1392,7 +1389,7 @@ void findTODOList();
 int main()
 {
     ProgramGreeting();
-  UnitTest();
+  	UnitTest();
 	runTODOLIST();
     return 0;
 }
@@ -1404,7 +1401,7 @@ void runTODOLIST()
 
     do
     {
-		
+
         cout<<"Press Enter to Continue";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');		
         string input;
@@ -1468,12 +1465,12 @@ void UnitTest()
     Vector<int> array;
     array.VectorUnitTest();
     Date date;
-	pressEnterKey();
+	
   	date.dateUnitTest();
-	pressEnterKey();
+	
 	TODO todo;
 	todo.UnitTest();
-	pressEnterKey();
+	
 	ListManager TODOLIST;
 	TODOLIST.UnitTest();
 }
