@@ -1,6 +1,6 @@
 // todolist.cpp
 // Ishan Meher, CISP 400
-// 11/1/2020
+// 11/8/2020
 
 #include<iostream>
 #include<string>
@@ -12,7 +12,7 @@
 
 using namespace std;
 
-//Specification C4 - TODO array
+// Specification C4 - TODO array
 template <class A>
 class Vector
 {
@@ -849,7 +849,7 @@ struct TODO
 
 	}
 
-	//Specification C2 - Overload »
+	// Specification C2 - Overload »
 	friend istream& operator >> (istream &input, TODO& item)
 	{
     	// Overloads the >> operator 
@@ -924,7 +924,7 @@ class ListManager
 {
 	private:
 
-	  	//Specification C4 - TODO array
+	  	// Specification C4 - TODO array
     	Vector<TODO> list; // Array of TODO's stored on the heap
       	bool hasBlankEntries;
 
@@ -1367,13 +1367,15 @@ class ListManager
 				}
 				
 			}
+			
 			else
 			{
 				TODO todo;
 				add(todo);
 				this->hasBlankEntries=true;
 			}
-    			return done;
+    		
+			return done;
 
     }	
 
@@ -1405,18 +1407,18 @@ void runTODOLIST()
         cout<<"Press Enter to Continue";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');		
         string input;
-        system("clear");
+        
         menu();
 			
         getline(cin,input);
-	
+		system("clear");
 		
         if(!cin.fail())
         {
-			
             done=list.handleUserInput(input);
-			
+		t p
         }
+
         else
         {
             // Clears the buffer if the input fails when a bad type is entered
@@ -1461,6 +1463,7 @@ void ProgramGreeting()
 
 void UnitTest()
 {
+	// Unit Tests
 	pressEnterKey();
     Vector<int> array;
     array.VectorUnitTest();
