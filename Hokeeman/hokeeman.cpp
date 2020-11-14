@@ -44,9 +44,6 @@ class Vector
 
 		}
 
-
-		
-
 	private:
 
 		void resizeVector()
@@ -782,46 +779,68 @@ class Date
 
 };
 
- // Specification C2 - Creature class
+
+// Specification C2 - Creature class
 class Creature
 {
-  public:
-  string name;
-  int boredomLevel;
-  int hungerLevel;
+    public:
+    string name;
+    int boredomLevel;
+    int hungerLevel;
 
   public:
+
+
+    Creature()
+    {
+        this->hungerLevel=randomNumberGenerator(0,5);
+        this->boredomLevel=randomNumberGenerator(0,5);
+    }
+    Creature(string name)
+    {
+        this->name=name;
+        this->hungerLevel=randomNumberGenerator(0,5);
+        this->boredomLevel=randomNumberGenerator(0,5);
+    }
+    
+    // Specification C1 - PassTime()
+    void passTime();
+
+    // Feeds the Creature a random amount of food (3-6)
+    // Increases the hungerLevel
+    void feedCreature();
+
+
+    // Play with the Creature
+    // Increases the boredomLevel by a random amount (4-8)
+    void playWithCreature();
+
+    // Generates a random number between two numbers
+    int randomNumberGenerator(int lo,int hi);
+
+    // Specification B2 - Virtual Class Creature
+    virtual bool isParalyzed()
+    {
+        // Checks if the Creature is Paralyzed
+        return boredomLevel>20;
+    }
+
+    virtual bool isDead()
+    {
+        return hungerLevel<0;
+    }
 
   
-  // Specification C1 - PassTime()
-  void passTime();
 
-  // Feeds the Creature a random amount of food (3-6)
-  // Increases the hungerLevel
-  void feedCreature();
-
-
-  // Play with the Creature
-  // Increases the boredomLevel by a random amount (4-8)
-  void playWithCreature();
-
-  // Generates a random number between two numbers
-  int randomNumberGenerator(int lo,int hi);
-
-
-  virtual bool isParalyzed()
-  {
-    // Checks if the Creature is Paralyzed
-    return boredomLevel<=0;
-  }
-
-  friend ostream& operator << (ostream& out,Creature& creature)
-  {
-    out<<"Creature Name: "<<creature.name<<'\n';
-    out<<"Boredom Level: "<<creature.boredomLevel<<'\name';
-    out<<"Hunger Level: "<<creature.hungerLevel<<'\name';
-    return out;
-  }
+    friend ostream& operator << (ostream& out,Creature& creature)
+    {
+        out<<"Name: "<<creature.name<<'\n';
+        out<<"Boredom Level: "<<creature.boredomLevel<<'\n';
+        out<<"Hunger Level: "<<creature.hungerLevel<<'\n';
+        out<<"Is Dead: "<<creature.isDead()<<"\n";
+        out<<"Is Paralyzed: "<<creature.isParalyzed()<<"\n";
+        return out;
+    }
 
 };
 
@@ -829,8 +848,9 @@ class Creature
 // Specification C1 - PassTime()
 void Creature ::passTime()
 {
+    
     this->hungerLevel--;
-    this->boredomLevel--;    
+    this->boredomLevel++;    
 }
 
 int Creature :: randomNumberGenerator(int lo,int hi)
@@ -843,59 +863,68 @@ int Creature :: randomNumberGenerator(int lo,int hi)
 
   void Creature :: feedCreature()
   {
+    // Feed the Hokeeman and increase hungerLevel by a random number
+
     int amountToFeed=randomNumberGenerator(3,6);
     this->hungerLevel+=amountToFeed;
+    passTime();
   }
 
   void Creature:: playWithCreature()
   {
+
+    // Play with the Hokeeman and decrease boredomLevel by a random number
+
     int boredomLevelUpdated= randomNumberGenerator(4,8);
     this->boredomLevel+=boredomLevelUpdated;
-
+    passTime();
   }
   
 
 // Specification B1 - Child Class
 class Hokeeman :public Creature
 { 
-  public: 
+    public: 
 
-  bool isParalyzed()
-  {
-    return boredomLevel<=0;
-  }
+    bool isParalyzed()
+    {
+        return boredomLevel>20;
+    }
 
-  bool isDead()
-  {
-    return hungerLevel<=0;
-  }
+    bool isDead()
+    {
+        return hungerLevel<0;
+    }
 
-  
-  Hokeeman(Hokeeman& parent1, Hokeeman &parent2)
-  {
-    this->name= (parent1.name+" "+parent2.name);
-
-    // Use the overloaded + operator to increase hungerLevels
-    *this=(parent1+parent2);
     
-  }
+    Hokeeman(Hokeeman& parent1, Hokeeman &parent2)
+    {
+        this->name= (parent1.name+" "+parent2.name);
+
+        // Use the overloaded + operator to increase hungerLevels
+        *this=(parent1+parent2);
+    }
 
 
-  //Specification B3 - Overload Assignment Operator
-  Hokeeman& operator =(const Hokeeman& hokeeman)
-	{
+    //Specification B3 - Overload Assignment Operator
+    Hokeeman& operator =(const Hokeeman& hokeeman)
+    {
 			this->name=hokeeman.name;
 			this->hungerLevel=hokeeman.hungerLevel;
 			this->boredomLevel=hokeeman.boredomLevel;
 			return *this;
 	} 
 
-
-  Hokeeman(const Hokeeman& hokeeman)
+    // Specification A2 - Copy Constructor
+    Hokeeman(Hokeeman& hokeeman)
 	{
-			this->name=hokeeman.name;
-			this->hungerLevel=hokeeman.hungerLevel;
-			this->boredomLevel=hokeeman.boredomLevel;
+        
+        // Copy Constructor for Hokeeman
+        // Absorbs and Spits out the other Hokeeman
+        // Takes the other Hokeeman's hunger and boredom levels and uses it to strengthen itself
+		this->name=hokeeman.name+" Parasite"; 
+		this->hungerLevel+=hokeeman.hungerLevel;
+		this->boredomLevel-=hokeeman.boredomLevel;        
 	} 
 
   
@@ -910,7 +939,7 @@ class Hokeeman :public Creature
   Hokeeman operator +(Hokeeman& hokeeman)
   {
     this->hungerLevel+=hokeeman.hungerLevel;
-    this->boredomLevel+=hokeeman.boredomLevel;
+    this->boredomLevel-=hokeeman.boredomLevel;
     return *this;
   }
 
@@ -956,39 +985,15 @@ class HokeemanGame
   private:
 
  
-  Vector<shared_ptr<Creature>> creatureList;
+  //Vector<shared_ptr<Creature>> creatureList;
+  Creature* hokeeman();
   public:
 
-  HokeemanGame()
-  {
-    addHokeemans();
-    playGame();
-  }
-
-  int selectHokeeman()
-  {
-    bool done;
-    int indexOfHokeeman=0;
-    do
+    HokeemanGame()
     {
-      cout<<"Size of list: "<<creatureList.size()<<'\n';
-      int index;
-      cin>>index;
-      if(!cin.fail()&&index<=creatureList.size())
-      { 
-        indexOfHokeeman=index;
-        done=true;
-      }
-      else
-      {
-        cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      }
+        playGame();
     }
-    while(!done);
 
-    return indexOfHokeeman;
-  }
 
   // Specification C3 - Validate Input
   bool validateInput(string input, int index)
@@ -1021,12 +1026,22 @@ class HokeemanGame
   void playGame()
   {
     bool done;
+    cout<<"Print the Hokeeman's Name\n";
+    string name;
+    getline(cin,name);
+    
+    Creature* hokeemanToCopy= new Hokeeman(name);
+
+    
+
     string command;
+    
     do
     {
-      getline(cin,command);
-      int index=selectHokeeman();
-      done=validateInput(command,index);
+        getline(cin,command);
+        // Specification A1 - Critter Name
+        done =handleCommandInput();
+   
     
     }
     while(!done);
@@ -1044,61 +1059,14 @@ class HokeemanGame
     cout<<"========================\n";
   }
 
-  void addHokeemans()
-  {
-    bool done=false;
-    string command;
-    do
-    {
-      displayhokeemanAdditionMenu();
-      getline(cin,command);
-      done=handleHokeemanAdditonInput(command);
-    }
-    while(!done);
+  
 
-  }
+  
 
-  void displayhokeemanAdditionMenu()
-  {
-    cout<<"(+)Add Hokeeman\n";
-    cout<<"(Q)Stop Adding Hokeemans\n";
-  }
-
-  bool handleHokeemanAdditonInput(string command)
-  {
-    if(command=="+")
-    {
-      addHokeemanToList();
-    }
-    else if(command=="Q"||command=="q")
-    {
-      return true;
-    }
-    else
-    {
-      cout<<"Enter a valid input\n";
-    }
-
-    return false;
-  }
-
-  // Specification A1 - Critter Name
-  void addHokeemanToList()
-  {
-    bool done;
-    string name;
-    do
-    {
  
-      cout<<"Enter the name of the Hokeeman\n";
-      getline(cin,name);
-      shared_ptr<Hokeeman> hokeeman1(new Hokeeman(name));
-      creatureList.add(hokeeman1);
-      cout<<hokeeman1<<'\n';
-      done=true;
-    }
-    while(!done);
-  }
+
+  
+ 
 
 };
 
