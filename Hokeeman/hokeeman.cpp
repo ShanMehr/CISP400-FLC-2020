@@ -943,7 +943,10 @@ class Hokeeman :public Creature
     return *this;
   }
 
+
+
 };
+
 
 // Specification A3 - Second Child Class
 class BattleHokeeman : public Creature
@@ -958,35 +961,21 @@ class BattleHokeeman : public Creature
     this->name=name;
     this->elementalType=elementalType;
     this->health=randomNumberGenerator(5,200);
-    this->attackDamage=randomNumberGenerator(5, 20);
-
+    this->attackDamage=randomNumberGenerator(1,10);
   }
 
-  void takeDamage(BattleHokeeman& hokeeman)
-  {
-    this->health-=randomNumberGenerator(0,hokeeman.attackDamage); 
-  }
-
-  bool isParalyzed()
-  {
-    return health<=0;
-  }
-
-  void dealDamage(BattleHokeeman& hokeeman)
-  {
-    hokeeman.health-=randomNumberGenerator(0, this->attackDamage);
-  }
+	void dealDamage(BattleHokeeman& hokeeman)
+  	{
+    	hokeeman.health-=randomNumberGenerator(0, this->attackDamage);
+  	}
 
 };
 
 
 class HokeemanGame
 {
-  private:
-
- 
-  //Vector<shared_ptr<Creature>> creatureList;
-  Creature* hokeeman();
+  private:  
+  Creature* hokeeman;
   public:
 
     HokeemanGame()
@@ -996,30 +985,46 @@ class HokeemanGame
 
 
   // Specification C3 - Validate Input
-  bool validateInput(string input, int index)
+  bool validateInput(string input)
   {
+    if(hokeeman->isDead())
+    {
+        cout<<hokeeman->name+" is died from starvation\n";
+      cout<<"The Game is Over\n";
+      return true;
+    }
+    else if(hokeeman->isParalyzed())
+    {
+      cout<<hokeeman->name+" is Paralyzed from Boredom\n";
+      cout<<"The Game is Over\n";
+      return true;
+    }
+	if(input.length()>0)
+	{
     
-    if(input=="L"||input=="l")
-    {
-      //cout<<creatureList.get()<<'\n';
-    }
-    else if(input=="P"||input=="p")
-    {
-      
-    }
-    else if(input=="Q"||input=="q")
-    {
-
-    }
-    else if(input=="F"||input=="f")
-    {
-
-    }
-    else
-    {
-      cout<<"Not a valid input\n";
-    }
-
+		string command = input.substr(0,1);
+    
+		if(input=="L"||input=="l")
+		{
+			cout<<*hokeeman<<"\n";
+		}
+		else if(input=="P"||input=="p")
+		{
+			hokeeman->playWithCreature();
+		}
+		else if(input=="Q"||input=="q")
+		{
+			return true;
+		}
+		else if(input=="F"||input=="f")
+		{
+			hokeeman->feedCreature();
+		}
+		else
+		{
+		cout<<"Not a valid input\n";
+		}	
+	}
       return false;
   }
 
@@ -1027,20 +1032,23 @@ class HokeemanGame
   {
     bool done;
     cout<<"Print the Hokeeman's Name\n";
+
+    // Specification A1 - Critter Name
     string name;
     getline(cin,name);
     
     Creature* hokeemanToCopy= new Hokeeman(name);
-
-    
+	  this->hokeeman=hokeemanToCopy;
 
     string command;
     
     do
     {
+        displayHokeemanTask();
+        
         getline(cin,command);
-        // Specification A1 - Critter Name
-        done =handleCommandInput();
+        
+        done= validateInput(command);
    
     
     }
@@ -1049,22 +1057,26 @@ class HokeemanGame
 
   private:
 
-  void displayHokeemanTask()
-  {
-    cout<<"Hokeeman Menu\n";
-    cout<<"========================\n";
-    cout<<"(L)isten to Hokeeman\n";
-    cout<<"(F)eed Hokeeman\n";
-    cout<<"(P)lay with Hokeeman\n";
-    cout<<"========================\n";
-  }
+	void displayHokeemanTask()
+	{
+		cout<<"Hokeeman Menu\n";
+		cout<<"========================\n";
+		cout<<"(L)isten to Hokeeman\n";
+		cout<<"(F)eed Hokeeman\n";
+		cout<<"(P)lay with Hokeeman\n";
+		cout<<"========================\n";
+	}
 
-  
 
-  
+public:
 
  
 
+ 
+~HokeemanGame()
+{
+	delete hokeeman;
+}
   
  
 
@@ -1076,6 +1088,7 @@ void UnitTest();
 
 int main() {
     ProgramGreeting();
+	HokeemanGame game;
 }
 
 
