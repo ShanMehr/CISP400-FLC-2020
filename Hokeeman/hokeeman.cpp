@@ -1,4 +1,4 @@
-// hokeeman.cpp
+// hokeemon.cpp
 // Ishan Meher, CISP 400
 // 11/22/2020
 
@@ -11,249 +11,6 @@
 
 using namespace std;
 
-template <class A>
-class Vector
-{
-	// The template class Vector creates an array that is able to store any data type 
-	public:
-
-		int length=0;
-		A* array;
-
-	public:
-		
-		Vector(int size)
-		{	
-			// Defines an Vector Object that accepts a length
-			// Allocates space on the heap to store array
-			if(length>=0)
-			{
-				// Makes sure the length is at least 0
-				this->length=size;
-				
-			}			
-			array= new A[length];
-		}
-
-		Vector()
-		{
-			// Creates an Vector object
-			// Allocates space on the heap to store array
-			this->length=0;
-			array=new A[length];
-
-		}
-
-	private:
-
-		void resizeVector()
-		{
-			// Resiszes the array by one
-
-			A* tempVector= new A[length+1]; // The tempVector stores all the data of array and has one more element
-
-			for(int position=0; position < length; position++)
-			{
-				// Loops through each position of the array and stores copies the element at each position into the tempVector
-				tempVector[position]= array[position];
-			}
-
-			// Frees the memory used by the smaller array
-			// The gradeList is set to point to the tempVector memory location
-			delete[] array; 
-			array=tempVector;	
-			tempVector=nullptr;
-		}
-
-	public:
-
-		void set(int index, A element)
-		{
-			// Changes the data stored at the requested index
-			
-				if(isValidIndex(index))
-				{
-					array[index]=element;
-				}		
-			
-		}
-
-		void clear()
-		{
-			// clears the contents of the arrray
-			delete[] array;
-			array=nullptr;
-			length=0;
-			array= new A[length]; 
-		}
-
-		int size()
-		{
-			// Returns the size of the array
-			return length;
-      
-		}
-
-	
-		void add(A element)
-		{
-			// Adds a new element to the end of the array
-
-			// Increases the size of the array by one
-			resizeVector();
-						
-			array[length]=element;
-			length++;		
-			
-		}
-
-		bool isValidIndex(const int index)
-		{
-			// Checks if the index entered is within the bounds of the array
-			return (index>=0&&index<length);
-		}
-
-		
-
-		A get(const int index)
-		{
-			// Gets the data stored at the requested index
-			// Returns the last index of the array if the requested index is invalid
-			if(isValidIndex(index))
-			{	
-				return array[index];
-			}
-			else
-			{
-				// If the entered index is not valid returns value of last index
-				return (array[length-1]);
-			}
-		}
-
-		void printItem(int index)
-		{	
-				// Prints the item at the requested index
-				cout<<array[index];
-			
-			
-		}
-
-		void printContents()
-		{
-			// Prints the the entire array
-			for(int index=0;index>size();++index)
-			{
-				printItem(index);
-			}
-		}
-
-		void remove(const int index)
-		{
-			// Removes an alement at any index of the array
-			if(isValidIndex(index))
-			{
-				// If the index is a valid index then remove the element located at the position
-
-
-				// Defines a temporary array allocated on the heap
-				// The int copyPosition variable increases with the loop unless the position that is to be removed is reached
-				// By not increasing int copyPosition it will make sure that one less item will be copied;
-				A* tempVector = new A[length-1];
-				int copyPosition=0;
-				for(int position=0;position<length;position++)
-				{
-
-					if(!(position==index))
-					{
-						tempVector[copyPosition]=array[position];
-						copyPosition++;
-						
-
-					}
-					
-				}
-				delete[] array;
-				length--;
-				array=tempVector;
-				tempVector=nullptr;
-			}
-			
-		}
-
-
-		
-		void removeLast()
-		{
-			// Removes the element at the last index of the array
-			remove(length-1);
-		}
-
-		
-		void VectorUnitTest()
-		{
-			// Tests various functions of the Vector Class
-
-			Vector<string> array;
-			cout<<"Printing Initial Size:\n"<<array.size()<<'\n';
-			cout<<"Adding an element:\n";
-			array.add("Ishan Meher");
-			cout<<"Printing Added element\n"<<array.get(0)<<'\n';
-			
-
-			cout<<"Adding a few Elements and printing these elements"<<'\n';
-			array.add("Professor Fowler");
-			cout<<"Printing the newly added element\n";
-			cout<<array.get(1)<<'\n';
-			array.add("Knuth");
-			array.add("Warshall");
-			array.add("Kruskal");
-
-			cout<<"Printing All the elements in the array"<<'\n';
-			for(int i=0;i<array.size();i++)
-			{
-				cout<<array.get(i)<<'\n';
-
-			}
-			cout<<'\n';
-
-			cout<<"Removing last element(Kruskal is gone)\n";
-			array.removeLast();
-
-			for(int i=0;i<array.size();i++)
-			{
-				cout<<array.get(i)<<'\n';
-			}
-
-			array.remove(3);
-
-			cout<<'\n';
-			cout<<"Removing Warshall at index 2\n";			
-			for(int i=0;i<array.size();i++)
-			{
-				cout<<array.get(i)<<'\n';
-			}
-
-			cout<<"Removing all elements"<<'\n';
-			array.clear();
-			
-			cout<<"Adding element to cleared array\n";
-			array.add("Ishan");
-			cout<<array.get(0)<<'\n';
-			cout<<array.size()<<'\n';
-			cout<<"Changing the value of an index\n";
-			array.set(0,"Professor Fowler");
-			cout<<array.get(0)<<'\n';
-			cout<<'\n';
-		}
-		
-		~Vector()
-		{
-			delete[] array;
-			array=nullptr;
-			this->length=0;
-		}	
-
-};
 
 
 class Date
@@ -574,19 +331,6 @@ class Date
     	return output;
 	}
 
-
-	
-	friend istream& operator >>(istream &input, Date& date)
-	{
-		// Sets the member variables for the Date Class
-		cout<<"Enter the month\n";
-		input>>date.month;
-		cout<<"Enter the day of the month the date falls under.\n";
-		input>>date.day;
-		cout<<"Enter the year.\n";
-		input>>date.year;
-		return input;
-	}	
 		
 		void dateUnitTest()
 		{
@@ -752,28 +496,7 @@ class Date
 			cout<<"Date: "+testDate.getNumericDate()<<'\n';	
 			cout<<"\n";
 			
-			cout<<"Testing the overloaded Date input operator\n";
-			Date dateOperatorTesting;
-			cin>>dateOperatorTesting;
-			cout<<"\n";
-
-			cout<<"Testing the overloaded Date output operator\n";
-			cout<<dateOperatorTesting;
-			
-      cout<<"Checking the functionality of the overloaded = operator\n";
-      cout<<"Assinging one object's data to another\nThen printing object's content\n";
-      cout<<"Should print the previous object's data\n"<<'\n';
-      dateOperatorTesting=testDate;
-      cout<<dateOperatorTesting;
-    
-
-    
-    cout<<"Testing Constructor Overloading\n";
-    cout<<"Editing the previous item's member variables\n"<<"Then assigning the data into a new object\n"<<"This is done by passing the reference of the edited object into the new object's overloaded constructor\n";
-    cin>>testDate;
-    Date item3(testDate);
-    cout<<item3<<'\n';
-		cout<<"\n";
+		
 
 	}
 
@@ -819,7 +542,7 @@ class Creature
     int randomNumberGenerator(int lo,int hi);
 
     // Specification B2 - Virtual Class Creature
-    virtual bool isParalyzed()
+    bool isParalyzed()
     {
         // Checks if the Creature is Paralyzed
         return boredomLevel>20;
@@ -832,15 +555,67 @@ class Creature
 
   
 
+    // Specification C4 - Overload «
     friend ostream& operator << (ostream& out,Creature& creature)
     {
+		// Specification A4 - Write a Lambda
+		auto printTrue = [](bool value) 
+    	{ 
+        	if(value==true)
+			{
+				return "true";
+			}
+			else
+			{
+				return "false";
+			}
+			
+   		}; 
+
         out<<"Name: "<<creature.name<<'\n';
         out<<"Boredom Level: "<<creature.boredomLevel<<'\n';
         out<<"Hunger Level: "<<creature.hungerLevel<<'\n';
-        out<<"Is Dead: "<<creature.isDead()<<"\n";
-        out<<"Is Paralyzed: "<<creature.isParalyzed()<<"\n";
+        out<<"Is Dead: "<<printTrue(creature.isDead())<<"\n";
+        out<<"Is Paralyzed: "<<printTrue(creature.isParalyzed())<<"\n";
         return out;
     }
+
+
+	void UnitTest()
+	{
+		auto printTrue = [](bool value) 
+    	{ 
+        	if(value==true)
+			{
+				return "Passed";
+			}
+			else
+			{
+				return "Failed";
+			}
+			
+   		}; 
+
+		Creature creature;
+		cout<<"Testing the overloaded << operator "<<creature<<'\n';
+
+		cout<<"Testing the play function:\n";
+		int boredomLevel=creature.boredomLevel;
+		cout<<"Initial boredom Level:"<<boredomLevel<<'\n';
+		creature.playWithCreature();
+		cout<<"Boredom Level After Play: "<<creature.boredomLevel<<'\n';
+		cout<<printTrue(boredomLevel>creature.boredomLevel)<<'\n';
+		
+
+		cout<<"Testing the Feed function:\n";
+		int hungerLevel=creature.hungerLevel;
+		cout<<"Initial hunger Level:"<<hungerLevel<<'\n';
+		creature.feedCreature();
+		cout<<"Boredom Level After Play: "<<creature.hungerLevel<<'\n';
+		cout<<printTrue(hungerLevel<creature.hungerLevel)<<'\n';
+
+		
+	}
 
 };
 
@@ -855,7 +630,7 @@ void Creature ::passTime()
 
 int Creature :: randomNumberGenerator(int lo,int hi)
 {
-   // Generates a ranodm number between lo and hi
+   // Generates a random number between lo and hi
   int random = (rand()% (hi-lo+1))+lo;
     
   return random;
@@ -863,7 +638,7 @@ int Creature :: randomNumberGenerator(int lo,int hi)
 
   void Creature :: feedCreature()
   {
-    // Feed the Hokeeman and increase hungerLevel by a random number
+    // Feed the Hokeemon and increase hungerLevel by a random number
 
     int amountToFeed=randomNumberGenerator(3,6);
     this->hungerLevel+=amountToFeed;
@@ -873,19 +648,23 @@ int Creature :: randomNumberGenerator(int lo,int hi)
   void Creature:: playWithCreature()
   {
 
-    // Play with the Hokeeman and decrease boredomLevel by a random number
-
+    // Play with the Hokeemon and decrease boredomLevel by a random number
     int boredomLevelUpdated= randomNumberGenerator(4,8);
-    this->boredomLevel+=boredomLevelUpdated;
+    this->boredomLevel-=boredomLevelUpdated;
     passTime();
   }
   
 
 // Specification B1 - Child Class
-class Hokeeman :public Creature
+class Hokeemon:public Creature
 { 
     public: 
 
+    Hokeemon()
+    {
+    this->boredomLevel=randomNumberGenerator(0, 5);
+    this->hungerLevel=randomNumberGenerator(0, 5);
+    }
     bool isParalyzed()
     {
         return boredomLevel>20;
@@ -897,105 +676,262 @@ class Hokeeman :public Creature
     }
 
     
-    Hokeeman(Hokeeman& parent1, Hokeeman &parent2)
+    Hokeemon(Hokeemon& parent1, Hokeemon &parent2)
     {
-        this->name= (parent1.name+" "+parent2.name);
-
         // Use the overloaded + operator to increase hungerLevels
-        *this=(parent1+parent2);
+        this->name=parent1.name+" "+parent2.name;
+        this->hungerLevel+=parent1.hungerLevel+parent2.hungerLevel;
+		    this->boredomLevel-=parent1.boredomLevel-parent2.boredomLevel;        
+
     }
 
 
-    //Specification B3 - Overload Assignment Operator
-    Hokeeman& operator =(const Hokeeman& hokeeman)
+    //Specification B3 - Og++ -std=c++14 -g -Wall main.cppverload Assignment Operator
+    Hokeemon& operator =(const Hokeemon& hokeemon)
     {
-			this->name=hokeeman.name;
-			this->hungerLevel=hokeeman.hungerLevel;
-			this->boredomLevel=hokeeman.boredomLevel;
+			this->name=hokeemon.name;
+			this->hungerLevel=hokeemon.hungerLevel;
+			this->boredomLevel=hokeemon.boredomLevel;
 			return *this;
 	} 
 
     // Specification A2 - Copy Constructor
-    Hokeeman(Hokeeman& hokeeman)
+  Hokeemon(const Hokeemon& hokeemon)
 	{
-        
-        // Copy Constructor for Hokeeman
-        // Absorbs and Spits out the other Hokeeman
-        // Takes the other Hokeeman's hunger and boredom levels and uses it to strengthen itself
-		this->name=hokeeman.name+" Parasite"; 
-		this->hungerLevel+=hokeeman.hungerLevel;
-		this->boredomLevel-=hokeeman.boredomLevel;        
+        // Copy Constructor for Hokeemon
+        // Absorbs and Spits out the other Hokeemon
+        // Takes the other Hokeemon's hunger and boredom levels and uses it to strengthen itself
+		this->name=hokeemon.name;
+		this->hungerLevel+=hokeemon.hungerLevel;
+		this->boredomLevel-=hokeemon.boredomLevel;        
 	} 
 
   
-  Hokeeman(string name)
+  Hokeemon(string name)
   {
     this->name=name;
     this->boredomLevel=randomNumberGenerator(0, 5);
     this->hungerLevel=randomNumberGenerator(0, 5);
   }
 
+  
+
   //Specification B4 - Overload + Operator
-  Hokeeman operator +(Hokeeman& hokeeman)
+  Hokeemon operator +(Hokeemon& hokeemon)
   {
-    this->hungerLevel+=hokeeman.hungerLevel;
-    this->boredomLevel-=hokeeman.boredomLevel;
+    this->name+=" "+hokeemon.name;
+    this->hungerLevel=hokeemon.hungerLevel;
+    this->boredomLevel=hokeemon.boredomLevel;
     return *this;
   }
 
+	void UnitTest()
+	{
+      
+    cout<<"Making Object for Testing\n";
+		Hokeemon hokeemon("Blue Eyes");
+    cout<<hokeemon<<'\n';
+    cout<<"\n";
+
+    cout<<"Making Object for Testing\n";
+		Hokeemon hokeemon2("White Dragon");
+    cout<<hokeemon2<<'\n';
+    cout<<"\n";
+		Hokeemon hokeemon3 = hokeemon+hokeemon2;
+    cout<<"Testing the overloaded add operator\n";
+    cout<<hokeemon3<<'\n';
+
+    cout<<"Testing the Overloaded Assignment Operator\n";
+    hokeemon3=hokeemon2;
+    cout<<hokeemon3<<'\n';
+
+    
+
+	}
 
 
 };
 
 
 // Specification A3 - Second Child Class
-class BattleHokeeman : public Creature
+class BattleHokeemon : protected Creature
 {
   public:
   int health;
   string elementalType;
   int attackDamage;
 
-  BattleHokeeman(string name,string elementalType, int health)
+
+  public:
+
+  void UnitTest()
+  {
+    BattleHokeemon pikachu("Pikachu","fire",200);
+    cout<<pikachu<<'\n';
+    BattleHokeemon magikarp("Magikarp","water",200);
+    cout<<magikarp<<'\n';
+
+    BattleHokeemon evolvedHokeemon(pikachu,magikarp);
+    cout<<"Testing forming a new child hokeemon from two hokeemon\n";
+    cout<<evolvedHokeemon<<'\n';
+
+  
+    cout<<"Testing the dealDamage() Function by running a fight\n";
+    cout<<"\n";  
+    while(!magikarp.isDead())
+    {
+      pikachu.dealDamage(magikarp);
+      cout<<magikarp.name<<" "<<magikarp.returnLifeState()<<'\n';
+      
+    }
+    
+  }
+
+  
+
+
+  string returnLifeState()
+    {
+      if(!isDead())
+      {
+        return "Alive";
+      }
+      else
+      {
+        return "Dead";
+      }
+    }
+
+
+  BattleHokeemon()
+  { 
+  }
+
+
+  BattleHokeemon(string name,string elementalType, int health)
   { 
     this->name=name;
     this->elementalType=elementalType;
-    this->health=randomNumberGenerator(5,200);
-    this->attackDamage=randomNumberGenerator(1,10);
+    this->health=randomNumberGenerator(5,health);
+    this->attackDamage=randomNumberGenerator(2,100);
   }
 
-	void dealDamage(BattleHokeeman& hokeeman)
-  	{
-    	hokeeman.health-=randomNumberGenerator(0, this->attackDamage);
-  	}
 
+  BattleHokeemon(BattleHokeemon &h1, BattleHokeemon& h2)
+  { 
+    this->name="Mega Sale,Half Off,Buy One Get Free, One-Premium-Special Editiom "+h1.name+" "+h2.name;
+    this->elementalType=h1.elementalType;
+    this->health=h1.health+h2.health;
+    this->attackDamage=h2.attackDamage+h1.attackDamage;
+  }
+
+
+	void dealDamage(BattleHokeemon& hokeemon)
+  {
+      cout<<this->name<<" is attacking\n";
+      int damageDealt=randomNumberGenerator(1,this->attackDamage);
+    	hokeemon.health-=damageDealt;
+      if(attackDamage==0)
+      {
+        cout<<hokeemon.name<<" dodged the attack\n";
+      }
+      else
+      {
+        cout<<hokeemon.name<<" took \n"<< attackDamage<<'\n';
+      }
+  }
+
+
+    
+
+  bool isDead()
+  {
+    return health<=0;
+  }
+
+friend ostream& operator << (ostream& out,BattleHokeemon& creature)
+    {
+		// Specification A4 - Write a Lambda
+		auto printTrue = [](bool value) 
+    	{ 
+        	if(value==true)
+			{
+				return "true";
+			}
+			else
+			{
+				return "false";
+			}
+			
+   		}; 
+
+        out<<"Name: "<<creature.name<<'\n';
+        out<<"Is Dead: "<<printTrue(creature.isDead())<<"\n";
+        out<<"Attack Damage: "<<creature.attackDamage<<'\n';
+        out<<"Health: "<<creature.health<<'\n';
+        return out;
+    }
 };
 
 
-class HokeemanGame
+// Function Protypes
+void ProgramGreeting();
+void UnitTest();
+void pressEnterKey();
+void playGame(Hokeemon& hokeemon);
+void displayHokeemonTask();
+bool validateInput(string input,Hokeemon& hokeemon);
+
+int main()
 {
-  private:  
-  Creature* hokeeman;
-  public:
+	ProgramGreeting();
+	UnitTest();
+  pressEnterKey();
+  system("clear");
+  ProgramGreeting();
+	Hokeemon hokeemon;
+	playGame(hokeemon);
+	
+}
 
-    HokeemanGame()
-    {
-        playGame();
-    }
-
-
-  // Specification C3 - Validate Input
-  bool validateInput(string input)
+ void playGame(Hokeemon& hokeemon)
   {
-    if(hokeeman->isDead())
+    bool done;
+    cout<<"Print the Hokeemon's Name\n";
+
+    // Specification A1 - Critter Name
+    string name;
+    getline(cin,name="Pikachu"); 
+
+    string command;
+    
+    do
     {
-        cout<<hokeeman->name+" is died from starvation\n";
+       
+        displayHokeemonTask();
+        
+        getline(cin,command);
+        system("clear");
+        
+        done= validateInput(command,hokeemon);
+   
+    
+    }
+    while(!done);
+  }
+
+ // Specification C3 - Validate Input
+  bool validateInput(string input,Hokeemon& hokeemon)
+  {
+    if(hokeemon.isDead())
+    {
+        cout<<hokeemon.name+" is dead from starvation.\n";
       cout<<"The Game is Over\n";
       return true;
     }
-    else if(hokeeman->isParalyzed())
+    else if(hokeemon.isParalyzed())
     {
-      cout<<hokeeman->name+" is Paralyzed from Boredom\n";
+      cout<<hokeemon.name+" is paralyzed out of boredom.\n";
       cout<<"The Game is Over\n";
       return true;
     }
@@ -1006,19 +942,17 @@ class HokeemanGame
     
 		if(input=="L"||input=="l")
 		{
-			cout<<*hokeeman<<"\n";
+			// Listen to the condition of the Hokeemon
+			hokeemon.passTime();
+			cout<<hokeemon<<"\n";
 		}
 		else if(input=="P"||input=="p")
 		{
-			hokeeman->playWithCreature();
-		}
-		else if(input=="Q"||input=="q")
-		{
-			return true;
+			hokeemon.playWithCreature();
 		}
 		else if(input=="F"||input=="f")
 		{
-			hokeeman->feedCreature();
+			hokeemon.feedCreature();
 		}
 		else
 		{
@@ -1028,68 +962,16 @@ class HokeemanGame
       return false;
   }
 
-  void playGame()
-  {
-    bool done;
-    cout<<"Print the Hokeeman's Name\n";
-
-    // Specification A1 - Critter Name
-    string name;
-    getline(cin,name);
-    
-    Creature* hokeemanToCopy= new Hokeeman(name);
-	  this->hokeeman=hokeemanToCopy;
-
-    string command;
-    
-    do
-    {
-        displayHokeemanTask();
-        
-        getline(cin,command);
-        
-        done= validateInput(command);
-   
-    
-    }
-    while(!done);
-  }
-
-  private:
-
-	void displayHokeemanTask()
+void displayHokeemonTask()
 	{
-		cout<<"Hokeeman Menu\n";
+		cout<<"Hokeemon Menu\n";
 		cout<<"========================\n";
-		cout<<"(L)isten to Hokeeman\n";
-		cout<<"(F)eed Hokeeman\n";
-		cout<<"(P)lay with Hokeeman\n";
+		cout<<"(L)isten to Hokeemon\n";
+		cout<<"(F)eed Hokeemon\n";
+		cout<<"(P)lay with Hokeemon\n";
 		cout<<"========================\n";
 	}
 
-
-public:
-
- 
-
- 
-~HokeemanGame()
-{
-	delete hokeeman;
-}
-  
- 
-
-};
-
-// Function Protypes
-void ProgramGreeting();
-void UnitTest();
-
-int main() {
-    ProgramGreeting();
-	HokeemanGame game;
-}
 
 
 // Program Greeting
@@ -1098,13 +980,49 @@ void ProgramGreeting()
    Date currentDate;
 	cout<<"Today's Date: "<<currentDate;
     cout<<"============================\n";
-    cout<<"Welcome to the Hokeeman\n";
+    cout<<"Welcome to the Hokeemon\n";
+    cout<<"A Game where you take care of your hokeemon\n";
     cout<<"Program Author: Ishan Meher\n";
     cout<<"Program Due Date: November 22, 2020\n";
 	  cout<<"============================\n";
-}
+} 
 
+
+// Unit Tests
 void UnitTest()
 {
   cout<<"Starting Unit Testing\n";
+  Date date;
+  date.dateUnitTest();
+
+  Creature creature;
+  creature.UnitTest();
+  Hokeemon hokeemon;
+  hokeemon.UnitTest();
+  BattleHokeemon pikachu;
+  pikachu.UnitTest();
+
 }
+
+void pressEnterKey()
+{
+	// Clears the console and asks the user to press the enter key to contine
+	 int enter=0;
+        
+        cout << "Press Enter key to Continue\n";
+        while (enter==cin.get() )      
+		{
+                if ( enter == (int)'\n' ) 
+                {
+                    
+                    break;
+                }
+                else 
+                {
+                    cout << "Failure, Program Quitting\n";
+                    exit(EXIT_FAILURE);
+                }
+        }
+
+}
+
