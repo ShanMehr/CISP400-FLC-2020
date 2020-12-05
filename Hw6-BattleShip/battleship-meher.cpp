@@ -1300,7 +1300,7 @@ class Grid
 
   friend ostream& operator <<(ostream& output, Grid& grid)
   {
-    char letter[10] ={'A','B','C','D','E','F','G','H','I','J'};
+   
 
     output<<"  A ";
     output<<"  B  ";
@@ -1507,7 +1507,7 @@ class Player
       Position* array = new Position[size];
       
       // Stores the number of orientations that have been tried and failed
-      int orientationFailCount;
+  
       int i=0;
 
       /**
