@@ -8,7 +8,6 @@
 #include<cctype>
 #include<ctime>
 #include<fstream> 
-#include<algorithm>
 
 
 using namespace std;
@@ -874,7 +873,7 @@ class Ship
   public:
   string shipType;
   int shipSize;
-  Position* positions;
+  Vector<Position*>* positions;
   string shipCode;
   bool isDown;
   int health;
@@ -885,7 +884,7 @@ class Ship
     this->shipType=shipType;
     this->shipSize=shipSize;
     this->health=shipSize;
-    positions=new Position[shipSize];
+    positions= new Vector<Position*>(shipSize);
     this->shipCode=code;
   }
 
@@ -910,7 +909,7 @@ class Ship
         {   
             // Prints all the positons the ship is located at
             output<<"Position at "<<index<<":"<<'\n';
-            output<<(ship.positions[index])<<'\n';
+            output<<(*ship.positions->get(index))<<'\n';
         }
       return output;
     }
@@ -919,8 +918,8 @@ class Ship
 		{	
 			if(index<shipSize&&index>=0)
 			{
-				Position position(xCoord,yCoord);
-				this->positions[index]=position;
+				Position* position= new Position(xCoord,yCoord);
+				this->positions->set(index,position);
 
 			}
 			else
@@ -953,13 +952,13 @@ class Ship
 
 			ship.setCoordinateAtPosition(1,1,2);
 			cout<<"Testing the Position array's changing of coordinates\n";
-			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship.positions[1].xCoord==1&&ship.positions[1].yCoord==2)<<'\n';
+			cout<<"Position 1 is changed (Must Pass): "<<printPassed( ship.positions->get(1)->xCoord ==1&&ship.positions->get(1)->yCoord==2 )<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
+     
 
 			ship.setCoordinateAtPosition(24,1,2);
-			cout<<"Testing to see if it fails when a bad positions is entered\n";
-			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship.positions[24].xCoord==1&&ship.positions[24].yCoord==2)<<'\n';
+			cout<<"Position 24 is changed (Must Fail): "<<printPassed( ship.positions->get(24)->xCoord ==1&&ship.positions->get(24)->yCoord==2 )<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
 		}
@@ -974,7 +973,7 @@ class Carrier : public Ship
         this->shipType="Carrier";
         this->shipSize=5;
         this->shipCode="C5";
-        this->positions=new Position[5];      
+        this->positions= new Vector<Position*>(5);
         this->health=shipSize;
     }
 		~Carrier()
@@ -1007,13 +1006,13 @@ class Carrier : public Ship
 
 			ship->setCoordinateAtPosition(1,1,2);
 			cout<<"Testing the Position array's changing of coordinates\n";
-			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions[1].xCoord==1&&ship->positions[1].yCoord==2)<<'\n';
+			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions->get(1)->xCoord==1&&ship->positions->get(1)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
 
 			ship->setCoordinateAtPosition(24,1,2);
 			cout<<"Testing to see if it fails when a bad positions is entered\n";
-			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions[24].xCoord==1&&ship->positions[24].yCoord==2)<<'\n';
+			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions->get(24)->xCoord==1&&ship->positions->get(24)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
       delete ship;
@@ -1032,7 +1031,7 @@ class BattleShip : public Ship
         this->shipType="BattleShip";
         this->shipSize=4;
         this->shipCode="B4";
-        this->positions=new Position[4];
+        this->positions=new Vector<Position*>(4);
         this->health=shipSize;
     }
 
@@ -1058,16 +1057,18 @@ class BattleShip : public Ship
 			Ship* ship=new BattleShip();
 			cout<<*ship<<'\n';
 
-			ship->setCoordinateAtPosition(1,1,2);
+				ship->setCoordinateAtPosition(1,1,2);
 			cout<<"Testing the Position array's changing of coordinates\n";
-			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions[1].xCoord==1&&ship->positions[1].yCoord==2)<<'\n';
+			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions->get(1)->xCoord==1&&ship->positions->get(1)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
 
 			ship->setCoordinateAtPosition(24,1,2);
 			cout<<"Testing to see if it fails when a bad positions is entered\n";
-			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions[24].xCoord==1&&ship->positions[24].yCoord==2)<<'\n';
+			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions->get(24)->xCoord==1&&ship->positions->get(24)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
+
+      delete ship;
 
       delete ship;
 
@@ -1091,7 +1092,7 @@ class Cruiser : public Ship
         this->shipType="Cruiser";
         this->shipSize=3;
         this->shipCode="C3";
-        this->positions=new Position[3];
+        this->positions=new Vector<Position*>(3);
         this->health=shipSize;
     }
 
@@ -1117,16 +1118,18 @@ class Cruiser : public Ship
 			Ship* ship=new Cruiser();
 			cout<<*ship<<'\n';
 
-			ship->setCoordinateAtPosition(1,1,2);
+				ship->setCoordinateAtPosition(1,1,2);
 			cout<<"Testing the Position array's changing of coordinates\n";
-			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions[1].xCoord==1&&ship->positions[1].yCoord==2)<<'\n';
+			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions->get(1)->xCoord==1&&ship->positions->get(1)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
 
 			ship->setCoordinateAtPosition(24,1,2);
 			cout<<"Testing to see if it fails when a bad positions is entered\n";
-			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions[24].xCoord==1&&ship->positions[24].yCoord==2)<<'\n';
+			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions->get(24)->xCoord==1&&ship->positions->get(24)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
+
+      delete ship;
 
       delete ship;
 
@@ -1148,7 +1151,7 @@ class Submarine : public Ship
         this->shipType="Submarine";
         this->shipSize=3;
         this->shipCode="S3";
-        this->positions=new Position[3];
+        this->positions=new Vector<Position*>(3);
         this->health=shipSize;
     }
 
@@ -1175,16 +1178,18 @@ class Submarine : public Ship
 			Ship* ship=new Submarine();
 			cout<<*ship<<'\n';
 
-			ship->setCoordinateAtPosition(1,1,2);
+				ship->setCoordinateAtPosition(1,1,2);
 			cout<<"Testing the Position array's changing of coordinates\n";
-			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions[1].xCoord==1&&ship->positions[1].yCoord==2)<<'\n';
+			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions->get(1)->xCoord==1&&ship->positions->get(1)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
 
 			ship->setCoordinateAtPosition(24,1,2);
 			cout<<"Testing to see if it fails when a bad positions is entered\n";
-			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions[24].xCoord==1&&ship->positions[24].yCoord==2)<<'\n';
+			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions->get(24)->xCoord==1&&ship->positions->get(24)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
+
+      delete ship;
 
       delete ship;
 
@@ -1207,8 +1212,8 @@ class Destroyer : public Ship
       ;
       this->shipType="Destroyer";
         this->shipSize=2;
-        this->shipCode="C2";
-        this->positions=new Position[5];
+        this->shipCode="D2";
+        this->positions=new Vector<Position*>(2);
         this->health=shipSize;
   	}
 
@@ -1235,17 +1240,18 @@ class Destroyer : public Ship
 			Ship* ship=new Destroyer();
 			cout<<*ship<<'\n';
 
-			ship->setCoordinateAtPosition(1,1,2);
+				ship->setCoordinateAtPosition(1,1,2);
 			cout<<"Testing the Position array's changing of coordinates\n";
-			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions[1].xCoord==1&&ship->positions[1].yCoord==2)<<'\n';
+			cout<<"Position 1 is changed (Must Pass): "<<printPassed(ship->positions->get(1)->xCoord==1&&ship->positions->get(1)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
 
 			ship->setCoordinateAtPosition(24,1,2);
 			cout<<"Testing to see if it fails when a bad positions is entered\n";
-			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions[24].xCoord==1&&ship->positions[24].yCoord==2)<<'\n';
+			cout<<"Position 24 is changed (Must Fail): "<<printPassed(ship->positions->get(24)->xCoord==1&&ship->positions->get(24)->yCoord==2)<<'\n';
 			cout<<"+++++++++++++++++++++++\n";
 
+      delete ship;
       delete ship;
 
 		}
@@ -1300,11 +1306,11 @@ class Grid
 
   friend ostream& operator <<(ostream& output, Grid& grid)
   {
-   
+    char letter[10] ={'A','B','C','D','E','F','G','H','I','J'};
 
     output<<"  A ";
     output<<"  B  ";
-    output<<" B  ";
+    output<<" C  ";
     output<<" D  ";
     output<<" E  ";
     output<<" F  ";
@@ -1371,7 +1377,7 @@ class Grid
   {
     if(row<gridSize&&column<gridSize)
     {
-      string textValue= "["+text+"]";
+      string textValue="["+text+"]";
       grid[row][column]=textValue;
     }
   }
@@ -1425,8 +1431,8 @@ class Player
   Player()
   {
     addShips();
-    //addPositionsToPlayer();
     populateGrid();
+    
     
   }
 
@@ -1446,7 +1452,14 @@ class Player
         cout<<"Printing all the player's ships\n";
         cout<<"Testing to see if the playerShipList vector contains all the ships that have been added to\n";
         
+         for(int i=0;i<this->playerShipList->size();i++)
+        {
+          cout<<*this->playerShipList->get(i);
+        }
+        
         cout<<*player.playerGameGrid<<'\n';
+
+       
     }
 
     private:
@@ -1468,13 +1481,6 @@ class Player
       playerShipList->add(playerSubmarine);
       playerShipList->add(playerDestroyer);
 
-
-      delete playerCarrier;
-      delete playerBattleship;
-      delete playerCruiser;
-      delete playerSubmarine;
-      delete playerDestroyer;
-
     }
 
     int randomNumberGenerator(int lo,int hi)
@@ -1490,7 +1496,7 @@ class Player
 
 
     // Specification B3 - Random Start
-    Position* addShipToGrid(int size)
+    Vector<Position*>* addShipToGrid(int size)
     {
       
       /*      
@@ -1504,10 +1510,16 @@ class Player
       int xCoord= randomNumberGenerator(0,9);
       int yCoord= randomNumberGenerator(0,9);
 
-      Position* array = new Position[size];
+
+      Vector<Position*>* array;
+      if(size>0)
+      {
+          array= new Vector<Position*>(size);
+      }
+     
       
       // Stores the number of orientations that have been tried and failed
-  
+      int orientationFailCount;
       int i=0;
 
       /**
@@ -1528,8 +1540,9 @@ class Player
             // If Orientation is North
             // If there is a match at the position store the position in the array
             // The next position is 1 up so increase yCoord
-            array[i].xCoord=xCoord;
-            array[i].yCoord=yCoord;
+           
+            Position* position = new Position(xCoord,yCoord);
+            array->set(i,position);
             yCoord++;
 			      i++;
           }
@@ -1538,8 +1551,8 @@ class Player
             // If Orientation is South
             // If there is a match at the position store the position in the array
             // The next position is 1 down so decrease yCoord
-            array[i].xCoord=xCoord;
-            array[i].yCoord=yCoord;
+            Position* position = new Position(xCoord,yCoord);
+            array->set(i,position);
             xCoord++;
               i++;
               
@@ -1564,42 +1577,47 @@ class Player
     void populateGrid()
     {
       
-
-      for(int i=0;i<playerShipList->size();i++)
+      // Add all ships to the grid
+      for(int i=0;i<this->playerShipList->size();i++)
       {
        
         int index=0;
-        int size=playerShipList->get(i)->shipSize;
-        
-        playerShipList->get(i)->positions=addShipToGrid(size);
 
-        string shipCode=playerShipList->get(i)->shipCode;
+        // get the size of the ship to add
+        int size=this->playerShipList->get(i)->shipSize;
         
-        int shipSize=playerShipList->get(i)->shipSize;
+        // get the positions to place the ship at
+        
+        this->playerShipList->get(i)->positions=addShipToGrid(size);
+
+        // Print the shipCode of the ship at its positions
+        string shipCode=this->playerShipList->get(i)->shipCode;
+                
+        int shipSize=this->playerShipList->get(i)->shipSize;
+        
+        // Add the ships position markers at all the ships positions
         
         while(index<shipSize)
         {
-         
-          int row=playerShipList->get(i)->positions[index].xCoord;
-          int column=playerShipList->get(i)->positions[index].yCoord;
-          string text="["+shipCode+"]";
-          playerGameGrid->grid[row][column]=text;         
+          // get the row of the ship
+                
+
+          // add the row and the col to the ship
+          string text=shipCode;
+          int row=this->playerShipList->get(i)->positions->get(index)->xCoord;
+          int column=this->playerShipList->get(i)->positions->get(index)->yCoord;
+          this->playerGameGrid->addToPosition(row,column,text);  
+          
+              
+          
           index++;
           
         }
       }
+       
     }
 
-    void addPositionsToPlayer()
-    {
-      for(int i=0;i<playerShipList->size();i++)
-      {
-        int size= playerShipList->get(i)->shipSize;
-        playerShipList->get(i)->positions=addShipToGrid(size);
-      }
-    }
-
-    
+   
 
     bool positionIsInBounds(int xCoord,int yCoord)
     {
@@ -1621,39 +1639,16 @@ class Player
 
 };
 
-class BattleShipGameManager
+
+class BattleShipGameTemplate
 {
-    protected:
+
+    public:
     Player* human = new Player;
     Player* computer = new Player;
     Player* humanReplay;
     Player* computerReplay;
-    
-    int gameType;
-   
-
-	public:
-    BattleShipGameManager()
-    {
-      this->humanReplay=human;
-      this->computerReplay=computer;
-      this->gameType=0;
-      cout<<"Loading Game\n";
-      startGame();
-      
-
-
-    }
-
-    BattleShipGameManager(int gameType)
-    {
-      this->humanReplay=human;
-      this->computerReplay=computer;
-      this->gameType=1;
-      startGame();
-
-
-    }
+  
     void startGame()
     {
       bool gameEnded;
@@ -1678,7 +1673,7 @@ class BattleShipGameManager
         system("clear");
         
         // Specification B1 - Secret Option
-        if(command=="nuclearlaunchcodes")
+        if(command=="nukecodes")
         {
           cout<<"It's ok to cheat if you don't get caught\n";
           cout<<*this->computer->playerGameGrid;
@@ -1698,125 +1693,17 @@ class BattleShipGameManager
         computerTurn(*computer);
         gameEnded= gameIsOver();
 
-
       }
       while(!gameEnded);
     }
 
-    void playerTurn(Player& player)
-    {
-      bool turnRecorded=false;
+    virtual void playerTurn(Player& human)=0;
 
-      int numberOfTurns;
-      if(this->gameType==1)
-      {
-        numberOfTurns= player.numberOfShips;
-      }
-      else
-      {
-        numberOfTurns=1;
-      }
-
-      for(int i=0;i<numberOfTurns;i++)
-      {
-      do
-      {
-
-        char column;
-        int row=0;
-
-        // Player playerTurn
-        cout<<"Enter a column(A-J)\n";
-        
-        cin>>column;
-        if(!cin.fail())
-        {
-
-          cout<<"Enter a row(1-10)\n";
-          cin>>row;
-          
-
-          if(!cin.fail())
-          {
-         
-            int xCoord=((int)tolower(column))-97;            
-            // Specification C3 - Validate Input3
-            if(xCoord<10&&xCoord>=0&&row>=0&&row<10)
-            {
-              turnRecorded =recordMove(*this->human,*this->computer,row,xCoord);
-              
-            }
-      
-          }
-          else
-          {
-            cout<<"Invalid Input\n";
-            cin.clear();
-					  cin.ignore(numeric_limits<streamsize>::max(), '\n');
-          }
-  
-          
-        }
-        else
-        {
-           cout<<"Invalid Input\n";
-          cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-      }
-      while(!turnRecorded);
-      }
-      
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      
-    }
-
-    void computerTurn(Player& player)
-    {
-      system("clear");
-      
-      bool turnRecorded;
-      
-      int numberOfTurns;
-      if(this->gameType==1)
-      {
-        numberOfTurns= player.numberOfShips;
-      }
-      else
-      {
-        numberOfTurns=1;
-      }
-      for(int i=0;i<numberOfTurns;i++)
-      {
-      do
-      {
-
-        // Player playerTurn  
-        int col= randomNumberGenerator(0, 9);
-        int row=randomNumberGenerator(0, 9);
-
-        if(!cin.fail())
-        {
-          if(!cin.fail())
-          {
-            
-            turnRecorded =recordMove(*this->computer,*this->human,col,row);
-      
-          }
-          
-          
-        }
-
-      }
-      while(!turnRecorded);
-      }
-      
-    }
+    virtual void computerTurn(Player& computer)=0;
 
     int randomNumberGenerator(int lo,int hi)
     {
-      
-      // Generates a ranodm number between lo and hi
+      // Generates a random number between lo and hi
       srand(time(0));
       int random = (rand()% (hi-lo+1))+lo;
         
@@ -1826,6 +1713,7 @@ class BattleShipGameManager
 
     bool gameIsOver()
     {
+      // Check who lost the game
       if(playerLost(*this->human))
       {
         cout<<"The Player Lost\n";
@@ -1840,14 +1728,27 @@ class BattleShipGameManager
   
     }
 
-    
+    bool playerLost(Player& player)
+    {
+      for(int i=0;i<player.playerGameGrid->gridSize;i++)
+      {
+        for(int j=0; j<player.playerGameGrid->gridSize;j++)
+        {
+          if(player.playerGameGrid->grid[i][j]=="[C5]"||player.playerGameGrid->grid[i][j]=="[C3]"||player.playerGameGrid->grid[i][j]=="[D2]"||player.playerGameGrid->grid[i][j]=="[S3]"||player.playerGameGrid->grid[i][j]=="[B4]")
+          {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
 
-    bool recordMove(Player& currentPlayer,Player& opposingPlayer,int xCoord,int yCoord)
+     bool recordMove(Player& currentPlayer,Player& opposingPlayer,int xCoord,int yCoord)
     {
     
         // Returns true if the move is recorded
       
-      if(!checkIfShotPrevioslyFired(xCoord,yCoord))
+      if(!checkIfShotPrevioslyFired(currentPlayer,xCoord,yCoord))
       {
        
         Position* shot = new Position(xCoord,yCoord);
@@ -1858,11 +1759,13 @@ class BattleShipGameManager
         // Mark the oppposing player's display grid as a position shot at 
         opposingPlayer.playerGameGrid->addToPosition(shot->xCoord,shot->yCoord,"/&");
         positionIsHit(currentPlayer,opposingPlayer,shot);
+        
+        delete shot;
         return true;
       }
       else
       {
-       
+      
         return false;
       }
       
@@ -1871,11 +1774,11 @@ class BattleShipGameManager
 
     // Specification B2 - Adv Input Validation
     // Specification C2 - Prohibit AI wasted shots
-    bool checkIfShotPrevioslyFired(int row, int col)
+    bool checkIfShotPrevioslyFired(Player &player,int row, int col)
     {
-      for(int i=0;i<this->human->pastShots->size();i++)
+      for(int i=0;i<player.pastShots->size();i++)
       {
-        if(row==this->human->pastShots->get(i)->xCoord&&col==this->human->pastShots->get(i)->yCoord)
+        if(row==player.pastShots->get(i)->xCoord&&col==player.pastShots->get(i)->yCoord)
         {
          return true; 
         }
@@ -1892,7 +1795,7 @@ class BattleShipGameManager
         for(int j=0;j<opposingPlayer.playerShipList->get(i)->shipSize;j++)
         {
 
-          if(shot->xCoord==opposingPlayer.playerShipList->get(i)->positions->xCoord&&shot->xCoord==opposingPlayer.playerShipList->get(i)->positions->yCoord)
+          if(shot->xCoord==opposingPlayer.playerShipList->get(i)->positions->get(j)->xCoord&&shot->yCoord==opposingPlayer.playerShipList->get(i)->positions->get(j)->yCoord)
           {
           
             // Lower the health of the opposiong player's ship
@@ -1908,18 +1811,266 @@ class BattleShipGameManager
       
     }
 
+    virtual void displayReplay()=0;
+
+};
+
+class BattleShipGameManager : public BattleShipGameTemplate
+{
+
+	public:
+    BattleShipGameManager()
+    {
+      this->humanReplay=human;
+      this->computerReplay=computer;
+      cout<<"Loading Game\n";
+      startGame();
+    }
+
+    void playerTurn(Player& player)
+    {
+      bool turnRecorded=false;
+      do
+      {
+
+        char column;
+        int row;
+
+        // Player playerTurn
+        cout<<"Enter a column(A-J)\n";
+        
+        cin>>column;
+        if(!cin.fail())
+        {
+
+          cout<<"Enter a row(0-9)\n";
+          cin>>row;
+          
+
+          if(!cin.fail())
+          {
+                    
+            int xCoord=((int)tolower(column))-97;
+            
+            // Specification C3 - Validate Input
+            if((xCoord<10&&xCoord>=0)&&(row>=0&&row<10))
+            {
+              turnRecorded =recordMove(*this->human,*this->computer,row,xCoord);
+            }
+      
+          }
+          else
+          {
+            cout<<"Invalid Input\n";
+            cin.clear();
+					  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+          }
+  
+        }
+        else
+        {
+           cout<<"Invalid Input\n";
+          cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+      }
+      while(turnRecorded==false);
+      
+      
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      
+    }
+
+   
+
+    void computerTurn(Player& player)
+    {
+      system("clear");
+      
+      bool turnRecorded;
+      
+      // Computer's turn
+      do
+      {
+
+        // get Random coordinates for the computer
+       
+        int col= randomNumberGenerator(0, 9);
+        int row=randomNumberGenerator(0, 9);
+
+        if(!cin.fail())
+        {
+          if(!cin.fail())
+          {
+            // Record the computer's move if the inut is of type int
+             // "Prompt" the computer for its turn until a previous position is not chosen"
+            turnRecorded =recordMove(*this->computer,*this->human,col,row);
+      
+          }
+        }
+
+      }
+      while(!turnRecorded);
+     
+    } 
+
+    
+    
     void BattleShipGameManagerUnitTest()
     {
       BattleShipGameManager game;
 
     }
     
-
-
     ~BattleShipGameManager()
     {
       delete human;
       delete computer;
+    }
+
+    // Specification A4 - Replay Finished Game
+    void displayReplay()
+    {
+    
+    
+     int gameTurns= max(this->human->pastShots->size(),this->computer->pastShots->size()); // The number of times the replay is run depends on the person who made more turns("The Winner")
+      for(int i=0;i<gameTurns;i++)
+      {
+        if(gameTurns<this->human->pastShots->size())
+        {
+          // Player's turn 
+          
+          // Add the shot to the player's game grid 
+          this->humanReplay->playerDisplayGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
+
+          // Add the player's shot to the computer's grid
+          this->computerReplay->playerGameGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
+
+           cout<<*this->computerReplay->playerGameGrid;
+        }
+         if(gameTurns<this->computer->pastShots->size())
+        {
+          // Computer's turn
+
+          // Add the computer's shot to its game grid          
+          this->computerReplay->playerDisplayGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
+
+          // Add the computer's shot to the player's game grid
+          this->humanReplay->playerGameGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
+
+
+          cout<<*this->humanReplay->playerGameGrid;
+        }
+      }
+    }
+};
+
+class MultiFireBattleShip :public BattleShipGameTemplate
+{
+  // Stores the number of shots each "player" makes per turn
+  Vector<int> numberOfShotsMadeByPlayerPerTurn; 
+  Vector<int> numberOfShotsMadeByComputerPerTurn;
+
+  int playerNumberOfTurns;
+  int computerNumberOfTurns;
+
+  public:
+  MultiFireBattleShip()
+  {
+    // Both the player and the computer start out with 5 turns
+    this->playerNumberOfTurns=5;
+    this->computerNumberOfTurns=5;
+
+    this->humanReplay=human;
+    this->computerReplay=computer;
+
+    cout<<"Loading Game\n";
+    startGame();
+  }
+
+
+  void playerTurn(Player& player)
+    {
+      bool turnRecorded=false;
+
+      // Ask the player for the number of turns based on the number of ships they have
+
+      // Stores the number of turns the player will be able to make based on the number of ships that they have
+      this->numberOfShotsMadeByPlayerPerTurn=player.numberOfShips;
+
+      // Stores the number of turns that the player made during this turn(used for game replay)
+      this->numberOfShotsMadeByPlayerPerTurn.add(player.numberOfShips);
+
+      for(int i=0;i<this->playerNumberOfTurns;i++)
+      {
+        playerInput(player);
+      }
+      
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      
+    }
+
+    void playerInput(Player& player)
+    {
+      bool turnRecorded=false;
+
+      // Ask the player for the number of turns based on the number of ships they have
+
+      // Stores the number of turns the player will be able to make based on the number of ships that they have
+      this->numberOfShotsMadeByPlayerPerTurn=player.numberOfShips;
+
+      // Stores the number of turns that the player made during this turn(used for game replay)
+      this->numberOfShotsMadeByPlayerPerTurn.add(player.numberOfShips);
+
+      
+        do
+      {
+
+        char column;
+        int row;
+
+        // Player playerTurn
+        cout<<"Enter a column(A-J)\n";
+        
+        cin>>column;
+        if(!cin.fail())
+        {
+
+          cout<<"Enter a row(0-9)\n";
+          cin>>row;
+          
+
+          if(!cin.fail())
+          {
+                    
+            int xCoord=((int)tolower(column))-97;
+            
+            // Specification C3 - Validate Input
+            if((xCoord<10&&xCoord>=0)&&(row>=0&&row<10))
+            {
+              turnRecorded =recordMove(*this->human,*this->computer,row,xCoord);
+            }
+      
+          }
+          else
+          {
+            cout<<"Invalid Input\n";
+            cin.clear();
+					  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+          }
+  
+        }
+        else
+        {
+           cout<<"Invalid Input\n";
+          cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+      }
+      while(turnRecorded==false);
+      
+      
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 
     bool playerLost(Player& player)
@@ -1928,72 +2079,122 @@ class BattleShipGameManager
       int shipsLost;
       for(int i=0;i<numberOfShips;i++)
       {
-        if(player.playerShipList->get(i)->health==0)
+        if(player.playerShipList->get(i)->health<=0)
         {
           // Check if all ships are hit
-          
-          // Decrease the number of turns the player has if they lost a ship
-          shipsLost++;
 
+          shipsLost++;
+          
         }
         else
         {
           // If a ship is not down then the game is not over
+
+          // Before leaving loop store the number of ships the playerCurrentlyHas
+          int shipCount =5- shipsLost;
+          player.numberOfShips=shipCount;
           return false;
         }
         // Record the number of ships that the player has
-        if(gameType==1)
-        {
-          player.numberOfShips=(numberOfShips-shipsLost);
-        }
       }
       return true;
     }
 
-    // Specification A4 - Replay Finished Game
+    void computerTurn(Player& player)
+    {
+      // Store the number of turns that the computer can make
+      this->numberOfShotsMadeByComputerPerTurn=this->computer->numberOfShips;
+
+      // Store the number of turns the computer will make during this turn (used for replay)
+      this->numberOfShotsMadeByComputerPerTurn.add(player.numberOfShips);
+      system("clear");
+      
+      for(int i=0;this->computerNumberOfTurns;i++)
+      {
+        computerInput(player);
+      }
+     
+    } 
+
+    void computerInput(Player& player)
+    {
+
+      bool turnRecorded;
+       do
+      {
+
+        // get Random coordinates for the computer
+       
+        int col= randomNumberGenerator(0, 9);
+        int row=randomNumberGenerator(0, 9);
+
+        if(!cin.fail())
+        {
+          if(!cin.fail())
+          {
+            // Record the computer's move if the inut is of type int
+             // "Prompt" the computer for its turn until a previous position is not chosen"
+            turnRecorded =recordMove(*this->computer,*this->human,col,row);
+      
+          }
+        }
+
+      }
+      while(!turnRecorded);
+    }
+
     void displayReplay()
     {
-      
-     int gameTurns= max(this->human->pastShots->size(),this->computer->pastShots->size());
+     int gameTurns= max(this->human->pastShots->size(),this->computer->pastShots->size()); // The number of times the replay is run depends on the person who made more turns("The Winner")
       for(int i=0;i<gameTurns;i++)
       {
         if(gameTurns<this->human->pastShots->size())
         {
+          // Player's turn 
+          
+          // Add the shot to the player's game grid 1
           this->humanReplay->playerDisplayGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
+
+          // Add the player's shot to the computer's grid
           this->computerReplay->playerGameGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
-          cout<<*this->computerReplay->playerGameGrid;
+
+           cout<<*this->computerReplay->playerGameGrid;
         }
          if(gameTurns<this->computer->pastShots->size())
         {
+          // Computer's turn
+
+          // Add the computer's shot to its game grid          
           this->computerReplay->playerDisplayGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
+
+          // Add the computer's shot to the player's game grid
           this->humanReplay->playerGameGrid->addToPosition(this->human->pastShots->get(i)->xCoord,this->human->pastShots->get(i)->yCoord,"*/");
+
+
           cout<<*this->humanReplay->playerGameGrid;
         }
       }
-
-
     }
+
 };
-
-
-
 
 // Function Protypes
  void UnitTest();
  void ProgramGreeting();
-
+void pressEnterKey();
 
 int main() {
 
 	//UnitTest();
 	ProgramGreeting();
-  //g++ -std=c++14 -g -Wall main.cpp REMOVE BEOFRE SUBMITTING
 	cout<<"Select a Game Type\n";
+  //UnitTest();
+  
   int gameType;
   cout<<"Select 0 for normal Battle Ship\n";
-  cout<<"Select 1 for Rapid Fire Battle Ship\n";
+  cout<<"Select 1 for Multi Fire Battle Ship\n";
   cin>>gameType;
-  BattleShipGameManager* battleship;
+  BattleShipGameTemplate* battleship;
   if(!cin.fail())
   {
     if(gameType==0)
@@ -2002,7 +2203,7 @@ int main() {
     }
     else
     {
-      battleship= new BattleShipGameManager(1);
+      battleship= new MultiFireBattleShip();
     }
   }
   else
@@ -2027,7 +2228,7 @@ int main() {
     cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
   }
-
+  
 
 } 
 
@@ -2035,45 +2236,80 @@ void UnitTest()
 {
   cout<<"Starting Unit Tests\n";
 
-
-  
+  /*    
   Date dateUnitTest;
   dateUnitTest.dateUnitTest();
+
+  pressEnterKey();
+  system("clear");
 
   Vector<int> vectorUnitTest;
   vectorUnitTest.VectorUnitTest();
 
+  pressEnterKey();
+  system("clear");
+
 	Position positionUnitTest;
 	positionUnitTest.PositionsUnitTest();
+
+  pressEnterKey();
+  system("clear");
 
 	Ship shipUnitTest;
 	shipUnitTest.shipUnitTest();
 
-	Carrier carrierShipUnitTest;
+  pressEnterKey();
+  system("clear");
 
+	Carrier carrierShipUnitTest;
   carrierShipUnitTest.carrierShipUnitTest();
+  pressEnterKey();
+  system("clear");
+
 	
   BattleShip battleShipUnitTest;
   battleShipUnitTest.battleShipUnitTest();
 
+  pressEnterKey();
+  system("clear");
+
   Cruiser cruiserUnitTest;
   cruiserUnitTest.cruiserShipUnitTest();
+
+  pressEnterKey();
+  system("clear");
 
   Submarine submarineUnitTest;
   submarineUnitTest.submarineUnitTest();
 
+  pressEnterKey();
+  system("clear");
+
   Destroyer destroyerUnitTest;
   destroyerUnitTest.destroyerUnitTest();
+
+  pressEnterKey();
+  system("clear");
 
   Grid gridUnitTest;
   gridUnitTest.gridUnitTest();
 
+pressEnterKey();
+  system("clear");
   
   Player playerUnitTest;
   playerUnitTest.playerUnitTest();
 
+  pressEnterKey();
+  system("clear");
+  
+*/
   BattleShipGameManager gameUnitTest;
+  
   gameUnitTest.BattleShipGameManagerUnitTest();
+
+  pressEnterKey();
+  system("clear");
 }
 
 void ProgramGreeting()
@@ -2087,4 +2323,25 @@ void ProgramGreeting()
 		cout<<"Project for my CISP 400 Class\n";
     cout<<"Program Due Date: November 22, 2020\n";
 	  cout<<"==========================================\n";
+}
+
+void pressEnterKey()
+{
+	// Clears the console and asks the user to press the enter key to contine
+	 int enter=0;
+        
+        cout << "Press Enter key to Continue\n";
+        while (enter==cin.get() )      {
+                if ( enter == (int)'\n' ) 
+                {
+                    
+                    break;
+                }
+                else 
+                {
+                    cout << "Failure, Program Quitting\n";
+                    exit(EXIT_FAILURE);
+                }
+        }
+
 }
