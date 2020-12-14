@@ -9,6 +9,6 @@ GPA-Analyzer
 
 
 The assignment is meant to practice these skills in C++:
-	Object Oriented Programming 
+	Object Oriented Programming, 
 	Dynamic Memory Allocation
   
