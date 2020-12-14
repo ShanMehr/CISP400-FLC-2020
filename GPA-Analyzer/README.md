@@ -1,4 +1,4 @@
-GPA-Analyzer
+#GPA-Analyzer
 
   A command line program that stores grades and calculates grade point average
   A program which will accept an unlimited number of  grades and calculates the average score. Assume each test is worth
