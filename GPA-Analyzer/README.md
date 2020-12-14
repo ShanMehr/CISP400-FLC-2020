@@ -6,7 +6,9 @@ GPA-Analyzer
   60+ ’D’ , less than 60 are ’F’.
 
 
-  The assignment is meant to practice these skills in C++:
-  		Object Oriented Programming 
-			Dynamic Memory Allocation
+
+
+The assignment is meant to practice these skills in C++:
+  	Object Oriented Programming 
+	Dynamic Memory Allocation
   
