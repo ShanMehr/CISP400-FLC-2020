@@ -7,5 +7,5 @@ GPA-Analyzer
 
 
   The assignment is meant to practice these skills in C++:
-  Object Oriented Programming 
-  Basic File Serialization
+    Object Oriented Programming 
+  
